@@ -27,7 +27,6 @@
 		"useUnknownInCatchVariables": true,
 		"removeComments": true,
 		"forceConsistentCasingInFileNames": true,
-		"keyofStringsOnly": true,
 		"noErrorTruncation": true,
 		/* Bundler mode */
 		"moduleResolution": "bundler",
