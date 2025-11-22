@@ -1,13 +1,19 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
+
+type TestResponse struct {
+	Message string `json:"message"`
+}
 
 func main() {
 
@@ -29,8 +35,21 @@ func main() {
 	r.GET("/test", func(ctx *gin.Context) {
 		fmt.Println("api success")
 		ctx.Writer.WriteHeader(http.StatusOK)
-		ctx.Writer.Write([]byte("api success"))
+
+		response := TestResponse{
+			Message: "great job you",
+		}
+
+		err := json.NewEncoder(ctx.Writer).Encode(response)
+
+		if err != nil {
+			fmt.Println("broken encoder", err)
+		}
 	})
 
-	r.Run()
+	err := r.Run()
+
+	if err != nil {
+		log.Println("It broke", err)
+	}
 }
