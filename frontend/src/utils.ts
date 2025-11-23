@@ -1,7 +1,9 @@
-export function testFetch(): Promise<{ message: string }> {
-	const result: Promise<{ message: string }> = fetch("http://localhost:8080/test").then((res) =>
-		res.json()
-	)
+import { TestTagApi, type MainTestResponse } from "./api";
+
+export function testFetch(): Promise<MainTestResponse> {
+	const api = new TestTagApi();
+
+	const result: Promise<MainTestResponse> = api.testGet();
 
 	return result;
 }
