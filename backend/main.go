@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -33,18 +32,17 @@ func main() {
 	r.Use(cors.New(config))
 
 	r.GET("/test", func(ctx *gin.Context) {
-		fmt.Println("api success")
-		ctx.Writer.WriteHeader(http.StatusOK)
-
 		response := TestResponse{
 			Message: "great job you",
 		}
 
-		err := json.NewEncoder(ctx.Writer).Encode(response)
-
-		if err != nil {
-			fmt.Println("broken encoder", err)
-		}
+		ctx.JSON(http.StatusOK, response)
+		//
+		// err := json.NewEncoder(ctx.Writer).Encode(response)
+		//
+		// if err != nil {
+		// 	fmt.Println("broken encoder", err)
+		// }
 	})
 
 	err := r.Run()
