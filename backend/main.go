@@ -6,14 +6,21 @@ import (
 	"net/http"
 	"time"
 
+	_ "github.com/NikolaTosic-sudo/level-up/backend/docs"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type TestResponse struct {
 	Message string `json:"message"`
 }
 
+// @title Your API Title
+// @version 1.0
+// @description This is a sample API.
+// @host localhost:8080
 func main() {
 
 	r := gin.Default()
@@ -31,23 +38,27 @@ func main() {
 	// Apply the CORS middleware
 	r.Use(cors.New(config))
 
-	r.GET("/test", func(ctx *gin.Context) {
-		response := TestResponse{
-			Message: "great job you",
-		}
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-		ctx.JSON(http.StatusOK, response)
-		//
-		// err := json.NewEncoder(ctx.Writer).Encode(response)
-		//
-		// if err != nil {
-		// 	fmt.Println("broken encoder", err)
-		// }
-	})
+	r.GET("/test", testApi)
 
 	err := r.Run()
 
 	if err != nil {
 		log.Println("It broke", err)
 	}
+}
+
+// @Tags test tag
+// @Summary testing swagger and api
+// @Description test job
+// @Produce json
+// @Success 200 {object} TestResponse
+// @Router /test [get]
+func testApi(ctx *gin.Context) {
+	response := TestResponse{
+		Message: "great job you",
+	}
+
+	ctx.JSON(http.StatusOK, response)
 }
