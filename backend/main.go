@@ -49,7 +49,7 @@ func main() {
 	}
 }
 
-// @Tags test tag
+// @Tags test tag 1
 // @Summary testing swagger and api
 // @Description test job
 // @Produce json

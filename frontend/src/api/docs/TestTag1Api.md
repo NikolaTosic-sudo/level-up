@@ -1,10 +1,10 @@
-# TestTagApi
+# TestTag1Api
 
 All URIs are relative to *http://localhost:8080*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**testGet**](TestTagApi.md#testget) | **GET** /test | testing swagger and api |
+| [**testGet**](TestTag1Api.md#testget) | **GET** /test | testing swagger and api |
 
 
 
@@ -21,13 +21,13 @@ test job
 ```ts
 import {
   Configuration,
-  TestTagApi,
+  TestTag1Api,
 } from '';
 import type { TestGetRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new TestTagApi();
+  const api = new TestTag1Api();
 
   try {
     const data = await api.testGet();

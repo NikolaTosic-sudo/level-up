@@ -22,7 +22,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "test tag"
+                    "test tag 1"
                 ],
                 "summary": "testing swagger and api",
                 "responses": {

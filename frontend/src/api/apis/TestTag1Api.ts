@@ -25,7 +25,7 @@ import {
 /**
  * 
  */
-export class TestTagApi extends runtime.BaseAPI {
+export class TestTag1Api extends runtime.BaseAPI {
 
     /**
      * test job

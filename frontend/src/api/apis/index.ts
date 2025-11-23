@@ -1,3 +1,3 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './TestTagApi';
+export * from './TestTag1Api';

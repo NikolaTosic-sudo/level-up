@@ -23,5 +23,5 @@ paths:
             $ref: '#/definitions/main.TestResponse'
       summary: testing swagger and api
       tags:
-      - test tag
+      - test tag 1
 swagger: "2.0"

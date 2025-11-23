@@ -9,7 +9,8 @@
 		"build": "tsc -b && vite build && cp -Rv ./locales ./dist/",
 		"lint": "eslint .",
 		"preview": "vite preview",
-		"generate-routes": "tsr generate"
+		"generate-routes": "tsr generate",
+		"api": "cp ../backend/docs/swagger.json ./openapi.json && rm -rf ./src/api && openapi-generator-cli generate -i openapi.json -g typescript-fetch -o ./src/api"
 	},
 	"dependencies": {
 		"@tanstack/react-query": "^5.90.10",

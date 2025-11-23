@@ -1,42 +1,42 @@
 {
-	"swagger": "2.0",
-	"info": {
-		"description": "This is a sample API.",
-		"title": "Your API Title",
-		"contact": {},
-		"version": "1.0"
-	},
-	"host": "localhost:8080",
-	"paths": {
-		"/test": {
-			"get": {
-				"description": "test job",
-				"produces": [
-					"application/json"
-				],
-				"tags": [
-					"test tag"
-				],
-				"summary": "testing swagger and api",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"schema": {
-							"$ref": "#/definitions/main.TestResponse"
-						}
-					}
-				}
-			}
-		}
-	},
-	"definitions": {
-		"main.TestResponse": {
-			"type": "object",
-			"properties": {
-				"message": {
-					"type": "string"
-				}
-			}
-		}
-	}
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample API.",
+        "title": "Your API Title",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/test": {
+            "get": {
+                "description": "test job",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "test tag 1"
+                ],
+                "summary": "testing swagger and api",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.TestResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.TestResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }

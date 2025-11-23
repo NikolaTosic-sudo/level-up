@@ -1,8 +1,8 @@
 .openapi-generator-ignore
-apis/TestTagApi.ts
+apis/TestTag1Api.ts
 apis/index.ts
 docs/MainTestResponse.md
-docs/TestTagApi.md
+docs/TestTag1Api.md
 index.ts
 models/MainTestResponse.ts
 models/index.ts
