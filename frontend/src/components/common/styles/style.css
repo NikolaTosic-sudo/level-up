@@ -1,0 +1,27 @@
+:root {
+	background: rgba(2, 4, 10, 0.92);
+	backdrop-filter: blur(6px);
+
+	border: 2px solid rgba(0, 255, 255, 0.55);
+	box-shadow:
+		0 0 18px rgba(0, 255, 255, 0.55),
+		inset 0 0 25px rgba(0, 120, 255, 0.25);
+
+	background-image:
+		radial-gradient(circle at 25% 35%, rgba(0, 255, 255, 0.07) 0%, rgba(0, 255, 255, 0.00) 60%),
+		radial-gradient(circle at 70% 75%, rgba(0, 180, 255, 0.05) 0%, rgba(0, 180, 255, 0.00) 65%),
+		radial-gradient(circle at 50% 10%, rgba(0, 200, 255, 0.04) 0%, rgba(0, 200, 255, 0.00) 70%),
+		radial-gradient(circle at 10% 80%, rgba(0, 255, 255, 0.03) 0%, rgba(0, 255, 255, 0.00) 80%);
+
+	background-blend-mode: screen;
+
+	font-family: "Montserrat", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+}
+
+body {
+	padding: 20px;
+	min-height: 100vh;
+}
