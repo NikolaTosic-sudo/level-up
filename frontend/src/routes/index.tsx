@@ -1,16 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { testFetch } from "../utils";
+import LandingPage from "../components/landingPage/LandingPage";
 
 export const Route = createFileRoute("/")({
-	component: IndexComponent,
-	loader: async ({ context }) => {
-		await context.queryClient.ensureQueryData({
-			queryKey: ["repoData"],
-			queryFn: testFetch,
-		});
-	},
+	component: LandingPage,
 });
-
-function IndexComponent() {
-	return <div>Hello index</div>
-}
