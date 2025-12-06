@@ -1,7 +1,7 @@
+import ProfileCreationForm from "./components/ProfileCreationForm";
+
 function ProfileCreation() {
-	return (
-		<div>Hello there</div>
-	)
+	return <ProfileCreationForm />
 }
 
 export default ProfileCreation;
