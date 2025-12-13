@@ -39,7 +39,6 @@ func main() {
 	r.Use(cors.New(config))
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	r.GET("/test", testApi)
 
 	err := r.Run()
