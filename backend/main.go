@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-
-	_ "github.com/NikolaTosic-sudo/level-up/backend/docs"
 )
 
 type TestResponse struct {
@@ -15,7 +13,6 @@ type TestResponse struct {
 // @description This is a sample API.
 // @host localhost:8080
 func main() {
-
 	fmt.Println("started listening on port 8080")
 }
 
