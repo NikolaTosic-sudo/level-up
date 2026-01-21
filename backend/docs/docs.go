@@ -34,10 +34,38 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/test-two": {
+            "get": {
+                "description": "test job",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "test tag 2"
+                ],
+                "summary": "testing swagger and api",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.TestResponseTwo"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "main.TestResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.TestResponseTwo": {
             "type": "object",
             "properties": {
                 "message": {

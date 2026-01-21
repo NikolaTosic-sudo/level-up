@@ -4,6 +4,11 @@ definitions:
       message:
         type: string
     type: object
+  main.TestResponseTwo:
+    properties:
+      message:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -24,4 +29,17 @@ paths:
       summary: testing swagger and api
       tags:
       - test tag 1
+  /test-two:
+    get:
+      description: test job
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TestResponseTwo'
+      summary: testing swagger and api
+      tags:
+      - test tag 2
 swagger: "2.0"
