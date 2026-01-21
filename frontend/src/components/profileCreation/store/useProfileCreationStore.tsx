@@ -1,5 +1,13 @@
 import { create } from "zustand";
 
+// investigate the erasableSyntaxOnly property on Typescript
+export enum CurrentStepsEnum {
+  Form,
+  Skills,
+  Quests,
+  Finish,
+}
+
 interface ProfileCreationStore {
   loading: boolean;
   disabled: boolean;

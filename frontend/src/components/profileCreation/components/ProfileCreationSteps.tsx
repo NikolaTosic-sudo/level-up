@@ -1,4 +1,5 @@
 import {
+  AuditOutlined,
   DeploymentUnitOutlined,
   NodeIndexOutlined,
   UserOutlined,
@@ -33,6 +34,13 @@ export const ProfileCreationSteps = () => {
       }),
       status: "process",
       icon: <NodeIndexOutlined />,
+    },
+    {
+      title: t("profileCreationTrans.steps.finish", {
+        defaultValue: "Finish",
+      }),
+      status: "process",
+      icon: <AuditOutlined />,
     },
   ];
 
