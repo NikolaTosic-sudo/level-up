@@ -6,6 +6,7 @@ import {
 import ProfileCreationForm from "./ProfileCreationForm";
 import { ProfileCreationSteps } from "./ProfileCreationSteps";
 import { useTranslation } from "react-i18next";
+import { Activity } from "react";
 
 const ProfileCreationWrapper = () => {
   const { t } = useTranslation();
@@ -24,15 +25,29 @@ const ProfileCreationWrapper = () => {
     <div className="profile-creation-wrapper">
       <ProfileCreationSteps />
 
-      {currentStep === CurrentStepsEnum.Form ? (
+      <Activity
+        mode={currentStep === CurrentStepsEnum.Form ? "visible" : "hidden"}
+      >
         <ProfileCreationForm />
-      ) : currentStep === CurrentStepsEnum.Skills ? (
+      </Activity>
+
+      <Activity
+        mode={currentStep === CurrentStepsEnum.Skills ? "visible" : "hidden"}
+      >
         <div>Skills</div>
-      ) : currentStep === CurrentStepsEnum.Quests ? (
+      </Activity>
+
+      <Activity
+        mode={currentStep === CurrentStepsEnum.Quests ? "visible" : "hidden"}
+      >
         <div>Quests</div>
-      ) : (
+      </Activity>
+
+      <Activity
+        mode={currentStep === CurrentStepsEnum.Finish ? "visible" : "hidden"}
+      >
         <div>Finish</div>
-      )}
+      </Activity>
 
       <Flex justify="end" gap={8}>
         {currentStep !== CurrentStepsEnum.Form && (
