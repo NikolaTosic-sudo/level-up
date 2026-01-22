@@ -18,28 +18,24 @@ export const ProfileCreationSteps = () => {
       title: t("profileCreationTrans.steps.userInfo", {
         defaultValue: "User info",
       }),
-      status: "process",
       icon: <UserOutlined />,
     },
     {
       title: t("profileCreationTrans.steps.skills", {
         defaultValue: "Starting skills",
       }),
-      status: "finish",
       icon: <DeploymentUnitOutlined />,
     },
     {
       title: t("profileCreationTrans.steps.quests", {
         defaultValue: "Daily quests",
       }),
-      status: "process",
       icon: <NodeIndexOutlined />,
     },
     {
       title: t("profileCreationTrans.steps.finish", {
         defaultValue: "Finish",
       }),
-      status: "process",
       icon: <AuditOutlined />,
     },
   ];

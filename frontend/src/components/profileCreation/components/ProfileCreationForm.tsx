@@ -53,8 +53,13 @@ function ProfileCreationForm() {
           defaultValue: "Upload profile picture",
         })}
         rules={[{ required: true }]}
+        valuePropName="file"
       >
-        <Upload accept={".png, .jpeg, .webp, .jpg"} maxCount={1}>
+        <Upload
+          accept={".png, .jpeg, .webp, .jpg"}
+          maxCount={1}
+          beforeUpload={() => false}
+        >
           <Button>Upload</Button>
         </Upload>
       </Form.Item>
