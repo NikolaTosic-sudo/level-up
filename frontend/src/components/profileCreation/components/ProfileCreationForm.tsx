@@ -6,10 +6,16 @@ function ProfileCreationForm() {
   const [form] = Form.useForm();
 
   return (
-    <Form form={form} requiredMark={false} colon={false} layout="vertical">
+    <Form
+      name="profile"
+      form={form}
+      requiredMark={false}
+      colon={false}
+      layout="vertical"
+    >
       <Form.Item
         name="firstName"
-        label={t("profileCreationTrans.form.firstName", {
+        label={t("profileCreationTrans.formProfile.firstName", {
           defaultValue: "First name",
         })}
         rules={[{ required: true }]}
@@ -19,7 +25,7 @@ function ProfileCreationForm() {
 
       <Form.Item
         name="lastName"
-        label={t("profileCreationTrans.form.lastName", {
+        label={t("profileCreationTrans.formProfile.lastName", {
           defaultValue: "Last name",
         })}
         rules={[{ required: true }]}
@@ -29,7 +35,7 @@ function ProfileCreationForm() {
 
       <Form.Item
         name="nickname"
-        label={t("profileCreationTrans.form.nickname", {
+        label={t("profileCreationTrans.formProfile.nickname", {
           defaultValue: "Nickname",
         })}
         rules={[{ required: true }]}
@@ -39,7 +45,7 @@ function ProfileCreationForm() {
 
       <Form.Item
         name="dateOfBirth"
-        label={t("profileCreationTrans.form.dateOfBirth", {
+        label={t("profileCreationTrans.formProfile.dateOfBirth", {
           defaultValue: "Date of birth",
         })}
         rules={[{ required: true }]}
@@ -49,7 +55,7 @@ function ProfileCreationForm() {
 
       <Form.Item
         name="profilePicture"
-        label={t("profileCreationTrans.form.uploadPicture", {
+        label={t("profileCreationTrans.formProfile.uploadPicture", {
           defaultValue: "Upload profile picture",
         })}
         rules={[{ required: true }]}

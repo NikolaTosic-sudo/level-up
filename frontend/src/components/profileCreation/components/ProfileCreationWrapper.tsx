@@ -7,6 +7,9 @@ import ProfileCreationForm from "./ProfileCreationForm";
 import { ProfileCreationSteps } from "./ProfileCreationSteps";
 import { useTranslation } from "react-i18next";
 import { Activity } from "react";
+import ProfileCreationQuests from "./ProfileCreationQuests";
+import { ProfileCreationSkills } from "./ProfileCreationSkills";
+import { ProfileCreationFinish } from "./ProfileCreationFinish";
 
 const ProfileCreationWrapper = () => {
   const { t } = useTranslation();
@@ -34,19 +37,19 @@ const ProfileCreationWrapper = () => {
       <Activity
         mode={currentStep === CurrentStepsEnum.Skills ? "visible" : "hidden"}
       >
-        <div>Skills</div>
+        <ProfileCreationSkills />
       </Activity>
 
       <Activity
         mode={currentStep === CurrentStepsEnum.Quests ? "visible" : "hidden"}
       >
-        <div>Quests</div>
+        <ProfileCreationQuests />
       </Activity>
 
       <Activity
         mode={currentStep === CurrentStepsEnum.Finish ? "visible" : "hidden"}
       >
-        <div>Finish</div>
+        <ProfileCreationFinish />
       </Activity>
 
       <Flex justify="end" gap={8}>
