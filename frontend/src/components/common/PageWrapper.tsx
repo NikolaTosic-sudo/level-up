@@ -7,26 +7,27 @@ import "../../../i18n.ts";
 import "./styles/style.css";
 
 const theme: ThemeConfig = {
-	token: {
-		borderRadius: 0,
-		fontFamily: "Montserrat, sans-serif",
-		colorError: "#9B0A3C",
-		colorPrimary: "#008c95",
-	},
+  token: {
+    borderRadius: 0,
+    fontFamily: "Montserrat, sans-serif",
+    colorText: "white",
+    colorError: "#9B0A3C",
+    colorPrimary: "#008c95",
+  },
 };
 
 function PageWrapper() {
-	return (
-		<Suspense
-			fallback={<Spin indicator={<LoadingOutlined spin />} size={"large"} />}
-		>
-			<ConfigProvider theme={theme}>
-				<div className="page">
-					<Outlet />
-				</div>
-			</ConfigProvider>
-		</Suspense>
-	);
+  return (
+    <Suspense
+      fallback={<Spin indicator={<LoadingOutlined spin />} size={"large"} />}
+    >
+      <ConfigProvider theme={theme}>
+        <div className="page">
+          <Outlet />
+        </div>
+      </ConfigProvider>
+    </Suspense>
+  );
 }
 
 export default PageWrapper;
