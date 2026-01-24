@@ -4,56 +4,50 @@ import { useTranslation } from "react-i18next";
 
 const ProfileCreationQuests = () => {
   const { t } = useTranslation();
-  const [form] = Form.useForm();
 
   return (
-    <Form name="quests" layout="horizontal" form={form}>
-      <Form.List name="quest">
-        {(fields, { add, remove }) => (
-          <>
-            {fields.map((field, index) => (
-              <Form.Item
-                label={t("profileCreationTrans.formQuests.quest", {
-                  defaultValue: "Daily quest {{count}}",
-                  count: index + 1,
-                })}
-                required={false}
-                key={field.key}
-              >
-                <Flex align="start" gap={8}>
-                  <Form.Item
-                    {...field}
-                    key={field.key}
-                    validateTrigger={["onChange", "onBlur"]}
-                    noStyle
-                  >
-                    <Input.TextArea
-                      rows={3}
-                      placeholder={`Quest ${index + 1}`}
-                    />
-                  </Form.Item>
-                  {fields.length > 1 ? (
-                    <MinusCircleOutlined
-                      onClick={() => remove(field.name)}
-                      style={{ fontSize: 20 }}
-                    />
-                  ) : null}
-                </Flex>
-              </Form.Item>
-            ))}
-            <Form.Item>
-              <Button
-                type="primary"
-                onClick={() => add()}
-                icon={<PlusOutlined />}
-              >
-                {t("profileCreationTrans.formQuests.add", "Add quest")}
-              </Button>
+    <Form.List name="quest">
+      {(fields, { add, remove }) => (
+        <>
+          {fields.map((field, index) => (
+            <Form.Item
+              label={t("profileCreationTrans.formQuests.quest", {
+                defaultValue: "Daily quest {{count}}",
+                count: index + 1,
+              })}
+              required={false}
+              key={field.key}
+            >
+              <Flex align="start" gap={8}>
+                <Form.Item
+                  {...field}
+                  key={field.key}
+                  validateTrigger={["onChange", "onBlur"]}
+                  noStyle
+                >
+                  <Input.TextArea rows={3} placeholder={`Quest ${index + 1}`} />
+                </Form.Item>
+                {fields.length > 1 ? (
+                  <MinusCircleOutlined
+                    onClick={() => remove(field.name)}
+                    style={{ fontSize: 20 }}
+                  />
+                ) : null}
+              </Flex>
             </Form.Item>
-          </>
-        )}
-      </Form.List>
-    </Form>
+          ))}
+          <Form.Item>
+            <Button
+              type="primary"
+              onClick={() => add()}
+              icon={<PlusOutlined />}
+            >
+              {t("profileCreationTrans.formQuests.add", "Add quest")}
+            </Button>
+          </Form.Item>
+        </>
+      )}
+    </Form.List>
   );
 };
 

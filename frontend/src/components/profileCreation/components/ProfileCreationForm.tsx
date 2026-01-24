@@ -3,16 +3,9 @@ import { useTranslation } from "react-i18next";
 
 function ProfileCreationForm() {
   const { t } = useTranslation();
-  const [form] = Form.useForm();
 
   return (
-    <Form
-      name="profile"
-      form={form}
-      requiredMark={false}
-      colon={false}
-      layout="vertical"
-    >
+    <>
       <Form.Item
         name="firstName"
         label={t("profileCreationTrans.formProfile.firstName", {
@@ -69,7 +62,7 @@ function ProfileCreationForm() {
           <Button>Upload</Button>
         </Upload>
       </Form.Item>
-    </Form>
+    </>
   );
 }
 

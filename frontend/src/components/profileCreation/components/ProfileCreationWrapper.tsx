@@ -1,4 +1,4 @@
-import { Button, Flex } from "antd";
+import { Button, Flex, Form } from "antd";
 import {
   CurrentStepsEnum,
   useProfileCreationStore,
@@ -25,7 +25,12 @@ const ProfileCreationWrapper = () => {
   }
 
   return (
-    <div className="profile-creation-wrapper">
+    <Form
+      name="profile-creation"
+      colon={false}
+      layout="vertical"
+      className="profile-creation-wrapper"
+    >
       <ProfileCreationSteps />
 
       <Activity
@@ -70,7 +75,7 @@ const ProfileCreationWrapper = () => {
               })}
         </Button>
       </Flex>
-    </div>
+    </Form>
   );
 };
 
