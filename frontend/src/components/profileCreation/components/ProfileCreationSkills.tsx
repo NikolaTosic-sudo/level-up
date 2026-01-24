@@ -1,3 +1,16 @@
+import { Form } from "antd";
+import SelectSkills from "./SelectSkills";
+import SkillRenderer from "./SkillRenderer";
+
 export const ProfileCreationSkills = () => {
-  return <div></div>;
+  const formInstance = Form.useFormInstance();
+  const skills = Form.useWatch("skills", formInstance);
+
+  return (
+    <>
+      <SkillRenderer skills={skills ?? []} />
+      <Form.Item name="skills" hidden />
+      <SelectSkills />
+    </>
+  );
 };
