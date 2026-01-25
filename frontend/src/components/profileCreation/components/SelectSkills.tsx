@@ -22,7 +22,7 @@ const SelectSkills = () => {
 
   const userSkills = Form.useWatch("skills", formInstance);
 
-  const items = ["development", "driving"]; // We'll get items from the backend, with all skills users added
+  const items = ["development development", "driving"]; // We'll get items from the backend, with all skills users added
 
   const onSkillChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSkill(event.target.value);

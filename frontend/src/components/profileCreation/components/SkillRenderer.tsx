@@ -1,4 +1,4 @@
-import { Form, Space, Tag } from "antd";
+import { Form, Space, Tag, Typography } from "antd";
 import type { MouseEvent } from "react";
 
 type SkillRendererProps = {
@@ -22,8 +22,10 @@ const SkillRenderer = ({ skills }: SkillRendererProps) => {
   return (
     <Space vertical>
       {skills.map((s, index) => (
-        <Tag closable onClose={(e) => handleClose(e, index)}>
-          {s}
+        <Tag closable onClose={(e) => handleClose(e, index)} className="skills">
+          <Typography.Paragraph ellipsis={true} style={{ maxWidth: 160 }}>
+            {s}
+          </Typography.Paragraph>
         </Tag>
       ))}
     </Space>

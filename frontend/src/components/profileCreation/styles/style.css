@@ -2,3 +2,13 @@
   max-width: 50%;
   margin-inline: auto;
 }
+
+.skills {
+  width: 200px;
+  padding: 16px 24px;
+
+  .ant-typography {
+    color: black;
+    margin: 0;
+  }
+}
