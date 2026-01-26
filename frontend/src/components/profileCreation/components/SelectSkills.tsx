@@ -48,7 +48,9 @@ const SelectSkills = () => {
   return (
     <Select
       style={{ width: 300 }}
-      placeholder={t("", { defaultValue: "Select skill" })}
+      placeholder={t("profileCreationTrans.selectSkill.placeholderSelect", {
+        defaultValue: "Select skill",
+      })}
       ref={selectRef}
       onChange={handleChange}
       open={open}
@@ -62,13 +64,18 @@ const SelectSkills = () => {
           <Divider style={{ margin: "8px 0" }} />
           <Space style={{ padding: "0 8px 4px" }}>
             <Input
-              placeholder={t("", { defaultValue: "Please enter skill" })}
+              placeholder={t(
+                "profileCreationTrans.selectSkill.placeholderAdd",
+                { defaultValue: "Please enter skill" },
+              )}
               value={skill}
               onChange={onSkillChange}
               onKeyDown={(e) => e.stopPropagation()}
             />
             <Button type="primary" icon={<PlusOutlined />} onClick={addItem}>
-              {t("", { defaultValue: "Add skill" })}
+              {t("profileCreationTrans.selectSkill.addSkill", {
+                defaultValue: "Add skill",
+              })}
             </Button>
           </Space>
         </>
