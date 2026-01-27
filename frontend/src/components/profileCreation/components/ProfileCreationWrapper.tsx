@@ -58,13 +58,15 @@ const ProfileCreationWrapper = () => {
       </Activity>
 
       <Flex justify="end" gap={8}>
-        {currentStep !== CurrentStepsEnum.Form && (
+        <Activity
+          mode={currentStep !== CurrentStepsEnum.Form ? "visible" : "hidden"}
+        >
           <Button onClick={() => setCurrentStep(currentStep - 1)} danger>
             {t("profileCreationTrans.stepBtn.previous", {
               defaultValue: "Previous step",
             })}
           </Button>
-        )}
+        </Activity>
         <Button type="primary" onClick={handleNextStep}>
           {currentStep !== CurrentStepsEnum.Finish
             ? t("profileCreationTrans.stepBtn.next", {

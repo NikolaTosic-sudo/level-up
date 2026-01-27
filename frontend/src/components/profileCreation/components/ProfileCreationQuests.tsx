@@ -1,5 +1,6 @@
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Input } from "antd";
+import { Activity } from "react";
 import { useTranslation } from "react-i18next";
 
 const ProfileCreationQuests = () => {
@@ -27,12 +28,12 @@ const ProfileCreationQuests = () => {
                 >
                   <Input.TextArea rows={3} placeholder={`Quest ${index + 1}`} />
                 </Form.Item>
-                {fields.length > 1 ? (
+                <Activity mode={fields.length > 1 ? "visible" : "hidden"}>
                   <MinusCircleOutlined
                     onClick={() => remove(field.name)}
                     style={{ fontSize: 20 }}
                   />
-                ) : null}
+                </Activity>
               </Flex>
             </Form.Item>
           ))}
