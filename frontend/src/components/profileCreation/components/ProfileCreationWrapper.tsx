@@ -15,12 +15,20 @@ const ProfileCreationWrapper = () => {
   const { t } = useTranslation();
 
   const { currentStep, setCurrentStep } = useProfileCreationStore();
+  const [form] = Form.useForm();
 
   function handleNextStep() {
     if (currentStep !== CurrentStepsEnum.Finish) {
       setCurrentStep(currentStep + 1);
     } else {
-      alert("finished");
+      form
+        .validateFields()
+        .then((values) =>
+          alert(`finished with values: ${JSON.stringify(values)}`),
+        )
+        .catch(
+          (reason) => alert(`rejected with reason: ${JSON.stringify(reason)}`), // Problem with <Activity /> component destroying <Form.Items> inside and removing required rules, gotta figure it out
+        );
     }
   }
 
@@ -30,6 +38,7 @@ const ProfileCreationWrapper = () => {
       colon={false}
       layout="vertical"
       className="profile-creation-wrapper"
+      form={form}
     >
       <ProfileCreationSteps />
 
