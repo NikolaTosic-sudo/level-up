@@ -44,5 +44,12 @@ export const ProfileCreationSteps = () => {
     setCurrentStep(current);
   }
 
-  return <Steps items={items} current={currentStep} onChange={changeStep} />;
+  return (
+    <Steps
+      style={{ marginBottom: 32 }}
+      items={items}
+      current={currentStep}
+      onChange={changeStep}
+    />
+  );
 };

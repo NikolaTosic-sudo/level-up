@@ -47,7 +47,7 @@ const SelectSkills = () => {
 
   return (
     <Select
-      style={{ width: 300 }}
+      style={{ marginLeft: 24, width: 300, maxHeight: 40 }}
       placeholder={t("profileCreationTrans.selectSkill.placeholderSelect", {
         defaultValue: "Select skill",
       })}

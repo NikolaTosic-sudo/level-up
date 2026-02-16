@@ -57,7 +57,7 @@ const ProfileCreationWrapper = () => {
         <ProfileCreationFinish />
       </Activity>
 
-      <Flex justify="end" gap={8}>
+      <Flex style={{ marginTop: 24 }} justify="end" gap={8}>
         <Activity
           mode={currentStep !== CurrentStepsEnum.Form ? "visible" : "hidden"}
         >

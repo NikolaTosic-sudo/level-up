@@ -23,7 +23,7 @@ const SkillRenderer = ({ skills }: SkillRendererProps) => {
     <Space vertical>
       {skills.map((s, index) => (
         <Tag closable onClose={(e) => handleClose(e, index)} className="skills">
-          <Typography.Paragraph ellipsis={true} style={{ maxWidth: 160 }}>
+          <Typography.Paragraph ellipsis={true} style={{ maxWidth: 140 }}>
             {s}
           </Typography.Paragraph>
         </Tag>

@@ -6,6 +6,8 @@
 .skills {
   width: 200px;
   padding: 16px 24px;
+  display: flex;
+  gap: 8px;
 
   .ant-typography {
     color: black;
