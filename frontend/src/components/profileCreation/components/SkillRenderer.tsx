@@ -7,7 +7,6 @@ type SkillRendererProps = {
 
 const SkillRenderer = ({ skills }: SkillRendererProps) => {
   const formInstance = Form.useFormInstance();
-  console.log(skills, "skills");
 
   function handleClose(
     e: MouseEvent<HTMLElement, globalThis.MouseEvent>,
