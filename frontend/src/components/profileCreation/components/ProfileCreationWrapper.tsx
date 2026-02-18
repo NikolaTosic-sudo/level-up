@@ -18,17 +18,13 @@ const ProfileCreationWrapper = () => {
   const [form] = Form.useForm();
 
   function handleNextStep() {
-    if (currentStep !== CurrentStepsEnum.Finish) {
+    if (currentStep === CurrentStepsEnum.Form) {
+      form.validateFields().then(() => setCurrentStep(currentStep + 1));
+    } else if (currentStep !== CurrentStepsEnum.Finish) {
       setCurrentStep(currentStep + 1);
     } else {
-      form
-        .validateFields()
-        .then((values) =>
-          alert(`finished with values: ${JSON.stringify(values)}`),
-        )
-        .catch(
-          (reason) => alert(`rejected with reason: ${JSON.stringify(reason)}`), // Problem with <Activity /> component destroying <Form.Items> inside and removing required rules, gotta figure it out
-        );
+      const values = form.getFieldsValue();
+      alert(`finished with values: ${JSON.stringify(values)}`);
     }
   }
 

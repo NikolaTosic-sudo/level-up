@@ -4,12 +4,16 @@ import {
   NodeIndexOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Steps, type StepsProps } from "antd";
+import { Form, Steps, type StepsProps } from "antd";
 import { useTranslation } from "react-i18next";
-import { useProfileCreationStore } from "../store/useProfileCreationStore";
+import {
+  CurrentStepsEnum,
+  useProfileCreationStore,
+} from "../store/useProfileCreationStore";
 
 export const ProfileCreationSteps = () => {
   const { t } = useTranslation();
+  const formInstance = Form.useFormInstance();
 
   const { currentStep, setCurrentStep } = useProfileCreationStore();
 
@@ -41,7 +45,11 @@ export const ProfileCreationSteps = () => {
   ];
 
   function changeStep(current: number) {
-    setCurrentStep(current);
+    if (currentStep === CurrentStepsEnum.Form) {
+      formInstance.validateFields().then(() => setCurrentStep(current));
+    } else {
+      setCurrentStep(current);
+    }
   }
 
   return (
