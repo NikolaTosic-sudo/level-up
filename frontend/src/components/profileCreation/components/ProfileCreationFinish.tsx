@@ -1,4 +1,5 @@
-import { Empty, Form } from "antd";
+import { Descriptions, Empty, Form } from "antd";
+import type { DescriptionsItemType } from "antd/es/descriptions";
 import { useTranslation } from "react-i18next";
 
 export const ProfileCreationFinish = () => {
@@ -11,6 +12,8 @@ export const ProfileCreationFinish = () => {
     Array.isArray(val) ? val.length : val,
   );
 
+  console.log(values, valuesExist);
+
   if (!valuesExist) {
     return (
       <Empty
@@ -21,5 +24,36 @@ export const ProfileCreationFinish = () => {
     );
   }
 
-  return <div></div>;
+  const descItems: DescriptionsItemType[] = [
+    {
+      label: t("profileCreationTrans.formFinish.profileDetails.firstName", {
+        defaultValue: "",
+      }),
+      children: values.firstName,
+    },
+    {
+      label: t("profileCreationTrans.formFinish.profileDetails.firstName", {
+        defaultValue: "",
+      }),
+      children: values.lastName,
+    },
+    {
+      label: t("profileCreationTrans.formFinish.profileDetails.firstName", {
+        defaultValue: "",
+      }),
+      children: values.nickname,
+    },
+    {
+      label: t("profileCreationTrans.formFinish.profileDetails.firstName", {
+        defaultValue: "",
+      }),
+      children: values.firstName,
+    },
+  ];
+
+  return (
+    <>
+      <Descriptions items={descItems} />
+    </>
+  );
 };
