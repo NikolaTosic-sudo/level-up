@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Upload } from "antd";
+import { DatePicker, Form, Input } from "antd";
 import { useTranslation } from "react-i18next";
 
 function ProfileCreationForm() {
@@ -44,23 +44,6 @@ function ProfileCreationForm() {
         rules={[{ required: true }]}
       >
         <DatePicker />
-      </Form.Item>
-
-      <Form.Item
-        name="profilePicture"
-        label={t("profileCreationTrans.formProfile.uploadPicture", {
-          defaultValue: "Upload profile picture",
-        })}
-        rules={[{ required: true }]}
-        valuePropName="file"
-      >
-        <Upload
-          accept={".png, .jpeg, .webp, .jpg"}
-          maxCount={1}
-          beforeUpload={() => false}
-        >
-          <Button>Upload</Button>
-        </Upload>
       </Form.Item>
     </>
   );
