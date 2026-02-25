@@ -1,5 +1,6 @@
-import { Descriptions, Empty, Form } from "antd";
+import { Descriptions, Divider, Empty, Form, Typography } from "antd";
 import type { DescriptionsItemType } from "antd/es/descriptions";
+import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 
 export const ProfileCreationFinish = () => {
@@ -27,33 +28,57 @@ export const ProfileCreationFinish = () => {
   const descItems: DescriptionsItemType[] = [
     {
       label: t("profileCreationTrans.formFinish.profileDetails.firstName", {
-        defaultValue: "",
+        defaultValue: "First name",
       }),
       children: values.firstName,
     },
     {
-      label: t("profileCreationTrans.formFinish.profileDetails.firstName", {
-        defaultValue: "",
+      label: t("profileCreationTrans.formFinish.profileDetails.lastName", {
+        defaultValue: "Last name",
       }),
       children: values.lastName,
     },
     {
-      label: t("profileCreationTrans.formFinish.profileDetails.firstName", {
-        defaultValue: "",
+      label: t("profileCreationTrans.formFinish.profileDetails.nickname", {
+        defaultValue: "Nickname",
       }),
       children: values.nickname,
     },
     {
-      label: t("profileCreationTrans.formFinish.profileDetails.firstName", {
-        defaultValue: "",
+      label: t("profileCreationTrans.formFinish.profileDetails.dateBirth", {
+        defaultValue: "Date of birth",
       }),
-      children: values.firstName,
+      children:
+        values.dateOfBirth && dayjs.isDayjs(values.dateOfBirth)
+          ? values.dateOfBirth.format("DD/MM/YYYY")
+          : null,
+      style:
+        values.dateOfBirth && dayjs.isDayjs(values.dateOfBirth)
+          ? {}
+          : { display: "none" },
     },
   ];
 
   return (
     <>
+      <Typography.Title level={3}>
+        {t("profileCreationTrans.formFinish.profileTitle", {
+          defaultValue: "Profile data",
+        })}
+      </Typography.Title>
       <Descriptions items={descItems} />
+      <Divider />
+      <Typography.Title level={3}>
+        {t("profileCreationTrans.formFinish.skillsTitle", {
+          defaultValue: "Skills",
+        })}
+      </Typography.Title>
+      <Divider />
+      <Typography.Title level={3}>
+        {t("profileCreationTrans.formFinish.questsTitle", {
+          defaultValue: "Quests",
+        })}
+      </Typography.Title>
     </>
   );
 };
