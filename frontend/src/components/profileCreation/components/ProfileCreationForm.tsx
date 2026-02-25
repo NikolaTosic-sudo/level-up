@@ -41,7 +41,6 @@ function ProfileCreationForm() {
         label={t("profileCreationTrans.formProfile.dateOfBirth", {
           defaultValue: "Date of birth",
         })}
-        rules={[{ required: true }]}
       >
         <DatePicker />
       </Form.Item>
