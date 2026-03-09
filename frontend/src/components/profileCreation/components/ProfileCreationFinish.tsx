@@ -13,8 +13,6 @@ export const ProfileCreationFinish = () => {
     Array.isArray(val) ? val.length : val,
   );
 
-  console.log(values, valuesExist);
-
   if (!valuesExist) {
     return (
       <Empty

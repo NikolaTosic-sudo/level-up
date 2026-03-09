@@ -23,7 +23,7 @@ const ProfileCreationWrapper = () => {
     } else if (currentStep !== CurrentStepsEnum.Finish) {
       setCurrentStep(currentStep + 1);
     } else {
-      const values = form.getFieldsValue();
+      const values = form.getFieldsValue(true);
       alert(`finished with values: ${JSON.stringify(values)}`);
     }
   }
