@@ -58,25 +58,33 @@ export const ProfileCreationFinish = () => {
   ];
 
   return (
-    <>
+    <div>
       <Typography.Title level={3}>
         {t("profileCreationTrans.formFinish.profileTitle", {
           defaultValue: "Profile data",
         })}
       </Typography.Title>
       <Descriptions items={descItems} />
-      <Divider />
-      <Typography.Title level={3}>
-        {t("profileCreationTrans.formFinish.skillsTitle", {
-          defaultValue: "Skills",
-        })}
-      </Typography.Title>
-      <Divider />
-      <Typography.Title level={3}>
-        {t("profileCreationTrans.formFinish.questsTitle", {
-          defaultValue: "Quests",
-        })}
-      </Typography.Title>
-    </>
+      {values.skills && values.skills.length ? (
+        <>
+          <Divider />
+          <Typography.Title level={3}>
+            {t("profileCreationTrans.formFinish.skillsTitle", {
+              defaultValue: "Skills",
+            })}
+          </Typography.Title>
+        </>
+      ) : null}
+      {values.quests && values.quests.length ? (
+        <>
+          <Divider />
+          <Typography.Title level={3}>
+            {t("profileCreationTrans.formFinish.questsTitle", {
+              defaultValue: "Quests",
+            })}
+          </Typography.Title>
+        </>
+      ) : null}
+    </div>
   );
 };

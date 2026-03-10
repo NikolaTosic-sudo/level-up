@@ -13,6 +13,7 @@ const theme: ThemeConfig = {
     colorText: "white",
     colorError: "#9B0A3C",
     colorPrimary: "#008c95",
+    colorTextPlaceholder: "#008c95",
   },
 };
 
