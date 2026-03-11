@@ -5,7 +5,7 @@ function ProfileCreationForm() {
   const { t } = useTranslation();
 
   return (
-    <>
+    <div className="profile-creation-main">
       <Form.Item
         name="firstName"
         label={t("profileCreationTrans.formProfile.firstName", {
@@ -44,7 +44,7 @@ function ProfileCreationForm() {
       >
         <DatePicker />
       </Form.Item>
-    </>
+    </div>
   );
 }
 

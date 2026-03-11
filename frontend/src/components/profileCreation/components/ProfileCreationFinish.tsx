@@ -58,7 +58,7 @@ export const ProfileCreationFinish = () => {
   ];
 
   return (
-    <div>
+    <div className="profile-creation-main">
       <Typography.Title level={3}>
         {t("profileCreationTrans.formFinish.profileTitle", {
           defaultValue: "Profile data",

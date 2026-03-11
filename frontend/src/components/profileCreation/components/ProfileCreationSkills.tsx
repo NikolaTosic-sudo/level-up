@@ -7,7 +7,10 @@ export const ProfileCreationSkills = () => {
   const skills = Form.useWatch("skills", formInstance);
 
   return (
-    <Flex justify={skills ? "space-between" : "center"}>
+    <Flex
+      className="profile-creation-main"
+      justify={skills ? "space-between" : "center"}
+    >
       <SkillRenderer skills={skills ?? []} />
       <Form.Item name="skills" hidden />
       <SelectSkills />

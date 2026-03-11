@@ -7,6 +7,10 @@
   justify-content: space-between;
 }
 
+.profile-creation-main {
+  flex: 1;
+}
+
 .skills {
   width: 200px;
   padding: 16px 24px;
