@@ -65,42 +65,44 @@ export const ProfileCreationFinish = () => {
   ];
 
   return (
-    <div className="profile-creation-main">
-      <Divider titlePlacement="start" style={{ marginTop: 0 }}>
-        <Typography.Title level={3}>
-          {t("profileCreationTrans.formFinish.profileTitle", {
-            defaultValue: "Profile data",
-          })}
-        </Typography.Title>
-      </Divider>
+    <ConfigProvider
+      theme={{
+        token: { colorSplit: "white" },
+      }}
+    >
+      <div className="profile-creation-main">
+        <Divider titlePlacement="start" style={{ marginTop: 0 }}>
+          <Typography.Title level={3} style={{ marginBlock: 12 }}>
+            {t("profileCreationTrans.formFinish.profileTitle", {
+              defaultValue: "Profile data",
+            })}
+          </Typography.Title>
+        </Divider>
 
-      <ConfigProvider
-        theme={{ token: { colorText: "rgba(0, 255, 255, 0.55)" } }}
-      >
         <Descriptions items={descItems} />
-      </ConfigProvider>
-      {values.skills && values.skills.length ? (
-        <>
-          <Divider titlePlacement="start">
-            <Typography.Title level={3}>
-              {t("profileCreationTrans.formFinish.skillsTitle", {
-                defaultValue: "Skills",
-              })}
-            </Typography.Title>
-          </Divider>
-        </>
-      ) : null}
-      {values.quests && values.quests.length ? (
-        <>
-          <Divider titlePlacement="start">
-            <Typography.Title level={3}>
-              {t("profileCreationTrans.formFinish.questsTitle", {
-                defaultValue: "Quests",
-              })}
-            </Typography.Title>
-          </Divider>
-        </>
-      ) : null}
-    </div>
+        {values.skills && values.skills.length ? (
+          <>
+            <Divider titlePlacement="start">
+              <Typography.Title level={3} style={{ marginBlock: 12 }}>
+                {t("profileCreationTrans.formFinish.skillsTitle", {
+                  defaultValue: "Skills",
+                })}
+              </Typography.Title>
+            </Divider>
+          </>
+        ) : null}
+        {values.quests && values.quests.length ? (
+          <>
+            <Divider titlePlacement="start">
+              <Typography.Title level={3} style={{ marginBlock: 12 }}>
+                {t("profileCreationTrans.formFinish.questsTitle", {
+                  defaultValue: "Quests",
+                })}
+              </Typography.Title>
+            </Divider>
+          </>
+        ) : null}
+      </div>
+    </ConfigProvider>
   );
 };
