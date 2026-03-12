@@ -1,4 +1,11 @@
-import { Descriptions, Divider, Empty, Form, Typography } from "antd";
+import {
+  ConfigProvider,
+  Descriptions,
+  Divider,
+  Empty,
+  Form,
+  Typography,
+} from "antd";
 import type { DescriptionsItemType } from "antd/es/descriptions";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
@@ -59,12 +66,19 @@ export const ProfileCreationFinish = () => {
 
   return (
     <div className="profile-creation-main">
-      <Typography.Title level={3}>
-        {t("profileCreationTrans.formFinish.profileTitle", {
-          defaultValue: "Profile data",
-        })}
-      </Typography.Title>
-      <Descriptions items={descItems} />
+      <Divider titlePlacement="start" style={{ marginTop: 0 }}>
+        <Typography.Title level={3}>
+          {t("profileCreationTrans.formFinish.profileTitle", {
+            defaultValue: "Profile data",
+          })}
+        </Typography.Title>
+      </Divider>
+
+      <ConfigProvider
+        theme={{ token: { colorText: "rgba(0, 255, 255, 0.55)" } }}
+      >
+        <Descriptions items={descItems} />
+      </ConfigProvider>
       {values.skills && values.skills.length ? (
         <>
           <Divider titlePlacement="start">

@@ -15,6 +15,9 @@ const theme: ThemeConfig = {
     colorError: "#9B0A3C",
     colorPrimary: "#008c95",
     colorTextPlaceholder: "#008c95",
+    colorTextDescription: "rgba(255, 255, 255, 0.45)",
+    colorTextQuaternary: "rgba(255, 255, 255, 0.45)",
+    colorTextTertiary: "rgba(255, 255, 255, 0.65)",
   },
 };
 
