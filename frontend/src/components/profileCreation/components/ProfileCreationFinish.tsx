@@ -67,22 +67,24 @@ export const ProfileCreationFinish = () => {
       <Descriptions items={descItems} />
       {values.skills && values.skills.length ? (
         <>
-          <Divider />
-          <Typography.Title level={3}>
-            {t("profileCreationTrans.formFinish.skillsTitle", {
-              defaultValue: "Skills",
-            })}
-          </Typography.Title>
+          <Divider titlePlacement="start">
+            <Typography.Title level={3}>
+              {t("profileCreationTrans.formFinish.skillsTitle", {
+                defaultValue: "Skills",
+              })}
+            </Typography.Title>
+          </Divider>
         </>
       ) : null}
       {values.quests && values.quests.length ? (
         <>
-          <Divider />
-          <Typography.Title level={3}>
-            {t("profileCreationTrans.formFinish.questsTitle", {
-              defaultValue: "Quests",
-            })}
-          </Typography.Title>
+          <Divider titlePlacement="start">
+            <Typography.Title level={3}>
+              {t("profileCreationTrans.formFinish.questsTitle", {
+                defaultValue: "Quests",
+              })}
+            </Typography.Title>
+          </Divider>
         </>
       ) : null}
     </div>
