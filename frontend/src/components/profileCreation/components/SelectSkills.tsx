@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
+  ConfigProvider,
   Divider,
   Form,
   Input,
@@ -46,44 +47,52 @@ const SelectSkills = () => {
   };
 
   return (
-    <Select
-      style={{ marginLeft: 24, width: 300, maxHeight: 40 }}
-      placeholder={t("profileCreationTrans.selectSkill.placeholderSelect", {
-        defaultValue: "Select skill",
-      })}
-      ref={selectRef}
-      onChange={handleChange}
-      open={open}
-      onFocus={() => setOpen(true)}
-      onOpenChange={setOpen}
-      showSearch
-      value={null}
-      popupRender={(menu) => (
-        <>
-          {menu}
-          <Divider style={{ margin: "8px 0" }} />
-          <Space style={{ padding: "0 8px 4px" }}>
-            <Input
-              placeholder={t(
-                "profileCreationTrans.selectSkill.placeholderAdd",
-                { defaultValue: "Please enter skill" },
-              )}
-              value={skill}
-              onChange={onSkillChange}
-              onKeyDown={(e) => e.stopPropagation()}
-            />
-            <Button type="primary" icon={<PlusOutlined />} onClick={addItem}>
-              {t("profileCreationTrans.selectSkill.addSkill", {
-                defaultValue: "Add skill",
-              })}
-            </Button>
-          </Space>
-        </>
-      )}
-      options={items
-        .filter((o) => !(userSkills ?? []).includes(o))
-        .map((item) => ({ label: item, value: item }))}
-    />
+    <ConfigProvider
+      theme={{
+        token: {
+          colorText: "black",
+        },
+      }}
+    >
+      <Select
+        style={{ marginLeft: 24, width: 300, maxHeight: 40 }}
+        placeholder={t("profileCreationTrans.selectSkill.placeholderSelect", {
+          defaultValue: "Select skill",
+        })}
+        ref={selectRef}
+        onChange={handleChange}
+        open={open}
+        onFocus={() => setOpen(true)}
+        onOpenChange={setOpen}
+        showSearch
+        value={null}
+        popupRender={(menu) => (
+          <>
+            {menu}
+            <Divider style={{ margin: "8px 0" }} />
+            <Space style={{ padding: "0 8px 4px" }}>
+              <Input
+                placeholder={t(
+                  "profileCreationTrans.selectSkill.placeholderAdd",
+                  { defaultValue: "Please enter skill" },
+                )}
+                value={skill}
+                onChange={onSkillChange}
+                onKeyDown={(e) => e.stopPropagation()}
+              />
+              <Button type="primary" icon={<PlusOutlined />} onClick={addItem}>
+                {t("profileCreationTrans.selectSkill.addSkill", {
+                  defaultValue: "Add skill",
+                })}
+              </Button>
+            </Space>
+          </>
+        )}
+        options={items
+          .filter((o) => !(userSkills ?? []).includes(o))
+          .map((item) => ({ label: item, value: item }))}
+      />
+    </ConfigProvider>
   );
 };
 
