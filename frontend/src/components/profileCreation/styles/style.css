@@ -13,12 +13,11 @@
 
 .skills {
   width: 200px;
-  padding: 16px 24px;
+  padding: 8px 24px;
   display: flex;
-  gap: 8px;
+  justify-content: space-between;
 
   .ant-typography {
-    color: black;
     margin: 0;
   }
 }

@@ -9,6 +9,7 @@ import "./styles/style.css";
 const theme: ThemeConfig = {
   token: {
     borderRadius: 0,
+    colorBorder: "rgba(0, 255, 255, 0.55)",
     fontFamily: "Montserrat, sans-serif",
     colorText: "white",
     colorError: "#9B0A3C",
