@@ -8,7 +8,7 @@ const ProfileCreationQuests = () => {
 
   return (
     <div className="profile-creation-main">
-      <Form.List name="quest">
+      <Form.List name="quests">
         {(fields, { add, remove }) => (
           <>
             {fields.map((field, index) => (
