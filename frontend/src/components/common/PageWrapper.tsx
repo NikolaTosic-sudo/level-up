@@ -12,12 +12,20 @@ const theme: ThemeConfig = {
     colorBorder: "rgba(0, 255, 255, 0.55)",
     fontFamily: "Montserrat, sans-serif",
     colorText: "white",
+    colorSplit: "white",
     colorError: "#9B0A3C",
     colorPrimary: "#008c95",
     colorTextPlaceholder: "#008c95",
     colorTextDescription: "rgba(255, 255, 255, 0.45)",
     colorTextQuaternary: "rgba(255, 255, 255, 0.45)",
     colorTextTertiary: "rgba(255, 255, 255, 0.65)",
+    colorTextDisabled: "rgba(0, 0, 0, 0.45)",
+  },
+  components: {
+    Form: {
+      labelColor: "white",
+      labelRequiredMarkColor: "#DD0A3C",
+    },
   },
 };
 
