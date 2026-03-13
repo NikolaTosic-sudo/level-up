@@ -5,6 +5,7 @@ import {
   Empty,
   Flex,
   Form,
+  Tag,
   Typography,
 } from "antd";
 import type { DescriptionsItemType } from "antd/es/descriptions";
@@ -85,6 +86,20 @@ export const ProfileCreationFinish = () => {
               })}
             </Typography.Title>
           </Divider>
+          <Flex gap={8} wrap>
+            {values.skills.map((s: string, index: number) => (
+              <Tag
+                key={`${s}_${index}`}
+                color="#008c95"
+                variant="solid"
+                className="skills"
+              >
+                <Typography.Paragraph ellipsis={true} style={{ maxWidth: 140 }}>
+                  {s}
+                </Typography.Paragraph>
+              </Tag>
+            ))}
+          </Flex>
         </>
       ) : null}
       {values.quests && values.quests.length ? (

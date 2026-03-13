@@ -12,7 +12,8 @@
 }
 
 .skills {
-  width: 200px;
+  max-width: 200px;
+  width: 100%;
   padding: 8px 24px;
   display: flex;
   justify-content: space-between;
