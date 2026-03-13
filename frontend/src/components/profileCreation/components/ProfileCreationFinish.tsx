@@ -1,8 +1,9 @@
 import {
-  ConfigProvider,
+  Card,
   Descriptions,
   Divider,
   Empty,
+  Flex,
   Form,
   Typography,
 } from "antd";
@@ -65,44 +66,45 @@ export const ProfileCreationFinish = () => {
   ];
 
   return (
-    <ConfigProvider
-      theme={{
-        token: { colorSplit: "white" },
-      }}
-    >
-      <div className="profile-creation-main">
-        <Divider titlePlacement="start" style={{ marginTop: 0 }}>
-          <Typography.Title level={3} style={{ marginBlock: 12 }}>
-            {t("profileCreationTrans.formFinish.profileTitle", {
-              defaultValue: "Profile data",
-            })}
-          </Typography.Title>
-        </Divider>
+    <div className="profile-creation-main">
+      <Divider titlePlacement="start" style={{ marginTop: 0 }}>
+        <Typography.Title level={3} style={{ marginBlock: 12 }}>
+          {t("profileCreationTrans.formFinish.profileTitle", {
+            defaultValue: "Profile data",
+          })}
+        </Typography.Title>
+      </Divider>
 
-        <Descriptions items={descItems} />
-        {values.skills && values.skills.length ? (
-          <>
-            <Divider titlePlacement="start">
-              <Typography.Title level={3} style={{ marginBlock: 12 }}>
-                {t("profileCreationTrans.formFinish.skillsTitle", {
-                  defaultValue: "Skills",
-                })}
-              </Typography.Title>
-            </Divider>
-          </>
-        ) : null}
-        {values.quests && values.quests.length ? (
-          <>
-            <Divider titlePlacement="start">
-              <Typography.Title level={3} style={{ marginBlock: 12 }}>
-                {t("profileCreationTrans.formFinish.questsTitle", {
-                  defaultValue: "Quests",
-                })}
-              </Typography.Title>
-            </Divider>
-          </>
-        ) : null}
-      </div>
-    </ConfigProvider>
+      <Descriptions items={descItems} />
+      {values.skills && values.skills.length ? (
+        <>
+          <Divider titlePlacement="start">
+            <Typography.Title level={3} style={{ marginBlock: 12 }}>
+              {t("profileCreationTrans.formFinish.skillsTitle", {
+                defaultValue: "Skills",
+              })}
+            </Typography.Title>
+          </Divider>
+        </>
+      ) : null}
+      {values.quests && values.quests.length ? (
+        <>
+          <Divider titlePlacement="start">
+            <Typography.Title level={3} style={{ marginBlock: 12 }}>
+              {t("profileCreationTrans.formFinish.questsTitle", {
+                defaultValue: "Quests",
+              })}
+            </Typography.Title>
+          </Divider>
+          <Flex gap={18} vertical>
+            {values.quests.map((q: string) => (
+              <Card className="quest-card" styles={{ body: { padding: 12 } }}>
+                {q}
+              </Card>
+            ))}
+          </Flex>
+        </>
+      ) : null}
+    </div>
   );
 };
