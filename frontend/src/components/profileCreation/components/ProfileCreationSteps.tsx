@@ -4,7 +4,7 @@ import {
   NodeIndexOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Form, Steps, type StepsProps } from "antd";
+import { ConfigProvider, Form, Steps, type StepsProps } from "antd";
 import { useTranslation } from "react-i18next";
 import {
   CurrentStepsEnum,
@@ -53,11 +53,19 @@ export const ProfileCreationSteps = () => {
   }
 
   return (
-    <Steps
-      style={{ marginBottom: 32 }}
-      items={items}
-      current={currentStep}
-      onChange={changeStep}
-    />
+    <ConfigProvider
+      theme={{
+        token: {
+          colorTextDisabled: "rgba(255, 255, 255, 0.45)",
+        },
+      }}
+    >
+      <Steps
+        style={{ marginBottom: 32 }}
+        items={items}
+        current={currentStep}
+        onChange={changeStep}
+      />
+    </ConfigProvider>
   );
 };

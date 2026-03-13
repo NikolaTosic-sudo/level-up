@@ -9,12 +9,9 @@ function ProfileCreationForm() {
       theme={{
         token: {
           colorText: "black",
-          colorTextDisabled: "rgba(0, 0, 0, 0.45)",
-        },
-        components: {
-          Form: {
-            labelColor: "white",
-          },
+          colorError: "#DD0A3C",
+          colorSplit: "rgba(0, 0, 0, 0.05)",
+          colorTextTertiary: "rgba(0, 0, 0, 0.65)",
         },
       }}
     >

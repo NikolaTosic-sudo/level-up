@@ -11,12 +11,6 @@ const ProfileCreationQuests = () => {
       theme={{
         token: {
           colorText: "black",
-          colorTextDisabled: "rgba(0, 0, 0, 0.45)",
-        },
-        components: {
-          Form: {
-            labelColor: "white",
-          },
         },
       }}
     >
@@ -48,7 +42,7 @@ const ProfileCreationQuests = () => {
                     <Activity mode={fields.length > 1 ? "visible" : "hidden"}>
                       <MinusCircleOutlined
                         onClick={() => remove(field.name)}
-                        style={{ fontSize: 20 }}
+                        style={{ fontSize: 20, color: "white" }}
                       />
                     </Activity>
                   </Flex>
