@@ -1,9 +1,9 @@
-import React from "react";
+type NotFoundComponentProps = {
+  message?: string;
+};
 
-type NotFoundComponentProps = {};
-
-function NotFoundComponent({}): NotFoundComponentProps {
-  return <div></div>;
+function NotFoundComponent({ message }: NotFoundComponentProps) {
+  return <div>{message ?? ""}</div>;
 }
 
 export type { NotFoundComponentProps };
