@@ -28,7 +28,10 @@ const SkillRenderer = ({ skills }: SkillRendererProps) => {
           onClose={(e) => handleClose(e, index)}
           className="skills"
         >
-          <Typography.Paragraph ellipsis={true} style={{ maxWidth: 140 }}>
+          <Typography.Paragraph
+            ellipsis={{ tooltip: true }}
+            style={{ maxWidth: 140 }}
+          >
             {s}
           </Typography.Paragraph>
         </Tag>

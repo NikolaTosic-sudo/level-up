@@ -94,7 +94,10 @@ export const ProfileCreationFinish = () => {
                 variant="solid"
                 className="skills"
               >
-                <Typography.Paragraph ellipsis={true} style={{ maxWidth: 140 }}>
+                <Typography.Paragraph
+                  ellipsis={{ tooltip: true }}
+                  style={{ maxWidth: 140 }}
+                >
                   {s}
                 </Typography.Paragraph>
               </Tag>
