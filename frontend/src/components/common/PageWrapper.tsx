@@ -35,6 +35,9 @@ const theme: ThemeConfig = {
       colorBgContainer: "transparent",
       selectorBg: "black",
     },
+    DatePicker: {
+      colorBgContainer: "transparent",
+    },
   },
 };
 
