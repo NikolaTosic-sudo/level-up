@@ -86,14 +86,9 @@ export const ProfileCreationFinish = () => {
               })}
             </Typography.Title>
           </Divider>
-          <Flex gap={8} wrap>
+          <Flex gap={16} wrap>
             {values.skills.map((s: string, index: number) => (
-              <Tag
-                key={`${s}_${index}`}
-                color="#008c95"
-                variant="solid"
-                className="skills"
-              >
+              <Tag key={`${s}_${index}`} className="skills-finish">
                 <Typography.Paragraph
                   ellipsis={{ tooltip: true }}
                   style={{ maxWidth: 140 }}
