@@ -9,7 +9,7 @@ export const ProfileCreationSkills = () => {
   return (
     <Flex
       className="profile-creation-main"
-      justify={skills ? "space-between" : "center"}
+      justify={skills && skills.length ? "space-between" : "center"}
     >
       <Form.Item name="skills">
         <SkillRenderer />
