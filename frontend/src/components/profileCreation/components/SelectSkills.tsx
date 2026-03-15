@@ -50,7 +50,7 @@ const SelectSkills = () => {
     <ConfigProvider
       theme={{
         token: {
-          colorText: "black",
+          colorSplit: "rgba(0, 255, 255, 0.55)",
         },
       }}
     >
