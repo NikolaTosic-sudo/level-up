@@ -11,8 +11,9 @@ export const ProfileCreationSkills = () => {
       className="profile-creation-main"
       justify={skills ? "space-between" : "center"}
     >
-      <SkillRenderer skills={skills ?? []} />
-      <Form.Item name="skills" hidden />
+      <Form.Item name="skills">
+        <SkillRenderer />
+      </Form.Item>
       <SelectSkills />
     </Flex>
   );

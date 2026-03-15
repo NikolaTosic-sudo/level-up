@@ -1,26 +1,31 @@
-import { Form, Space, Tag, Typography } from "antd";
+import { Space, Tag, Typography } from "antd";
 import type { MouseEvent } from "react";
 
 type SkillRendererProps = {
-  skills: string[];
+  value?: string[];
+  onChange?: (value: string[]) => void;
 };
 
-const SkillRenderer = ({ skills }: SkillRendererProps) => {
-  const formInstance = Form.useFormInstance();
+const SkillRenderer = ({ value, onChange }: SkillRendererProps) => {
+  if (!value) {
+    return null;
+  }
 
   function handleClose(
     e: MouseEvent<HTMLElement, globalThis.MouseEvent>,
     idx: number,
   ) {
     e.preventDefault();
-    const newSkills = [...skills];
-    newSkills.splice(idx, 1);
-    formInstance.setFieldValue("skills", newSkills);
+    if (value && onChange) {
+      const newSkills = [...value];
+      newSkills.splice(idx, 1);
+      onChange(newSkills);
+    }
   }
 
   return (
     <Space vertical>
-      {skills.map((s, index) => (
+      {value.map((s, index) => (
         <Tag
           closable
           color="#008c95"

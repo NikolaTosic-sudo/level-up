@@ -112,8 +112,12 @@ export const ProfileCreationFinish = () => {
             </Typography.Title>
           </Divider>
           <Flex gap={18} vertical>
-            {values.quests.map((q: string) => (
-              <Card className="quest-card" styles={{ body: { padding: 12 } }}>
+            {values.quests.map((q: string, idx: number) => (
+              <Card
+                key={`${q}_${idx}`}
+                className="quest-card"
+                styles={{ body: { padding: 12 } }}
+              >
                 {q}
               </Card>
             ))}
