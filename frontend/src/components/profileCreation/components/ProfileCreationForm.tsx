@@ -8,11 +8,8 @@ function ProfileCreationForm() {
     <ConfigProvider
       theme={{
         token: {
-          colorText: "black",
           colorError: "#DD0A3C",
           colorSplit: "rgba(0, 0, 0, 0.05)",
-          colorTextTertiary: "rgba(0, 0, 0, 0.65)",
-          colorTextQuaternary: "rgba(0, 0, 0, 0.45)",
         },
       }}
     >

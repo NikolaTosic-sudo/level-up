@@ -26,6 +26,15 @@ const theme: ThemeConfig = {
       labelColor: "white",
       labelRequiredMarkColor: "#DD0A3C",
     },
+    Input: {
+      colorBgContainer: "transparent",
+      activeShadow:
+        "0 0 8px rgba(0, 255, 255, 0.55), inset 0 0 25px rgba(0, 120, 255, 0.25)",
+    },
+    Select: {
+      colorBgContainer: "transparent",
+      selectorBg: "black",
+    },
   },
 };
 
