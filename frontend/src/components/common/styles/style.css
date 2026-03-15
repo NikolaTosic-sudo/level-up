@@ -71,6 +71,10 @@ body {
 
   background-blend-mode: screen;
   border: 1px solid rgba(0, 255, 255, 0.55);
+
+  .ant-select-item.ant-select-item-option:hover {
+    color: rgba(0, 255, 255, 0.95);
+  }
 }
 
 .ant-picker-dropdown .ant-picker-panel-container {
@@ -104,8 +108,20 @@ body {
     color: rgba(255, 255, 255, 0.4);
   }
 
+  .ant-picker-cell:hover {
+    color: rgba(0, 255, 255, 0.65);
+  }
+
+  .ant-picker-cell:not(.ant-picker-cell-in-view):hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
   .ant-picker-now-btn {
     color: rgba(0, 255, 255, 0.65);
+  }
+
+  .ant-picker-now-btn:hover {
+    color: rgba(0, 255, 255, 0.95);
   }
 }
 

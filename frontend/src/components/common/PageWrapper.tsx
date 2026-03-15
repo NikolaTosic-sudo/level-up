@@ -33,10 +33,12 @@ const theme: ThemeConfig = {
     },
     Select: {
       colorBgContainer: "transparent",
-      selectorBg: "black",
     },
     DatePicker: {
       colorBgContainer: "transparent",
+    },
+    Steps: {
+      colorTextDisabled: "rgba(255, 255, 255, 0.45)",
     },
   },
 };
