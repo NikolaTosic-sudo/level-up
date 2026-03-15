@@ -18,6 +18,8 @@ export const ProfileCreationFinish = () => {
 
   const values = formInstance.getFieldsValue(true);
 
+  const quests = values.quests ? values.quests.filter((q: string) => q) : [];
+
   const valuesExist = Object.values(values).some((val: unknown) =>
     Array.isArray(val) ? val.length : val,
   );
@@ -100,7 +102,7 @@ export const ProfileCreationFinish = () => {
           </Flex>
         </>
       ) : null}
-      {values.quests && values.quests.length ? (
+      {quests.length ? (
         <>
           <Divider titlePlacement="start">
             <Typography.Title level={3} style={{ marginBlock: 12 }}>
