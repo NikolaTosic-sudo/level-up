@@ -12,9 +12,9 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
-  description: This is a sample API.
-  title: Your API Title
-  version: "1.0"
+  description: API for Level-Up app
+  title: Level-Up API
+  version: "0.1"
 paths:
   /test:
     get:
@@ -39,7 +39,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/main.TestResponseTwo'
-      summary: testing swagger and api
+      summary: testing swagger and api again
       tags:
       - test tag 2
 swagger: "2.0"

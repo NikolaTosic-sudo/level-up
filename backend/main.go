@@ -63,7 +63,7 @@ func testAPI(w http.ResponseWriter, r *http.Request) {
 }
 
 // @Tags test tag 2
-// @Summary testing swagger and api
+// @Summary testing swagger and api again
 // @Description test job 2
 // @Produce json
 // @Success 200 {object} TestResponseTwo

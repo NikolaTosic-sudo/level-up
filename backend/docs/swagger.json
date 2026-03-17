@@ -1,10 +1,10 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample API.",
-        "title": "Your API Title",
+        "description": "API for Level-Up app",
+        "title": "Level-Up API",
         "contact": {},
-        "version": "1.0"
+        "version": "0.1"
     },
     "host": "localhost:8080",
     "paths": {
@@ -37,7 +37,7 @@
                 "tags": [
                     "test tag 2"
                 ],
-                "summary": "testing swagger and api",
+                "summary": "testing swagger and api again",
                 "responses": {
                     "200": {
                         "description": "OK",

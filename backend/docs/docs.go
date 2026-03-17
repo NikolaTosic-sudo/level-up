@@ -44,7 +44,7 @@ const docTemplate = `{
                 "tags": [
                     "test tag 2"
                 ],
-                "summary": "testing swagger and api",
+                "summary": "testing swagger and api again",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -78,12 +78,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "1.0",
+	Version:          "0.1",
 	Host:             "localhost:8080",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Your API Title",
-	Description:      "This is a sample API.",
+	Title:            "Level-Up API",
+	Description:      "API for Level-Up app",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
