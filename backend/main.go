@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
+	_ "github.com/NikolaTosic-sudo/level-up/backend/docs"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	_ "github.com/swaggo/http-swagger/example/go-chi/docs"
-	httpSwagger "github.com/swaggo/http-swagger/v2"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type TestResponse struct {
@@ -19,9 +19,9 @@ type TestResponseTwo struct {
 	Message string `json:"message"`
 }
 
-// @title Your API Title
-// @version 1.0
-// @description This is a sample API.
+// @title Level-Up API
+// @version 0.1
+// @description API for Level-Up app
 // @host localhost:8080
 func main() {
 	r := chi.NewRouter()
@@ -30,7 +30,7 @@ func main() {
 	r.Get("/test-two", testAPITwo)
 
 	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:8080/docs/swagger.json"),
+		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
 	))
 
 	fmt.Println("started listening on port 8080")
@@ -64,7 +64,7 @@ func testAPI(w http.ResponseWriter, r *http.Request) {
 
 // @Tags test tag 2
 // @Summary testing swagger and api
-// @Description test job
+// @Description test job 2
 // @Produce json
 // @Success 200 {object} TestResponseTwo
 // @Router /test-two [get]

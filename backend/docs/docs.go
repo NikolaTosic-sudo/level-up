@@ -37,7 +37,7 @@ const docTemplate = `{
         },
         "/test-two": {
             "get": {
-                "description": "test job",
+                "description": "test job 2",
                 "produces": [
                     "application/json"
                 ],
