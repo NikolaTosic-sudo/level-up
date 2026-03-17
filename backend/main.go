@@ -1,13 +1,18 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/NikolaTosic-sudo/level-up/backend/docs"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -24,7 +29,23 @@ type TestResponseTwo struct {
 // @description API for Level-Up app
 // @host localhost:8080
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
 	r := chi.NewRouter()
+
+	dbURL := os.Getenv("DB_URL")
+	port := os.Getenv("PORT")
+
+	db, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(db)
+
 	r.Use(middleware.Logger)
 	r.Get("/test", testAPI)
 	r.Get("/test-two", testAPITwo)
@@ -33,8 +54,10 @@ func main() {
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
 	))
 
+	fullPort := fmt.Sprintf(":%v", port)
+
 	fmt.Println("started listening on port 8080")
-	err := http.ListenAndServe(":8080", r)
+	err = http.ListenAndServe(fullPort, r)
 	if err != nil {
 		fmt.Println(err)
 	}
