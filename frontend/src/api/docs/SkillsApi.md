@@ -1,36 +1,41 @@
-# TestTag2Api
+# SkillsApi
 
 All URIs are relative to *http://localhost:8080*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**testTwoGet**](TestTag2Api.md#testtwoget) | **GET** /test-two | testing swagger and api |
+| [**v1LevelupApiSkillsGet**](SkillsApi.md#v1levelupapiskillsget) | **GET** /v1/levelup_api/skills | Get skills from database |
 
 
 
-## testTwoGet
+## v1LevelupApiSkillsGet
 
-> MainTestResponseTwo testTwoGet()
+> MainSkillsResponse v1LevelupApiSkillsGet(name)
 
-testing swagger and api
+Get skills from database
 
-test job
+get skills, limited to 200 results
 
 ### Example
 
 ```ts
 import {
   Configuration,
-  TestTag2Api,
+  SkillsApi,
 } from '';
-import type { TestTwoGetRequest } from '';
+import type { V1LevelupApiSkillsGetRequest } from '';
 
 async function example() {
   console.log("🚀 Testing  SDK...");
-  const api = new TestTag2Api();
+  const api = new SkillsApi();
+
+  const body = {
+    // string | Get skills with the typed in prefix (optional)
+    name: name_example,
+  } satisfies V1LevelupApiSkillsGetRequest;
 
   try {
-    const data = await api.testTwoGet();
+    const data = await api.v1LevelupApiSkillsGet(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -43,11 +48,14 @@ example().catch(console.error);
 
 ### Parameters
 
-This endpoint does not need any parameter.
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **name** | `string` | Get skills with the typed in prefix | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 
-[**MainTestResponseTwo**](MainTestResponseTwo.md)
+[**MainSkillsResponse**](MainSkillsResponse.md)
 
 ### Authorization
 

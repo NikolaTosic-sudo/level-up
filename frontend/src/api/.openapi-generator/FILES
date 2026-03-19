@@ -1,13 +1,9 @@
 .openapi-generator-ignore
-apis/TestTag1Api.ts
-apis/TestTag2Api.ts
+apis/SkillsApi.ts
 apis/index.ts
-docs/MainTestResponse.md
-docs/MainTestResponseTwo.md
-docs/TestTag1Api.md
-docs/TestTag2Api.md
+docs/MainSkillsResponse.md
+docs/SkillsApi.md
 index.ts
-models/MainTestResponse.ts
-models/MainTestResponseTwo.ts
+models/MainSkillsResponse.ts
 models/index.ts
 runtime.ts

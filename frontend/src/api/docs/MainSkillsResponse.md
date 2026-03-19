@@ -1,22 +1,22 @@
 
-# MainTestResponse
+# MainSkillsResponse
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`message` | string
+`skills` | Array&lt;string&gt;
 
 ## Example
 
 ```typescript
-import type { MainTestResponse } from ''
+import type { MainSkillsResponse } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "message": null,
-} satisfies MainTestResponse
+  "skills": null,
+} satisfies MainSkillsResponse
 
 console.log(example)
 
@@ -25,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as MainTestResponse
+const exampleParsed = JSON.parse(exampleJSON) as MainSkillsResponse
 console.log(exampleParsed)
 ```
 
