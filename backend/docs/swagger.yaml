@@ -1,13 +1,10 @@
 definitions:
-  main.TestResponse:
+  main.SkillsResponse:
     properties:
-      message:
-        type: string
-    type: object
-  main.TestResponseTwo:
-    properties:
-      message:
-        type: string
+      skills:
+        items:
+          type: string
+        type: array
     type: object
 host: localhost:8080
 info:
@@ -16,30 +13,22 @@ info:
   title: Level-Up API
   version: "0.1"
 paths:
-  /test:
+  /v1/levelup_api/skills:
     get:
-      description: test job
+      description: get skills, limited to 200 results
+      parameters:
+      - description: Get skills with the typed in prefix
+        in: query
+        name: name
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.TestResponse'
-      summary: testing swagger and api
+            $ref: '#/definitions/main.SkillsResponse'
+      summary: Get skills from database
       tags:
-      - test tag 1
-  /test-two:
-    get:
-      description: test job 2
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/main.TestResponseTwo'
-      summary: testing swagger and api again
-      tags:
-      - test tag 2
+      - Skills
 swagger: "2.0"

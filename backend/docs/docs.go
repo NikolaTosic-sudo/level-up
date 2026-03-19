@@ -15,41 +15,29 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/test": {
+        "/v1/levelup_api/skills": {
             "get": {
-                "description": "test job",
+                "description": "get skills, limited to 200 results",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "test tag 1"
+                    "Skills"
                 ],
-                "summary": "testing swagger and api",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/main.TestResponse"
-                        }
+                "summary": "Get skills from database",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Get skills with the typed in prefix",
+                        "name": "name",
+                        "in": "query"
                     }
-                }
-            }
-        },
-        "/test-two": {
-            "get": {
-                "description": "test job 2",
-                "produces": [
-                    "application/json"
                 ],
-                "tags": [
-                    "test tag 2"
-                ],
-                "summary": "testing swagger and api again",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.TestResponseTwo"
+                            "$ref": "#/definitions/main.SkillsResponse"
                         }
                     }
                 }
@@ -57,19 +45,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "main.TestResponse": {
+        "main.SkillsResponse": {
             "type": "object",
             "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "main.TestResponseTwo": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }
