@@ -4,26 +4,32 @@ import {
   Button,
   ConfigProvider,
   Divider,
+  Flex,
   Form,
   Input,
   Select,
   Space,
+  Spin,
   type RefSelectProps,
 } from "antd";
 import { useTranslation } from "react-i18next";
+import { useGetSkills } from "../hooks/useGetSkills";
+import { useDebounce } from "../../../hooks/useDebounce";
 
 const SelectSkills = () => {
   const { t } = useTranslation();
   const [skill, setSkill] = useState("");
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
   const [open, setOpen] = useState(false);
+
+  const { data: items, isLoading } = useGetSkills(debouncedSearch);
 
   const selectRef = useRef<RefSelectProps>(null);
 
   const formInstance = Form.useFormInstance();
 
   const userSkills = Form.useWatch("skills", formInstance);
-
-  const items = ["development development", "driving"]; // We'll get items from the backend, with all skills users added
 
   const onSkillChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSkill(event.target.value);
@@ -64,11 +70,21 @@ const SelectSkills = () => {
         open={open}
         onFocus={() => setOpen(true)}
         onOpenChange={setOpen}
-        showSearch
+        loading={isLoading}
+        showSearch={{
+          onSearch: (value) => setSearch(value),
+        }}
+        allowClear
         value={null}
         popupRender={(menu) => (
           <>
-            {menu}
+            {isLoading ? (
+              <Flex align="center" justify="center" style={{ height: 120 }}>
+                <Spin />
+              </Flex>
+            ) : (
+              menu
+            )}
             <Divider style={{ margin: "8px 0" }} />
             <Space style={{ padding: "0 8px 4px" }}>
               <Input
@@ -88,8 +104,8 @@ const SelectSkills = () => {
             </Space>
           </>
         )}
-        options={items
-          .filter((o) => !(userSkills ?? []).includes(o))
+        options={items?.skills
+          ?.filter((o) => !(userSkills ?? []).includes(o))
           .map((item) => ({ label: item, value: item }))}
       />
     </ConfigProvider>

@@ -9,17 +9,11 @@ export enum CurrentStepsEnum {
   Finish,
 }
 
-type ProfilePicture = {
-  file: File;
-  fileList: File[];
-};
-
 interface FormData {
   firstName: string;
   lastName: string;
   nickname: string;
   dateOfBirth: Dayjs | null;
-  profilePicture: ProfilePicture | null;
 }
 
 interface ProfileCreationStore {
@@ -37,7 +31,6 @@ const InitalFormData = {
   lastName: "",
   nickname: "",
   dateOfBirth: null,
-  profilePicture: null,
 };
 
 export const useProfileCreationStore = create<ProfileCreationStore>((set) => ({
