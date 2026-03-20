@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import {
   Button,
   ConfigProvider,
@@ -76,6 +76,7 @@ const SelectSkills = () => {
         showSearch={{
           onSearch: setSearch,
         }}
+        suffix={() => <SearchOutlined />}
         allowClear
         value={null}
         popupRender={(menu) => (
