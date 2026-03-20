@@ -36,13 +36,15 @@ const SelectSkills = () => {
   };
 
   function handleChange(selectedString: string) {
-    if (userSkills && userSkills.length) {
-      formInstance.setFieldValue("skills", [...userSkills, selectedString]);
-    } else {
-      formInstance.setFieldValue("skills", [selectedString]);
+    if (selectedString) {
+      if (userSkills && userSkills.length) {
+        formInstance.setFieldValue("skills", [...userSkills, selectedString]);
+      } else {
+        formInstance.setFieldValue("skills", [selectedString]);
+      }
+      setOpen(false);
+      selectRef.current?.blur();
     }
-    setOpen(false);
-    selectRef.current?.blur();
   }
 
   const addItem = () => {
@@ -72,7 +74,7 @@ const SelectSkills = () => {
         onOpenChange={setOpen}
         loading={isLoading}
         showSearch={{
-          onSearch: (value) => setSearch(value),
+          onSearch: setSearch,
         }}
         allowClear
         value={null}
