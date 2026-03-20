@@ -20,8 +20,6 @@ export const ProfileCreationFinish = () => {
 
   const quests = values.quests ? values.quests.filter((q: string) => q) : [];
 
-  console.log(quests);
-
   const valuesExist = Object.values(values).some((val: unknown) =>
     Array.isArray(val) ? val.length : val,
   );
