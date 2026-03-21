@@ -77,7 +77,6 @@ const SelectSkills = () => {
           onSearch: setSearch,
         }}
         suffix={() => <SearchOutlined />}
-        allowClear
         value={null}
         popupRender={(menu) => (
           <>
