@@ -40,6 +40,15 @@ const theme: ThemeConfig = {
     Steps: {
       colorTextDisabled: "rgba(255, 255, 255, 0.45)",
     },
+    Layout: {
+      bodyBg: "transparent",
+      headerBg: "transparent",
+      footerBg: "transparent",
+      siderBg: "transparent",
+    },
+    Menu: {
+      darkItemBg: "transparent",
+    },
   },
 };
 
