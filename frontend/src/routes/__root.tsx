@@ -5,19 +5,19 @@ import type { QueryClient } from "@tanstack/react-query";
 import ErrorComponent from "../components/common/ErrorComponent";
 
 export interface RouterContext {
-	queryClient: QueryClient;
+  queryClient: QueryClient;
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-	component: RootComponent,
-	errorComponent: ErrorComponent,
+  component: RootComponent,
+  errorComponent: ErrorComponent,
 });
 
 function RootComponent() {
-	return (
-		<>
-			<PageWrapper />
-			<TanStackRouterDevtools position="bottom-right" />
-		</>
-	);
+  return (
+    <>
+      <PageWrapper />
+      <TanStackRouterDevtools position="bottom-right" />
+    </>
+  );
 }
