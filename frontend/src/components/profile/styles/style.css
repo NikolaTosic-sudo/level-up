@@ -1,0 +1,30 @@
+.profile-header,
+.profile-sider,
+.profile-layout {
+  box-shadow:
+    0 0 18px rgba(0, 255, 255, 0.55),
+    inset 0 0 25px rgba(0, 120, 255, 0.25) !important;
+}
+
+.profile-layout {
+  border: 2px solid rgba(0, 255, 255, 0.55);
+  height: calc(100vh - 60px);
+
+  .ant-layout-sider-trigger {
+    position: relative;
+  }
+}
+
+.profile-sider {
+  border-right: 2px solid rgba(0, 255, 255, 0.55);
+  padding-top: 60px;
+}
+
+.profile-header {
+  border-bottom: 2px solid rgba(0, 255, 255, 0.55);
+}
+
+.profile-content {
+  padding: 20px;
+  overflow: auto;
+}
