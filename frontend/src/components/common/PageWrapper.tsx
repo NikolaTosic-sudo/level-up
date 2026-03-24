@@ -45,6 +45,7 @@ const theme: ThemeConfig = {
       headerBg: "transparent",
       footerBg: "transparent",
       siderBg: "transparent",
+      triggerBg: "transparent",
     },
     Menu: {
       darkItemBg: "transparent",
