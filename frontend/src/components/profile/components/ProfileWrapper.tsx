@@ -2,14 +2,17 @@ import {
   DashboardOutlined,
   ReconciliationOutlined,
   ThunderboltOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, type MenuProps } from "antd";
 import { useState } from "react";
 import { useProfileWrapStore } from "../store/useProfileWrapStore";
+import ProfileHeader from "./ProfileHeader";
+import ProfileContent from "./ProfileContent";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-const { Sider, Header, Content } = Layout;
+const { Sider } = Layout;
 
 function ProfileWrapper() {
   const { currentModule, setCurrentModule } = useProfileWrapStore();
@@ -31,6 +34,11 @@ function ProfileWrapper() {
       key: "tasks",
       icon: <ReconciliationOutlined />,
     },
+    {
+      label: "Account",
+      key: "account",
+      icon: <UserOutlined />,
+    },
   ];
 
   return (
@@ -51,8 +59,8 @@ function ProfileWrapper() {
         />
       </Sider>
       <Layout>
-        <Header className="profile-header">test header</Header>
-        <Content className="profile-content">test content</Content>
+        <ProfileHeader />
+        <ProfileContent />
       </Layout>
     </Layout>
   );
