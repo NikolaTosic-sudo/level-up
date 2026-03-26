@@ -35,8 +35,8 @@ function ProfileWrapper() {
       icon: <ReconciliationOutlined />,
     },
     {
-      label: "Account",
-      key: "account",
+      label: "Profile",
+      key: "profile",
       icon: <UserOutlined />,
     },
   ];
