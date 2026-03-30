@@ -16,12 +16,20 @@ body {
   padding: 20px;
 }
 
-.ant-dropdown .ant-dropdown-menu {
+.ant-dropdown {
+  padding: 20px;
+}
+
+.ant-dropdown {
   background-color: rgb(2, 4, 10);
 }
 
+.ant-dropdown .ant-dropdown-menu {
+  background-color: unset;
+}
+
 .ant-select-dropdown,
-.ant-dropdown-menu {
+.ant-dropdown {
   background: rgb(2, 4, 10);
   border: 1px solid rgba(0, 255, 255, 0.55);
 
@@ -71,7 +79,7 @@ body {
 :root,
 .ant-select-dropdown,
 .ant-picker-dropdown .ant-picker-panel-container,
-.ant-dropdown-menu {
+.ant-dropdown {
   backdrop-filter: blur(6px);
   background-image:
     radial-gradient(

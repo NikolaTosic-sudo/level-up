@@ -35,3 +35,7 @@
 .ant-badge.ant-dropdown-trigger:hover {
   cursor: pointer;
 }
+
+.ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item {
+  padding: 8px 0;
+}
