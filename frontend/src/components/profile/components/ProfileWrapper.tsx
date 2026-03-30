@@ -10,7 +10,7 @@ function ProfileWrapper() {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <Layout className="profile-layout">
+    <Layout hasSider className="profile-layout">
       <Sider
         className="profile-sider"
         collapsible
