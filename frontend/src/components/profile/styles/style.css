@@ -25,6 +25,7 @@
   display: flex;
   justify-content: end;
   align-items: center;
+  gap: 16px;
 }
 
 .profile-content {
@@ -38,4 +39,11 @@
 
 .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item {
   padding: 8px 0;
+}
+
+.ant-progress {
+  border: 1px solid rgba(0, 255, 255, 0.55);
+  padding: 2px;
+  border-radius: 6px;
+  max-width: 80px;
 }
