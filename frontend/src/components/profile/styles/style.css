@@ -22,9 +22,16 @@
 
 .profile-header {
   border-bottom: 2px solid rgba(0, 255, 255, 0.55);
+  display: flex;
+  justify-content: end;
+  align-items: center;
 }
 
 .profile-content {
   padding: 20px;
   overflow: auto;
+}
+
+.ant-badge.ant-dropdown-trigger:hover {
+  cursor: pointer;
 }

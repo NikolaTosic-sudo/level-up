@@ -16,7 +16,12 @@ body {
   padding: 20px;
 }
 
-.ant-select-dropdown {
+.ant-dropdown .ant-dropdown-menu {
+  background-color: rgb(2, 4, 10);
+}
+
+.ant-select-dropdown,
+.ant-dropdown-menu {
   background: rgb(2, 4, 10);
   border: 1px solid rgba(0, 255, 255, 0.55);
 
@@ -52,7 +57,8 @@ body {
 
 :root,
 .ant-select.ant-select-open,
-.ant-picker.ant-picker-focused {
+.ant-picker.ant-picker-focused,
+.ant-dropdown {
   box-shadow:
     0 0 18px rgba(0, 255, 255, 0.55),
     inset 0 0 25px rgba(0, 120, 255, 0.25) !important;
@@ -64,7 +70,8 @@ body {
 
 :root,
 .ant-select-dropdown,
-.ant-picker-dropdown .ant-picker-panel-container {
+.ant-picker-dropdown .ant-picker-panel-container,
+.ant-dropdown-menu {
   backdrop-filter: blur(6px);
   background-image:
     radial-gradient(
