@@ -1,7 +1,18 @@
 import { BellOutlined, DeliveredProcedureOutlined } from "@ant-design/icons";
-import { Badge, Divider, Dropdown, type MenuProps } from "antd";
+import {
+  Badge,
+  Button,
+  Divider,
+  Dropdown,
+  Flex,
+  Tooltip,
+  type MenuProps,
+} from "antd";
+import { useTranslation } from "react-i18next";
 
 function ProfileNotifications() {
+  const { t } = useTranslation();
+
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -23,21 +34,32 @@ function ProfileNotifications() {
   ];
 
   return (
-    <Dropdown
-      menu={{ items }}
-      trigger={["click"]}
-      popupRender={(menu) => (
-        <>
-          <div>Notifications</div>
-          <Divider size="middle" />
-          {menu}
-        </>
-      )}
+    <Tooltip
+      title={t("profile.header.notifications", {
+        defaultValue: "Notifications",
+      })}
     >
-      <Badge count={items.length} size="small" color="#008c95">
-        <BellOutlined style={{ fontSize: 18 }} />
-      </Badge>
-    </Dropdown>
+      <Dropdown
+        menu={{ items }}
+        trigger={["click"]}
+        popupRender={(menu) => (
+          <>
+            <Flex justify="space-between" align="center">
+              {t("profile.header.notifications", {
+                defaultValue: "Notifications",
+              })}
+              <Button type="link">Read all</Button>
+            </Flex>
+            <Divider size="middle" />
+            {menu}
+          </>
+        )}
+      >
+        <Badge count={items.length} size="small" color="#008c95">
+          <BellOutlined style={{ fontSize: 18 }} />
+        </Badge>
+      </Dropdown>
+    </Tooltip>
   );
 }
 
