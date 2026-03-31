@@ -6,30 +6,32 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useProfileWrapStore } from "../store/useProfileWrapStore";
+import { useTranslation } from "react-i18next";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
 function ProfileMenu() {
+  const { t } = useTranslation();
   const { currentModule, setCurrentModule } = useProfileWrapStore();
 
   const items: MenuItem[] = [
     {
-      label: "Dashboard",
+      label: t("profile.menu.dashboard", { defaultValue: "Dashboard" }),
       key: "dash",
       icon: <DashboardOutlined />,
     },
     {
-      label: "Skills",
+      label: t("profile.menu.skills", { defaultValue: "Skills" }),
       key: "skills",
       icon: <ThunderboltOutlined />,
     },
     {
-      label: "Tasks",
+      label: t("profile.menu.tasks", { defaultValue: "Tasks" }),
       key: "tasks",
       icon: <ReconciliationOutlined />,
     },
     {
-      label: "Profile",
+      label: t("profile.menu.profile", { defaultValue: "Profile" }),
       key: "profile",
       icon: <UserOutlined />,
     },
