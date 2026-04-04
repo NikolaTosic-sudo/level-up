@@ -1,4 +1,4 @@
-import { BellOutlined, DeliveredProcedureOutlined } from "@ant-design/icons";
+import { BellOutlined } from "@ant-design/icons";
 import {
   Badge,
   Button,
@@ -6,9 +6,11 @@ import {
   Dropdown,
   Flex,
   Tooltip,
+  Typography,
   type MenuProps,
 } from "antd";
 import { useTranslation } from "react-i18next";
+import NotificationsIcon from "./NotificationsIcon";
 
 function ProfileNotifications() {
   const { t } = useTranslation();
@@ -18,10 +20,16 @@ function ProfileNotifications() {
       key: "1",
       label: "first item",
       title: "Ovo je title",
-      icon: <DeliveredProcedureOutlined />,
-      extra: <div>extra je ovo</div>,
+      icon: <NotificationsIcon iconType="reward" />,
+      extra: (
+        <Typography.Text
+          ellipsis={{ tooltip: true }}
+          className="notifications-text"
+        >
+          extra je ovo neka bude jos vece
+        </Typography.Text>
+      ),
     },
-
     {
       key: "2",
       label: "second item",
@@ -35,7 +43,7 @@ function ProfileNotifications() {
 
   return (
     <Tooltip
-      title={t("profile.header.notifications", {
+      title={t("profile.header.notifications.title", {
         defaultValue: "Notifications",
       })}
     >
@@ -45,10 +53,14 @@ function ProfileNotifications() {
         popupRender={(menu) => (
           <>
             <Flex justify="space-between" align="center">
-              {t("profile.header.notifications", {
+              {t("profile.header.notifications.title", {
                 defaultValue: "Notifications",
               })}
-              <Button type="link">Read all</Button>
+              <Button type="link" className="notifications-readall">
+                {t("profile.header.notifications.readAll", {
+                  defaultValue: "Read all",
+                })}
+              </Button>
             </Flex>
             <Divider size="middle" />
             {menu}
