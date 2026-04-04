@@ -24,7 +24,7 @@ function ProfileNotifications() {
       extra: (
         <Typography.Text
           ellipsis={{ tooltip: true }}
-          className="notifications-text"
+          className="notifications-extra"
         >
           extra je ovo neka bude jos vece
         </Typography.Text>
