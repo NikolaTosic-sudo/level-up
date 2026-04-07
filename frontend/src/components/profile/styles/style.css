@@ -38,7 +38,7 @@
 }
 
 .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item {
-  padding: 8px 0;
+  padding: 8px 4px;
 
   span.anticon {
     margin-right: 8px;

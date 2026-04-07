@@ -26,6 +26,7 @@ body {
 
 .ant-dropdown .ant-dropdown-menu {
   background-color: unset;
+  padding: 4px 0;
 }
 
 .ant-select-dropdown,

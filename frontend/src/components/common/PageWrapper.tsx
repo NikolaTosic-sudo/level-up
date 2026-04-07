@@ -20,6 +20,7 @@ const theme: ThemeConfig = {
     colorTextQuaternary: "rgba(255, 255, 255, 0.45)",
     colorTextTertiary: "rgba(255, 255, 255, 0.65)",
     colorTextDisabled: "rgba(0, 0, 0, 0.45)",
+    controlItemBgHover: "#008c95",
   },
   components: {
     Form: {
