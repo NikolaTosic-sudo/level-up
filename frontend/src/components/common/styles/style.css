@@ -16,6 +16,19 @@ body {
   padding: 20px;
 }
 
+::-webkit-scrollbar {
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.55);
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+  border: 1px solid rgba(0, 255, 255, 0.55);
+}
+
 .ant-dropdown {
   padding: 20px;
 }
@@ -65,7 +78,7 @@ body {
 }
 
 .ant-modal {
-  border: 1px solid rgba(0, 255, 255, 0.55);
+  border: 2px solid rgba(0, 255, 255, 0.55);
   padding-bottom: 0;
   top: 60px;
   height: calc(100vh - 120px);
@@ -83,6 +96,7 @@ body {
 
     .ant-modal-body {
       flex: 1;
+      overflow: auto;
     }
   }
 }
@@ -91,7 +105,7 @@ body {
 .ant-select.ant-select-open,
 .ant-picker.ant-picker-focused,
 .ant-dropdown,
-.ant-modal .ant-modal-container {
+.ant-modal {
   box-shadow:
     0 0 18px rgba(0, 255, 255, 0.55),
     inset 0 0 25px rgba(0, 120, 255, 0.25) !important;
@@ -130,4 +144,8 @@ body {
     );
 
   background-blend-mode: screen;
+}
+
+.ant-typography:is(h1, h2, h3, h4, h5, h6) {
+  margin-block: 0;
 }
