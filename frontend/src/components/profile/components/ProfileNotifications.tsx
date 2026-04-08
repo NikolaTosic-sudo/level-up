@@ -19,7 +19,7 @@ function ProfileNotifications() {
     {
       key: "1",
       label: "first item",
-      title: "Ovo je title",
+      title: "first item",
       icon: <NotificationsIcon iconType="reward" />,
       extra: (
         <Typography.Text
@@ -32,9 +32,18 @@ function ProfileNotifications() {
     },
     {
       key: "2",
-      label: "second item",
+      label: <span>second item more more morem more</span>,
+      title: "second item more more morem more",
+      icon: <NotificationsIcon iconType="task" />,
+      extra: (
+        <Typography.Text
+          ellipsis={{ tooltip: true }}
+          className="notifications-extra"
+        >
+          more extra
+        </Typography.Text>
+      ),
     },
-
     {
       key: "3",
       label: "third item",

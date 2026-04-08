@@ -41,7 +41,13 @@
   padding: 8px 4px;
 
   span.anticon {
-    margin-right: 8px;
+    margin-right: 12px;
+  }
+
+  span.ant-dropdown-menu-title-content {
+    span:not([class]) {
+      max-width: 200px;
+    }
   }
 }
 
