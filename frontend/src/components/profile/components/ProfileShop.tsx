@@ -1,5 +1,5 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { Button, Divider, Modal, Tooltip, Typography } from "antd";
+import { Button, Divider, Flex, Modal, Tooltip, Typography } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -24,9 +24,18 @@ function ProfileShop() {
         closable={false}
         title={
           <>
-            <Typography.Title level={4}>
-              {t("profile.header.shop.title", { defaultValue: "Shop" })}
-            </Typography.Title>
+            <Flex justify="space-between" align="center">
+              <Typography.Title level={4}>
+                {t("profile.header.shop.title", { defaultValue: "Shop" })}
+              </Typography.Title>
+
+              <div>
+                <DollarCircleOutlined
+                  style={{ fontSize: 16, marginRight: 6 }}
+                />
+                800
+              </div>
+            </Flex>
             <Divider />
           </>
         }
