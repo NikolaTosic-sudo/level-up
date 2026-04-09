@@ -11,6 +11,7 @@ function ProfileHeader() {
       <ProfileNotifications />
       <ProfileShop />
       <ProfileProgress />
+      <div>Nikola Tosic</div>
     </Header>
   );
 }
