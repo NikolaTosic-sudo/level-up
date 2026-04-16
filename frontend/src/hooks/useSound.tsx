@@ -9,6 +9,7 @@ export function useSound(open: string, close: string) {
   const playOpen = useCallback(() => {
     const a = audioOpen.current;
     a.currentTime = 0;
+    a.volume = 0.2;
     a.muted = muted;
     a.play();
   }, [muted]);
@@ -16,6 +17,7 @@ export function useSound(open: string, close: string) {
   const playClose = useCallback(() => {
     const a = audioClose.current;
     a.currentTime = 0;
+    a.volume = 0.2;
     a.muted = muted;
     a.play();
   }, [muted]);
