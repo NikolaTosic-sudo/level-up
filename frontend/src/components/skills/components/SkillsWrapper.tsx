@@ -21,7 +21,7 @@ function SkillsWrapper() {
       </ModalComponent>
       <Flex gap={16} wrap style={{ marginTop: 16 }}>
         {skills.map((s) => (
-          <SkillModal key={s.id} name={s.skill} />
+          <SkillModal key={s.id} skill={s} />
         ))}
       </Flex>
     </>

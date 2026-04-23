@@ -1,43 +1,43 @@
 [
   {
     "id": "847392",
-    "skill": "Development"
+    "name": "Development",
+    "linkedSkills": ["JavaScript", "Communication", "Reading"]
   },
   {
     "id": "847398",
-    "skill": "Driving"
+    "name": "Driving"
   },
   {
     "id": "847397",
-    "skill": "Life"
+    "name": "Life"
   },
   {
     "id": "847396",
-    "skill": "Communication"
+    "name": "Communication"
   },
   {
     "id": "847391",
-    "skill": "Parenting"
+    "name": "Parenting"
   },
   {
     "id": "847393",
-    "skill": "Jumping"
+    "name": "Jumping"
   },
   {
     "id": "847394",
-    "skill": "Listening"
+    "name": "Listening"
   },
   {
     "id": "847395",
-    "skill": "Reading"
+    "name": "Reading"
   },
   {
     "id": "847390",
-    "skill": "Basketball"
+    "name": "Basketball"
   },
-
   {
     "id": "847311",
-    "skill": "Basketball"
+    "name": "Basketball"
   }
 ]
