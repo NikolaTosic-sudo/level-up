@@ -1,6 +1,6 @@
 import { Flex } from "antd";
 import skills from "./skills.json";
-import Skill from "./Skill";
+import SkillModal from "./SkillModal";
 import ModalComponent from "../../common/ModalComponent";
 import { PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,7 @@ function SkillsWrapper() {
       </ModalComponent>
       <Flex gap={16} wrap style={{ marginTop: 16 }}>
         {skills.map((s) => (
-          <Skill name={s.skill} />
+          <SkillModal key={s.id} name={s.skill} />
         ))}
       </Flex>
     </>
