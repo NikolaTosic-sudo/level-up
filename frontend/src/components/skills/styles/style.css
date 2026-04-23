@@ -2,3 +2,16 @@
   padding: 8px 24px;
   border: 1px solid rgba(0, 255, 255, 0.55);
 }
+
+.skills {
+  max-width: 200px;
+  width: 100%;
+  gap: 6px;
+  padding: 8px 24px;
+  display: flex;
+  justify-content: space-between;
+
+  .ant-typography {
+    margin: 0;
+  }
+}
