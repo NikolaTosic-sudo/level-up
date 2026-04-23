@@ -16,14 +16,19 @@ import { useTranslation } from "react-i18next";
 import { useGetSkills } from "../hooks/useGetSkills";
 import { useDebounce } from "../../../hooks/useDebounce";
 
-const SelectSkills = () => {
+type SelectSkillsProps = {
+  forUser?: boolean;
+  marginLeft?: number;
+};
+
+const SelectSkills = ({ forUser, marginLeft = 24 }: SelectSkillsProps) => {
   const { t } = useTranslation();
   const [skill, setSkill] = useState("");
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
   const [open, setOpen] = useState(false);
 
-  const { data: items, isLoading } = useGetSkills(debouncedSearch);
+  const { data: items, isLoading } = useGetSkills(debouncedSearch, forUser);
 
   const selectRef = useRef<RefSelectProps>(null);
 
@@ -63,7 +68,7 @@ const SelectSkills = () => {
       }}
     >
       <Select
-        style={{ marginLeft: 24, width: 300, maxHeight: 40 }}
+        style={{ marginLeft, width: 300, maxHeight: 40 }}
         placeholder={t("profileCreationTrans.selectSkill.placeholderSelect", {
           defaultValue: "Select skill",
         })}

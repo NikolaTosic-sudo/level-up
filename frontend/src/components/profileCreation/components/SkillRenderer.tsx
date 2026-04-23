@@ -2,11 +2,18 @@ import { Space, Tag, Typography } from "antd";
 import type { MouseEvent } from "react";
 
 type SkillRendererProps = {
+  vertical?: boolean;
+  wrap?: boolean;
   value?: string[];
   onChange?: (value: string[]) => void;
 };
 
-const SkillRenderer = ({ value, onChange }: SkillRendererProps) => {
+const SkillRenderer = ({
+  vertical = true,
+  wrap = false,
+  value,
+  onChange,
+}: SkillRendererProps) => {
   if (!value) {
     return null;
   }
@@ -24,7 +31,7 @@ const SkillRenderer = ({ value, onChange }: SkillRendererProps) => {
   }
 
   return (
-    <Space vertical>
+    <Space wrap={wrap} vertical={vertical}>
       {value.map((s, index) => (
         <Tag
           closable
