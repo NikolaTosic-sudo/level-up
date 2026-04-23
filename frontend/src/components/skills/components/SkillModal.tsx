@@ -1,16 +1,19 @@
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
+import SkillForm from "./SkillForm";
 
-type SkillProps = {
+type SkillModalProps = {
   name: string;
 };
 
-function Skill({ name }: SkillProps) {
+function SkillModal({ name }: SkillModalProps) {
   const { t } = useTranslation();
 
   return (
     <ModalComponent
       buttonInner={name}
+      cancelButtonProps={{ danger: true, type: "primary" }}
+      okText={t("", { defaultValue: "Save" })}
       buttonProps={{
         type: "primary",
         ghost: true,
@@ -21,10 +24,11 @@ function Skill({ name }: SkillProps) {
         },
       }}
       buttonTooltip={t("", { defaultValue: "Click for more info" })}
+      destroyOnHidden
     >
-      {name}
+      <SkillForm skillName={name} />
     </ModalComponent>
   );
 }
 
-export default Skill;
+export default SkillModal;
