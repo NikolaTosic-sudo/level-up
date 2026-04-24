@@ -5,7 +5,7 @@ import SelectSkills from "../../profileCreation/components/SelectSkills";
 import type { Skill } from "./SkillModal";
 
 type SkillFormProps = {
-  skill: Skill;
+  skill?: Skill;
 };
 
 function SkillForm({ skill }: SkillFormProps) {
@@ -16,7 +16,7 @@ function SkillForm({ skill }: SkillFormProps) {
     <Form form={form}>
       <Flex justify="center">
         <Form.Item style={{ width: 280 }} rules={[{ required: true }]}>
-          <Input defaultValue={skill.name} />
+          <Input defaultValue={skill?.name} />
         </Form.Item>
       </Flex>
 
@@ -28,7 +28,7 @@ function SkillForm({ skill }: SkillFormProps) {
 
       <Row justify="space-between" gutter={[0, 8]}>
         <Col sm={13}>
-          <Form.Item name="skills" initialValue={skill.linkedSkills}>
+          <Form.Item name="skills" initialValue={skill?.linkedSkills}>
             <SkillRenderer vertical={false} wrap />
           </Form.Item>
         </Col>
