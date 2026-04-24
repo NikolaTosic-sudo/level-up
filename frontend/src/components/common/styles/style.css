@@ -16,12 +16,14 @@ body {
   padding: 20px;
 }
 
-::-webkit-scrollbar {
+::-webkit-scrollbar,
+.rc-virtual-list-scrollbar {
   scrollbar-width: thin;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 255, 255, 0.55);
+::-webkit-scrollbar-thumb,
+.rc-virtual-list-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.55) !important;
 }
 
 ::-webkit-scrollbar-track {
