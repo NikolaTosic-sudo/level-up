@@ -15,7 +15,19 @@ function SkillForm({ skill }: SkillFormProps) {
   return (
     <Form form={form}>
       <Flex justify="center">
-        <Form.Item style={{ width: 280 }} rules={[{ required: true }]}>
+        <Form.Item
+          name="name"
+          label={t("", { defaultValue: "Skill name" })}
+          layout="vertical"
+          colon={false}
+          style={{ width: 280 }}
+          rules={[
+            {
+              required: true,
+              message: t("", { defaultValue: "Please enter skill name" }),
+            },
+          ]}
+        >
           <Input defaultValue={skill?.name} />
         </Form.Item>
       </Flex>
