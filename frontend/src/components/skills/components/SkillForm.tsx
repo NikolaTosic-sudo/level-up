@@ -1,4 +1,4 @@
-import { Col, Divider, Flex, Form, Input, Row, Typography } from "antd";
+import { Col, Divider, Flex, Form, Row, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import SkillRenderer from "../../profileCreation/components/SkillRenderer";
 import SelectSkills from "../../profileCreation/components/SelectSkills";
@@ -15,21 +15,7 @@ function SkillForm({ skill }: SkillFormProps) {
   return (
     <Form form={form}>
       <Flex justify="center">
-        <Form.Item
-          name="name"
-          label={t("", { defaultValue: "Skill name" })}
-          layout="vertical"
-          colon={false}
-          style={{ width: 280 }}
-          rules={[
-            {
-              required: true,
-              message: t("", { defaultValue: "Please enter skill name" }),
-            },
-          ]}
-        >
-          <Input defaultValue={skill?.name} />
-        </Form.Item>
+        <Typography.Title level={3}>{skill?.name}</Typography.Title>
       </Flex>
 
       <Divider titlePlacement="start">
