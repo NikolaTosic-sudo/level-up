@@ -1,10 +1,14 @@
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
 import SkillForm from "./SkillForm";
+import { Divider, Flex, Progress } from "antd";
 
 export type Skill = {
   id: string;
   name: string;
+  level: number;
+  experience: number;
+  experienceNeeded: number;
   linkedSkills?: Array<string>;
 };
 
@@ -17,17 +21,12 @@ function SkillModal({ skill }: SkillModalProps) {
 
   return (
     <ModalComponent
-      buttonInner={skill.name}
+      buttonInner={<ModalInnerButton skill={skill} />}
       cancelButtonProps={{ danger: true, type: "primary" }}
       okText={t("", { defaultValue: "Save" })}
       buttonProps={{
         type: "primary",
         ghost: true,
-        styles: {
-          content: {
-            color: "#fff",
-          },
-        },
       }}
       buttonTooltip={t("", { defaultValue: "Click for more info" })}
       destroyOnHidden
@@ -38,3 +37,19 @@ function SkillModal({ skill }: SkillModalProps) {
 }
 
 export default SkillModal;
+
+function ModalInnerButton({ skill }: SkillModalProps) {
+  return (
+    <Flex align="center">
+      <span style={{ color: "white" }}>{skill.name}</span>
+      <Divider vertical style={{ marginBlock: -12 }} />
+      <Progress
+        showInfo={false}
+        percent={(skill.experience / skill.experienceNeeded) * 100}
+        strokeColor="#008c95"
+        style={{ minWidth: 60 }}
+      />
+      <span style={{ marginLeft: 6, color: "white" }}>{skill.level}</span>
+    </Flex>
+  );
+}
