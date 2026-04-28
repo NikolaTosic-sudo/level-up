@@ -10,7 +10,6 @@ function ProfileShop() {
 
   return (
     <ModalComponent
-      cancelButtonProps={{ danger: true, type: "primary" }}
       onCancel={() => setOpen(false)}
       open={open}
       closable={false}

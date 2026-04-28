@@ -5,7 +5,7 @@ import {
   type ButtonProps,
   type ModalProps,
 } from "antd";
-import { useState, type ReactElement } from "react";
+import { useState, type MouseEvent, type ReactElement } from "react";
 import { useSound } from "../../hooks/useSound";
 import openSound from "../../assets/popup.wav";
 import closeSound from "../../assets/close.wav";
@@ -21,6 +21,7 @@ function ModalComponent({
   buttonInner,
   buttonProps,
   buttonTooltip,
+  onCancel,
   ...props
 }: ModalComponentProps & ModalProps) {
   const [open, setOpen] = useState(false);
@@ -33,10 +34,13 @@ function ModalComponent({
     }
   }
 
-  function handleClose() {
+  function handleClose(e: MouseEvent<HTMLButtonElement>) {
     setOpen(false);
     if (closePlay) {
       closePlay();
+    }
+    if (onCancel) {
+      onCancel(e);
     }
   }
 
@@ -47,7 +51,13 @@ function ModalComponent({
           {buttonInner}
         </Button>
       </Tooltip>
-      <Modal {...props} open={open} onCancel={handleClose}>
+      <Modal
+        closable={false}
+        cancelButtonProps={{ danger: true, type: "primary" }}
+        {...props}
+        open={open}
+        onCancel={handleClose}
+      >
         {children}
       </Modal>
     </>
