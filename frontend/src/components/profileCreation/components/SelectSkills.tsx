@@ -17,11 +17,16 @@ import { useGetSkills } from "../hooks/useGetSkills";
 import { useDebounce } from "../../../hooks/useDebounce";
 
 type SelectSkillsProps = {
+  onChange?: (skill: string) => void;
   forUser?: boolean;
   marginLeft?: number;
 };
 
-const SelectSkills = ({ forUser, marginLeft = 24 }: SelectSkillsProps) => {
+const SelectSkills = ({
+  onChange,
+  forUser,
+  marginLeft = 24,
+}: SelectSkillsProps) => {
   const { t } = useTranslation();
   const [skill, setSkill] = useState("");
   const [search, setSearch] = useState("");
@@ -55,7 +60,12 @@ const SelectSkills = ({ forUser, marginLeft = 24 }: SelectSkillsProps) => {
   const addItem = () => {
     if (skill) {
       setSkill("");
-      handleChange(skill);
+
+      if (onChange) {
+        onChange(skill);
+      } else {
+        handleChange(skill);
+      }
     }
   };
 
@@ -73,7 +83,7 @@ const SelectSkills = ({ forUser, marginLeft = 24 }: SelectSkillsProps) => {
           defaultValue: "Select skill",
         })}
         ref={selectRef}
-        onChange={handleChange}
+        onChange={onChange ?? handleChange}
         open={open}
         onFocus={() => setOpen(true)}
         onOpenChange={setOpen}
