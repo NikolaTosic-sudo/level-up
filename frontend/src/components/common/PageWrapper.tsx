@@ -54,6 +54,10 @@ const theme: ThemeConfig = {
     Collapse: {
       contentBg: "transparent",
     },
+    Card: {
+      colorBgContainer: "transparent",
+      colorBorderSecondary: "rgba(0, 255, 255, 0.55)",
+    },
   },
 };
 

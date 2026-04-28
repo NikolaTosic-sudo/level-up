@@ -2,6 +2,8 @@ import { Collapse } from "antd";
 import ModalComponent from "../../common/ModalComponent";
 import { useTranslation } from "react-i18next";
 import { PlusOutlined } from "@ant-design/icons";
+import Quest from "./Quest";
+import quests from "./quest.json";
 
 function QuestsWrapper() {
   const { t } = useTranslation();
@@ -12,7 +14,7 @@ function QuestsWrapper() {
           {
             key: "1",
             label: "Repeating quests",
-            children: <div>Yes</div>,
+            children: <Quest quests={quests} title="Daily quests" />,
             extra: (
               <ModalComponent
                 buttonInner={t("", { defaultValue: "Add a repeating quest" })}
