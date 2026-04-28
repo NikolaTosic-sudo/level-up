@@ -26,8 +26,8 @@ function ProfileMenu() {
       icon: <ThunderboltOutlined />,
     },
     {
-      label: t("profile.menu.tasks", { defaultValue: "Tasks" }),
-      key: "tasks",
+      label: t("profile.menu.quests", { defaultValue: "Quests" }),
+      key: "quests",
       icon: <ReconciliationOutlined />,
     },
     {

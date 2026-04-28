@@ -2,6 +2,7 @@ import { Layout } from "antd";
 import { useProfileWrapStore } from "../store/useProfileWrapStore";
 import Skills from "../../skills/Skills";
 import { Activity } from "react";
+import Quests from "../../tasks/Quests";
 
 const { Content } = Layout;
 
@@ -14,7 +15,17 @@ function ProfileContent() {
         <Skills />
       </Activity>
 
-      <Activity mode={currentModule !== "skills" ? "visible" : "hidden"}>
+      <Activity mode={currentModule === "quests" ? "visible" : "hidden"}>
+        <Quests />
+      </Activity>
+
+      <Activity
+        mode={
+          currentModule !== "skills" && currentModule !== "quests"
+            ? "visible"
+            : "hidden"
+        }
+      >
         Test content
       </Activity>
     </Content>
