@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
 import SkillForm from "./SkillForm";
-import { Divider, Flex, Progress } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 export type Skill = {
   id: string;
@@ -9,7 +9,7 @@ export type Skill = {
   level: number;
   experience: number;
   experienceNeeded: number;
-  linkedSkills?: Array<string>;
+  linkedSkills?: Array<Skill>;
 };
 
 type SkillModalProps = {
@@ -21,14 +21,15 @@ function SkillModal({ skill }: SkillModalProps) {
 
   return (
     <ModalComponent
-      buttonInner={<ModalInnerButton skill={skill} />}
-      cancelButtonProps={{ danger: true, type: "primary" }}
+      buttonInner={""}
       okText={t("", { defaultValue: "Save" })}
       buttonProps={{
         type: "primary",
         ghost: true,
+        style: { fontSize: 10, height: 20, width: 20 },
+        icon: <EditOutlined />,
       }}
-      buttonTooltip={t("", { defaultValue: "Click for more info" })}
+      buttonTooltip={t("", { defaultValue: "Edit skill" })}
       destroyOnHidden
     >
       <SkillForm skill={skill} />
@@ -37,19 +38,3 @@ function SkillModal({ skill }: SkillModalProps) {
 }
 
 export default SkillModal;
-
-function ModalInnerButton({ skill }: SkillModalProps) {
-  return (
-    <Flex align="center">
-      <span style={{ color: "white" }}>{skill.name}</span>
-      <Divider vertical style={{ marginBlock: -12 }} />
-      <Progress
-        showInfo={false}
-        percent={(skill.experience / skill.experienceNeeded) * 100}
-        strokeColor="#008c95"
-        style={{ minWidth: 60 }}
-      />
-      <span style={{ marginLeft: 6, color: "white" }}>{skill.level}</span>
-    </Flex>
-  );
-}
