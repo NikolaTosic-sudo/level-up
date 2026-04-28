@@ -51,6 +51,9 @@ const theme: ThemeConfig = {
     Menu: {
       darkItemBg: "transparent",
     },
+    Collapse: {
+      contentBg: "transparent",
+    },
   },
 };
 

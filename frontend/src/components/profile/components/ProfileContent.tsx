@@ -2,7 +2,7 @@ import { Layout } from "antd";
 import { useProfileWrapStore } from "../store/useProfileWrapStore";
 import Skills from "../../skills/Skills";
 import { Activity } from "react";
-import Quests from "../../tasks/Quests";
+import Quests from "../../quests/Quests";
 
 const { Content } = Layout;
 
