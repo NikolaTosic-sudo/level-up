@@ -26,9 +26,10 @@ function QuestsWrapper() {
         ]}
       />
       <Collapse
+        style={{ marginTop: 24 }}
         items={[
           {
-            key: "2",
+            key: "1",
             label: "Custom quests",
             children: <div>No</div>,
             extra: (
