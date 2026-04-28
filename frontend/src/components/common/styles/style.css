@@ -45,6 +45,8 @@ body {
   max-height: 250px;
 }
 
+.ant-popover .ant-popover-container,
+.ant-popover .ant-popover-arrow:before,
 .ant-select-dropdown,
 .ant-dropdown {
   background: rgb(2, 4, 10);
