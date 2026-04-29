@@ -27,7 +27,8 @@ function ModalComponent({
   const [open, setOpen] = useState(false);
   const [openPlay, closePlay] = useSound(openSound, closeSound);
 
-  function handleOpen() {
+  function handleOpen(e: MouseEvent) {
+    e.stopPropagation();
     setOpen(true);
     if (openPlay) {
       openPlay();
@@ -35,6 +36,7 @@ function ModalComponent({
   }
 
   function handleClose(e: MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
     setOpen(false);
     if (closePlay) {
       closePlay();

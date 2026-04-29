@@ -1,7 +1,8 @@
-import { Button, Collapse, Divider, Flex, Typography } from "antd";
+import { Button, Collapse, Divider, Flex, Popconfirm, Typography } from "antd";
 import ModalComponent from "../../common/ModalComponent";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import type { Skill } from "../../skills/components/SkillModal";
+import { useTranslation } from "react-i18next";
 
 type Quest = {
   id: number;
@@ -16,19 +17,46 @@ type QuestProps = {
 };
 
 function Quest({ title, quests }: QuestProps) {
+  const { t } = useTranslation();
+
   const items = quests.map((q) => ({
     key: q.id,
     label: q.title,
     children: <div>Description</div>,
     extra: (
       <Flex gap={8}>
+        <Popconfirm
+          title={t("", {
+            defaultValue:
+              "Are you sure you want to mark this quest as complete?",
+          })}
+        >
+          <Button
+            variant="outlined"
+            color="green"
+            ghost
+            icon={<CheckOutlined />}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </Popconfirm>
         <ModalComponent
           buttonInner=""
           buttonProps={{ type: "primary", icon: <EditOutlined /> }}
         >
           Edit
         </ModalComponent>
-        <Button ghost danger icon={<DeleteOutlined />} />
+        <Popconfirm
+          title={t("", {
+            defaultValue: "Are you sure you want to delete this quest?",
+          })}
+        >
+          <Button
+            ghost
+            danger
+            icon={<DeleteOutlined />}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </Popconfirm>
       </Flex>
     ),
   }));
