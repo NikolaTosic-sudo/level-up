@@ -3,8 +3,9 @@ import ModalComponent from "../../common/ModalComponent";
 import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import type { Skill } from "../../skills/components/SkillModal";
 import { useTranslation } from "react-i18next";
+import QuestDescrption from "./QuestDescription";
 
-type Quest = {
+export type Quest = {
   id: number;
   title: string;
   skills?: Array<Skill>;
@@ -22,7 +23,7 @@ function Quest({ title, quests }: QuestProps) {
   const items = quests.map((q) => ({
     key: q.id,
     label: q.title,
-    children: <div>Description</div>,
+    children: <QuestDescrption quest={q} />,
     extra: (
       <Flex gap={8}>
         <Popconfirm
