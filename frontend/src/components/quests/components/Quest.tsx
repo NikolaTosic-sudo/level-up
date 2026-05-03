@@ -27,7 +27,7 @@ function Quest({ title, quests }: QuestProps) {
     extra: (
       <Flex gap={8}>
         <Popconfirm
-          title={t("", {
+          title={t("quest.confirm.done", {
             defaultValue: "Are you done with this Quest?",
           })}
         >
@@ -46,7 +46,7 @@ function Quest({ title, quests }: QuestProps) {
           Edit
         </ModalComponent>
         <Popconfirm
-          title={t("", {
+          title={t("quest.confirm.delete", {
             defaultValue: "Are you sure you want to delete this quest?",
           })}
         >

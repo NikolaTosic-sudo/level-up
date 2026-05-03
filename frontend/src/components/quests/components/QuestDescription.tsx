@@ -12,7 +12,9 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
 
   const items: DescriptionsItemProps[] = [
     {
-      label: t("", { defaultValue: "Experience to be gained" }),
+      label: t("quest.description.exp", {
+        defaultValue: "Experience to be gained",
+      }),
       children: quest.experience,
     },
   ];

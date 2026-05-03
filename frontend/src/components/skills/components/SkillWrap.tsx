@@ -40,12 +40,16 @@ function SkillWrap({ skill }: SkillWrapProps) {
         <div className="skill-actions">
           <SkillModal skill={skill} />
           <Popconfirm
-            title={t("", {
+            title={t("skill.confirm.remove", {
               defaultValue: "Are you sure you want to remove this skill?",
             })}
             cancelButtonProps={{ danger: true, type: "primary" }}
           >
-            <Tooltip title={t("", { defaultValue: "Remove skill" })}>
+            <Tooltip
+              title={t("skill.tooltip.remove", {
+                defaultValue: "Remove skill",
+              })}
+            >
               <Button
                 style={{ fontSize: 10, height: 20, width: 20 }}
                 ghost

@@ -22,14 +22,14 @@ function SkillModal({ skill }: SkillModalProps) {
   return (
     <ModalComponent
       buttonInner={""}
-      okText={t("", { defaultValue: "Save" })}
+      okText={t("skill.modal.save", { defaultValue: "Save" })}
       buttonProps={{
         type: "primary",
         ghost: true,
         style: { fontSize: 10, height: 20, width: 20 },
         icon: <EditOutlined />,
       }}
-      buttonTooltip={t("", { defaultValue: "Edit skill" })}
+      buttonTooltip={t("skill.modal.edit", { defaultValue: "Edit skill" })}
       destroyOnHidden
     >
       <SkillForm skill={skill} />

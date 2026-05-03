@@ -15,8 +15,8 @@ function NewSkillWrapper() {
         type: "primary",
         icon: <PlusOutlined />,
       }}
-      buttonInner={t("", { defaultValue: "Add skill" })}
-      okText={t("", { defaultValue: "Save" })}
+      buttonInner={t("skill.modal.add", { defaultValue: "Add skill" })}
+      okText={t("skill.modal.save", { defaultValue: "Save" })}
       destroyOnHidden
       onCancel={() => setName("")}
       footer={(children) => (name ? children : false)}

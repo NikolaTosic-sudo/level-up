@@ -37,7 +37,7 @@ function SkillForm({ skill }: SkillFormProps) {
               style={{ minWidth: 100 }}
             />
             <span style={{ marginLeft: 6, color: "white" }}>
-              {skill.level} {t("", { defaultValue: "Level" })}
+              {skill.level} {t("skill.form.level", { defaultValue: "Level" })}
             </span>
           </Tooltip>
         </>
@@ -45,7 +45,7 @@ function SkillForm({ skill }: SkillFormProps) {
 
       <Divider titlePlacement="start">
         <Typography.Title level={3}>
-          {t("", { defaultValue: "Linked Skills" })}
+          {t("skill.form.linked", { defaultValue: "Linked Skills" })}
         </Typography.Title>
       </Divider>
 

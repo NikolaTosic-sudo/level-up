@@ -13,11 +13,13 @@ function QuestsWrapper() {
         items={[
           {
             key: "1",
-            label: "Repeating quests",
+            label: t("quest.repeating", { defaultValue: "Repeating quests" }),
             children: <Quest quests={quests} title="Daily quests" />,
             extra: (
               <ModalComponent
-                buttonInner={t("", { defaultValue: "Add a repeating quest" })}
+                buttonInner={t("quest.add.repeating", {
+                  defaultValue: "Add a repeating quest",
+                })}
                 buttonProps={{
                   type: "primary",
                   icon: <PlusOutlined />,
@@ -32,11 +34,13 @@ function QuestsWrapper() {
         items={[
           {
             key: "1",
-            label: "Custom quests",
+            label: t("quest.custom", { defaultValue: "Custom quests" }),
             children: <div>No</div>,
             extra: (
               <ModalComponent
-                buttonInner={t("", { defaultValue: "Add a custom quest" })}
+                buttonInner={t("quest.add.custom", {
+                  defaultValue: "Add a custom quest",
+                })}
                 buttonProps={{
                   type: "primary",
                   icon: <PlusOutlined />,
