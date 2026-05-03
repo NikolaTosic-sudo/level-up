@@ -28,8 +28,7 @@ function Quest({ title, quests }: QuestProps) {
       <Flex gap={8}>
         <Popconfirm
           title={t("", {
-            defaultValue:
-              "Are you sure you want to mark this quest as complete?",
+            defaultValue: "Are you done with this Quest?",
           })}
         >
           <Button
