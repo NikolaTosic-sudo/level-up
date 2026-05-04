@@ -10,6 +10,7 @@ export type Quest = {
   title: string;
   skills?: Array<Skill>;
   experience: number;
+  subTasks?: Array<Quest>;
 };
 
 type QuestProps = {
