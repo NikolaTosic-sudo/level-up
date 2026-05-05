@@ -17,42 +17,40 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
         defaultValue: "Sub-Quests",
       }),
       children: quest?.subTasks?.map((q) => (
-        <div style={{ display: "block" }}>
-          <Card
-            variant="borderless"
-            title={q.title}
-            styles={{ title: { fontSize: 16 } }}
-            extra={
-              <Flex gap={16}>
-                <Popconfirm
-                  title={t("quest.subquest.confirm.done", {
-                    defaultValue: "Are you done with this Subtquest?",
-                  })}
-                >
-                  <Button
-                    variant="outlined"
-                    color="green"
-                    ghost
-                    icon={<CheckOutlined style={{ fontSize: 12 }} />}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </Popconfirm>
-                <Popconfirm
-                  title={t("quest.subquest.confirm.delete", {
-                    defaultValue: "Are you sure you want to delete this quest?",
-                  })}
-                >
-                  <Button
-                    ghost
-                    danger
-                    icon={<DeleteOutlined style={{ fontSize: 12 }} />}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                </Popconfirm>
-              </Flex>
-            }
-          />
-        </div>
+        <Card
+          variant="borderless"
+          title={<h5>{q.title}</h5>}
+          extra={
+            <Flex gap={16}>
+              <Popconfirm
+                title={t("quest.subquest.confirm.done", {
+                  defaultValue: "Are you done with this sub-quest?",
+                })}
+              >
+                <Button
+                  variant="outlined"
+                  color="green"
+                  ghost
+                  icon={<CheckOutlined style={{ fontSize: 12 }} />}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </Popconfirm>
+              <Popconfirm
+                title={t("quest.subquest.confirm.delete", {
+                  defaultValue:
+                    "Are you sure you want to delete this sub-quest?",
+                })}
+              >
+                <Button
+                  ghost
+                  danger
+                  icon={<DeleteOutlined style={{ fontSize: 12 }} />}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </Popconfirm>
+            </Flex>
+          }
+        />
       )),
       span: 3,
       style: quest.subTasks && quest.subTasks.length ? {} : { display: "none" },
