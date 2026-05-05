@@ -14,7 +14,9 @@ function QuestsWrapper() {
           {
             key: "1",
             label: t("quest.repeating", { defaultValue: "Repeating quests" }),
-            children: <Quest quests={quests} title="Daily quests" />,
+            children: quests.map((q) => (
+              <Quest quests={q.quests} title={q.title} />
+            )),
             extra: (
               <ModalComponent
                 buttonInner={t("quest.add.repeating", {
