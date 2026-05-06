@@ -7,7 +7,6 @@ function ProfileProgress() {
         <Progress
           percent={(60 / 100) * 100}
           showInfo={false}
-          strokeColor="#008c95"
           size={{ height: 10 }}
         />
       </Tooltip>
