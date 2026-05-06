@@ -1,14 +1,14 @@
-import { Button, Collapse, Divider, Flex, Popconfirm, Typography } from "antd";
-import ModalComponent from "../../common/ModalComponent";
-import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Collapse, Divider, Flex, Progress, Typography } from "antd";
 import type { Skill } from "../../skills/components/SkillModal";
-import { useTranslation } from "react-i18next";
 import QuestDescrption from "./QuestDescription";
+import QuestExtra from "./QuestExtra";
 
 export type Quest = {
   id: number;
   title: string;
   skills?: Array<Skill>;
+  completed?: boolean;
+  subQuestsCompleted?: number;
   experience: number;
   subTasks?: Array<Quest>;
 };
@@ -19,47 +19,11 @@ type QuestProps = {
 };
 
 function Quest({ title, quests }: QuestProps) {
-  const { t } = useTranslation();
-
   const items = quests.map((q) => ({
     key: q.id,
-    label: q.title,
+    label: <QuestHeader quest={q} />,
     children: <QuestDescrption quest={q} />,
-    extra: (
-      <Flex gap={8}>
-        <Popconfirm
-          title={t("quest.confirm.done", {
-            defaultValue: "Are you done with this Quest?",
-          })}
-        >
-          <Button
-            variant="outlined"
-            color="green"
-            ghost
-            icon={<CheckOutlined />}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </Popconfirm>
-        <ModalComponent
-          buttonInner=""
-          buttonProps={{ type: "primary", icon: <EditOutlined /> }}
-        >
-          Edit
-        </ModalComponent>
-        <Popconfirm
-          title={t("quest.confirm.delete", {
-            defaultValue: "Are you sure you want to delete this quest?",
-          })}
-        >
-          <Button
-            ghost
-            danger
-            icon={<DeleteOutlined />}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </Popconfirm>
-      </Flex>
-    ),
+    extra: <QuestExtra quest={q} />,
   }));
 
   return (
@@ -74,3 +38,25 @@ function Quest({ title, quests }: QuestProps) {
 }
 
 export default Quest;
+
+function QuestHeader({ quest }: { quest: Quest }) {
+  return (
+    <Flex align="center" gap={24}>
+      {quest.title}
+      {quest.subTasks && quest.subTasks.length && (
+        <>
+          <Progress
+            showInfo={false}
+            percent={
+              ((quest.subQuestsCompleted ?? 0) / quest.subTasks.length) * 100
+            }
+            strokeColor="#008c95"
+          />
+          <span>
+            {quest.subQuestsCompleted ?? 0}/{quest.subTasks.length}
+          </span>
+        </>
+      )}
+    </Flex>
+  );
+}
