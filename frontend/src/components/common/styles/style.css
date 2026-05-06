@@ -154,3 +154,10 @@ body {
 .ant-typography:is(h1, h2, h3, h4, h5, h6) {
   margin-block: 0;
 }
+
+.ant-progress {
+  border: 1px solid rgba(0, 255, 255, 0.55);
+  padding: 2px;
+  border-radius: 6px;
+  max-width: 80px;
+}

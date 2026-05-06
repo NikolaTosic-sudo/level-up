@@ -58,6 +58,9 @@ const theme: ThemeConfig = {
       colorBgContainer: "transparent",
       colorBorderSecondary: "rgba(0, 255, 255, 0.55)",
     },
+    Progress: {
+      defaultColor: "#008c95",
+    },
   },
 };
 
