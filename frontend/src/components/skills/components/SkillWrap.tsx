@@ -1,9 +1,10 @@
-import { Button, Divider, Flex, Popconfirm, Progress, Tooltip } from "antd";
+import { Button, Divider, Flex, Progress, Tooltip } from "antd";
 import type { Skill } from "./SkillModal";
 import { useHover } from "../../../hooks/useHover";
 import SkillModal from "./SkillModal";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import PopconfirmComponent from "../../common/PopconfirmComponent";
 
 type SkillWrapProps = {
   skill: Skill;
@@ -39,7 +40,7 @@ function SkillWrap({ skill }: SkillWrapProps) {
       {isHovered ? (
         <div className="skill-actions">
           <SkillModal skill={skill} />
-          <Popconfirm
+          <PopconfirmComponent
             title={t("skill.confirm.remove", {
               defaultValue: "Are you sure you want to remove this skill?",
             })}
@@ -57,7 +58,7 @@ function SkillWrap({ skill }: SkillWrapProps) {
                 icon={<DeleteOutlined />}
               />
             </Tooltip>
-          </Popconfirm>
+          </PopconfirmComponent>
         </div>
       ) : null}
     </div>

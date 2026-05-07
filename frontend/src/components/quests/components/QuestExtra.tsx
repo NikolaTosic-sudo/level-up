@@ -1,8 +1,9 @@
 import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Flex, Popconfirm } from "antd";
+import { Button, Flex } from "antd";
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
 import type { Quest } from "./Quest";
+import PopconfirmComponent from "../../common/PopconfirmComponent";
 
 function QuestExtra({ quest }: { quest: Quest }) {
   const { t } = useTranslation();
@@ -10,7 +11,8 @@ function QuestExtra({ quest }: { quest: Quest }) {
   console.log(quest);
   return (
     <Flex gap={8}>
-      <Popconfirm
+      <PopconfirmComponent
+        cancelButtonProps={{ type: "primary", danger: true }}
         title={t("quest.confirm.done", {
           defaultValue: "Are you done with this Quest?",
         })}
@@ -22,16 +24,16 @@ function QuestExtra({ quest }: { quest: Quest }) {
           icon={<CheckOutlined />}
           onClick={(e) => e.stopPropagation()}
         />
-      </Popconfirm>
+      </PopconfirmComponent>
       <ModalComponent
         buttonInner=""
         buttonProps={{ type: "primary", icon: <EditOutlined /> }}
       >
         Edit
       </ModalComponent>
-      <Popconfirm
+      <PopconfirmComponent
         title={t("quest.confirm.delete", {
-          defaultValue: "Are you sure you want to delete this quest?",
+          defaultValue: "Are you sure you want to delete this Quest?",
         })}
       >
         <Button
@@ -40,7 +42,7 @@ function QuestExtra({ quest }: { quest: Quest }) {
           icon={<DeleteOutlined />}
           onClick={(e) => e.stopPropagation()}
         />
-      </Popconfirm>
+      </PopconfirmComponent>
     </Flex>
   );
 }

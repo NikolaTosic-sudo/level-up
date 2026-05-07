@@ -1,8 +1,9 @@
-import { Button, Card, Descriptions, Flex, Popconfirm, Typography } from "antd";
+import { Button, Card, Descriptions, Flex, Typography } from "antd";
 import type { Quest } from "./Quest";
 import type { DescriptionsItemProps } from "antd/es/descriptions/Item";
 import { useTranslation } from "react-i18next";
 import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
+import PopconfirmComponent from "../../common/PopconfirmComponent";
 
 type QuestDescrptionProps = {
   quest: Quest;
@@ -33,7 +34,7 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
               </Typography.Text>
             ) : (
               <Flex gap={16}>
-                <Popconfirm
+                <PopconfirmComponent
                   title={t("quest.subquest.confirm.done", {
                     defaultValue: "Are you done with this sub-quest?",
                   })}
@@ -45,8 +46,9 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
                     icon={<CheckOutlined style={{ fontSize: 12 }} />}
                     onClick={(e) => e.stopPropagation()}
                   />
-                </Popconfirm>
-                <Popconfirm
+                </PopconfirmComponent>
+                <PopconfirmComponent
+                  cancelButtonProps={{ type: "primary", danger: true }}
                   title={t("quest.subquest.confirm.delete", {
                     defaultValue:
                       "Are you sure you want to delete this sub-quest?",
@@ -58,7 +60,7 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
                     icon={<DeleteOutlined style={{ fontSize: 12 }} />}
                     onClick={(e) => e.stopPropagation()}
                   />
-                </Popconfirm>
+                </PopconfirmComponent>
               </Flex>
             )
           }
