@@ -62,6 +62,8 @@
         "id": 230470,
         "title": "Apply to jobs",
         "experience": 100,
+        "completed": true,
+        "subQuestsCompleted": 2,
         "skills": [
           {
             "id": "3242980",
@@ -89,11 +91,13 @@
           {
             "id": 39284,
             "title": "Apply on LinkedIn",
+            "completed": true,
             "experience": 10
           },
           {
             "id": 93428,
             "title": "Apply on Indeed",
+            "completed": true,
             "experience": 15
           }
         ]

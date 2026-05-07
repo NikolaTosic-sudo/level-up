@@ -21,14 +21,18 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
         <Card
           variant="borderless"
           title={
-            <Typography.Title level={5} delete={q.completed}>
+            <Typography.Title
+              level={5}
+              italic={q.completed}
+              delete={q.completed}
+            >
               {q.title}
             </Typography.Title>
           }
           extra={
             q.completed ? (
               <Typography.Text italic>
-                {t("quest.subquest.completed", {
+                {t("quest.status.completed", {
                   defaultValue: "Completed",
                 })}
               </Typography.Text>

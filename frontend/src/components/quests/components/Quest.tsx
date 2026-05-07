@@ -2,6 +2,7 @@ import { Collapse, Divider, Flex, Progress, Typography } from "antd";
 import type { Skill } from "../../skills/components/SkillModal";
 import QuestDescrption from "./QuestDescription";
 import QuestExtra from "./QuestExtra";
+import { CheckCircleOutlined } from "@ant-design/icons";
 
 export type Quest = {
   id: number;
@@ -42,7 +43,13 @@ export default Quest;
 function QuestHeader({ quest }: { quest: Quest }) {
   return (
     <Flex align="center" gap={24}>
-      {quest.title}
+      <Typography.Title
+        level={5}
+        italic={quest.completed}
+        delete={quest.completed}
+      >
+        {quest.title}
+      </Typography.Title>
       {quest.subTasks && quest.subTasks.length && (
         <>
           <Progress
@@ -52,9 +59,14 @@ function QuestHeader({ quest }: { quest: Quest }) {
             }
             strokeColor="#008c95"
           />
-          <span>
-            {quest.subQuestsCompleted ?? 0}/{quest.subTasks.length}
-          </span>
+
+          {quest.completed ? (
+            <CheckCircleOutlined style={{ color: "#008c95", fontSize: 20 }} />
+          ) : (
+            <span>
+              {quest.subQuestsCompleted ?? 0} / {quest.subTasks.length}
+            </span>
+          )}
         </>
       )}
     </Flex>

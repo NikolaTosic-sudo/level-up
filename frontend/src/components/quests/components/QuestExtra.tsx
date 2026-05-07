@@ -1,5 +1,5 @@
 import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Flex } from "antd";
+import { Button, Flex, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
 import type { Quest } from "./Quest";
@@ -8,7 +8,13 @@ import PopconfirmComponent from "../../common/PopconfirmComponent";
 function QuestExtra({ quest }: { quest: Quest }) {
   const { t } = useTranslation();
 
-  console.log(quest);
+  if (quest.completed)
+    return (
+      <Typography.Text italic>
+        {t("quest.status.completed", { defaultValue: "Completed" })}
+      </Typography.Text>
+    );
+
   return (
     <Flex gap={8}>
       <PopconfirmComponent
