@@ -75,15 +75,23 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
       styles: { content: { width: "100%", display: "block" } },
     },
     {
-      label: t("quest.description.exp", {
-        defaultValue: "Experience to be gained",
-      }),
+      label: quest.completed
+        ? t("quest.description.expCompleted", {
+            defaultValue: "Experience gained",
+          })
+        : t("quest.description.exp", {
+            defaultValue: "Experience to be gained",
+          }),
       children: quest.experience,
     },
     {
-      label: t("quest.description.skills", {
-        defaultValue: "Skills to be improved",
-      }),
+      label: quest.completed
+        ? t("quest.description.skillsCompleted", {
+            defaultValue: "Skills improved",
+          })
+        : t("quest.description.skills", {
+            defaultValue: "Skills to be improved",
+          }),
       children: quest.skills?.map((s) => s.name).join(", "),
       style: quest.skills && quest.skills.length ? {} : { display: "none" },
     },
