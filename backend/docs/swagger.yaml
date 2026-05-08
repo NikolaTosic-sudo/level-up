@@ -1,9 +1,16 @@
 definitions:
+  database.GetSkillsByNameRow:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   main.SkillsResponse:
     properties:
       skills:
         items:
-          type: string
+          $ref: '#/definitions/database.GetSkillsByNameRow'
         type: array
     type: object
 host: localhost:8080

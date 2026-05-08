@@ -45,13 +45,24 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "database.GetSkillsByNameRow": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "main.SkillsResponse": {
             "type": "object",
             "properties": {
                 "skills": {
                     "type": "array",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/database.GetSkillsByNameRow"
                     }
                 }
             }
