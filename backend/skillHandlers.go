@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/NikolaTosic-sudo/level-up/backend/internal/database"
 )
 
 type SkillsResponse struct {
-	Skills []string `json:"skills"`
+	Skills []database.GetSkillsByNameRow `json:"skills"`
 }
 
 // @Tags Skills
