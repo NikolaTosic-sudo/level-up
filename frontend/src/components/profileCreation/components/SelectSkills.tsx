@@ -45,12 +45,21 @@ const SelectSkills = ({
     setSkill(event.target.value);
   };
 
-  function handleChange(selectedString: string) {
-    if (selectedString) {
+  function handleChange(
+    _selectedString: string,
+    option?:
+      | { label?: string; value?: number }
+      | { label?: string; value?: number }[],
+  ) {
+    if (option && !Array.isArray(option)) {
+      const skill = {
+        id: option.value,
+        name: option.label,
+      };
       if (userSkills && userSkills.length) {
-        formInstance.setFieldValue("skills", [...userSkills, selectedString]);
+        formInstance.setFieldValue("skills", [...userSkills, skill]);
       } else {
-        formInstance.setFieldValue("skills", [selectedString]);
+        formInstance.setFieldValue("skills", [skill]);
       }
       setOpen(false);
       selectRef.current?.blur();
@@ -123,7 +132,7 @@ const SelectSkills = ({
         )}
         options={items?.skills
           ?.filter((o) => !(userSkills ?? []).includes(o))
-          .map((item) => ({ label: item, value: item }))}
+          .map((item) => ({ label: item.name, value: item.id }))}
       />
     </ConfigProvider>
   );

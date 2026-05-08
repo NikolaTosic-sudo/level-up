@@ -1,11 +1,12 @@
 import { Space, Tag, Typography } from "antd";
 import type { MouseEvent } from "react";
+import type { Skill } from "../../skills/components/SkillModal";
 
 type SkillRendererProps = {
   vertical?: boolean;
   wrap?: boolean;
-  value?: string[];
-  onChange?: (value: string[]) => void;
+  value?: Skill[];
+  onChange?: (value: Skill[]) => void;
 };
 
 const SkillRenderer = ({
@@ -34,6 +35,7 @@ const SkillRenderer = ({
     <Space wrap={wrap} vertical={vertical}>
       {value.map((s, index) => (
         <Tag
+          key={s.id}
           closable
           color="#008c95"
           variant="solid"
@@ -44,7 +46,7 @@ const SkillRenderer = ({
             ellipsis={{ tooltip: true }}
             style={{ maxWidth: 140 }}
           >
-            {s}
+            {s.name}
           </Typography.Paragraph>
         </Tag>
       ))}
