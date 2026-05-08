@@ -1,7 +1,9 @@
 import {
   Button,
+  Divider,
   Modal,
   Tooltip,
+  Typography,
   type ButtonProps,
   type ModalProps,
 } from "antd";
@@ -22,6 +24,7 @@ function ModalComponent({
   buttonProps,
   buttonTooltip,
   onCancel,
+  title,
   ...props
 }: ModalComponentProps & ModalProps) {
   const [open, setOpen] = useState(false);
@@ -59,8 +62,16 @@ function ModalComponent({
         {...props}
         open={open}
         onCancel={handleClose}
+        title={
+          title ? (
+            <>
+              <Typography.Title level={4}>{title}</Typography.Title>
+              <Divider />
+            </>
+          ) : null
+        }
       >
-        {children}
+        <div onClick={(e) => e.stopPropagation()}>{children}</div>
       </Modal>
     </>
   );
