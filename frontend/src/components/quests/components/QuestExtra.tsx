@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
 import type { Quest } from "./Quest";
 import PopconfirmComponent from "../../common/PopconfirmComponent";
+import QuestForm from "./QuestForm";
 
 function QuestExtra({ quest }: { quest: Quest }) {
   const { t } = useTranslation();
@@ -35,7 +36,7 @@ function QuestExtra({ quest }: { quest: Quest }) {
         buttonInner=""
         buttonProps={{ type: "primary", icon: <EditOutlined /> }}
       >
-        Edit
+        <QuestForm initialValue={quest} />
       </ModalComponent>
       <PopconfirmComponent
         title={t("quest.confirm.delete", {

@@ -12,15 +12,21 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import SkillRenderer from "../../profileCreation/components/SkillRenderer";
 import SelectSkills from "../../profileCreation/components/SelectSkills";
+import type { Quest } from "./Quest";
+import SelectRepeat from "./SelectRepeat";
 
-function QuestForm() {
+type QuestFormProps = {
+  initialValue?: Quest;
+};
+
+function QuestForm({ initialValue }: QuestFormProps) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
 
   return (
-    <Form form={form} layout="vertical">
+    <Form form={form} layout="vertical" initialValues={initialValue}>
       <Form.Item
-        name="groupKey"
+        name="type"
         label={t("quest.form.group", { defaultValue: "Repeats" })}
         rules={[
           {
@@ -30,8 +36,9 @@ function QuestForm() {
             }),
           },
         ]}
+        style={{ maxWidth: 380 }}
       >
-        {/* <Select options={groupOptions} /> */}
+        <SelectRepeat />
       </Form.Item>
 
       <Flex gap={16} align="start">
@@ -91,7 +98,7 @@ function QuestForm() {
         </Typography.Title>
       </Divider>
 
-      <Form.List name="subTasks">
+      <Form.List name="subQuests">
         {(fields, { add, remove }) => (
           <>
             {fields.map((field, index) => (
@@ -117,7 +124,7 @@ function QuestForm() {
                       }),
                     },
                   ]}
-                  style={{ minWidth: 480, flex: 1 }}
+                  style={{ minWidth: 380, flex: 1 }}
                 >
                   <Input />
                 </Form.Item>

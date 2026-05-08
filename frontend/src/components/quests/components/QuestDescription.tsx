@@ -17,7 +17,7 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
       label: t("quest.description.subquests", {
         defaultValue: "Sub-Quests",
       }),
-      children: quest?.subTasks?.map((q) => (
+      children: quest?.subQuests?.map((q) => (
         <Card
           variant="borderless"
           title={
@@ -71,7 +71,8 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
         />
       )),
       span: 3,
-      style: quest.subTasks && quest.subTasks.length ? {} : { display: "none" },
+      style:
+        quest.subQuests && quest.subQuests.length ? {} : { display: "none" },
       styles: { content: { width: "100%", display: "block" } },
     },
     {

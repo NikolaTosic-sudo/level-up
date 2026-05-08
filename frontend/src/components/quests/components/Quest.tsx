@@ -11,7 +11,7 @@ export type Quest = {
   completed?: boolean;
   subQuestsCompleted?: number;
   experience: number;
-  subTasks?: Array<Quest>;
+  subQuests?: Array<Quest>;
 };
 
 type QuestProps = {
@@ -50,12 +50,12 @@ function QuestHeader({ quest }: { quest: Quest }) {
       >
         {quest.title}
       </Typography.Title>
-      {quest.subTasks && quest.subTasks.length && (
+      {quest.subQuests && quest.subQuests.length && (
         <>
           <Progress
             showInfo={false}
             percent={
-              ((quest.subQuestsCompleted ?? 0) / quest.subTasks.length) * 100
+              ((quest.subQuestsCompleted ?? 0) / quest.subQuests.length) * 100
             }
             strokeColor="#008c95"
           />
@@ -64,7 +64,7 @@ function QuestHeader({ quest }: { quest: Quest }) {
             <CheckCircleOutlined style={{ color: "#008c95", fontSize: 20 }} />
           ) : (
             <span>
-              {quest.subQuestsCompleted ?? 0} / {quest.subTasks.length}
+              {quest.subQuestsCompleted ?? 0} / {quest.subQuests.length}
             </span>
           )}
         </>

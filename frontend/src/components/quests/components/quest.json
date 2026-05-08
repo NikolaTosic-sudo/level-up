@@ -32,7 +32,7 @@
             "experienceNeeded": 21
           }
         ],
-        "subTasks": [
+        "subQuests": [
           {
             "id": 39284,
             "title": "Apply on LinkedIn",
@@ -87,7 +87,7 @@
             "experienceNeeded": 21
           }
         ],
-        "subTasks": [
+        "subQuests": [
           {
             "id": 39284,
             "title": "Apply on LinkedIn",
@@ -140,7 +140,7 @@
             "experienceNeeded": 21
           }
         ],
-        "subTasks": [
+        "subQuests": [
           {
             "id": 39284,
             "title": "Apply on LinkedIn",
