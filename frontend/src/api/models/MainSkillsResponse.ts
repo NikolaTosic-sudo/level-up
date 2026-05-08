@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { DatabaseGetSkillsByNameRow } from './DatabaseGetSkillsByNameRow';
+import {
+    DatabaseGetSkillsByNameRowFromJSON,
+    DatabaseGetSkillsByNameRowFromJSONTyped,
+    DatabaseGetSkillsByNameRowToJSON,
+    DatabaseGetSkillsByNameRowToJSONTyped,
+} from './DatabaseGetSkillsByNameRow';
+
 /**
  * 
  * @export
@@ -21,10 +29,10 @@ import { mapValues } from '../runtime';
 export interface MainSkillsResponse {
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<DatabaseGetSkillsByNameRow>}
      * @memberof MainSkillsResponse
      */
-    skills?: Array<string>;
+    skills?: Array<DatabaseGetSkillsByNameRow>;
 }
 
 /**
@@ -44,7 +52,7 @@ export function MainSkillsResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'skills': json['skills'] == null ? undefined : json['skills'],
+        'skills': json['skills'] == null ? undefined : ((json['skills'] as Array<any>).map(DatabaseGetSkillsByNameRowFromJSON)),
     };
 }
 
@@ -59,7 +67,7 @@ export function MainSkillsResponseToJSONTyped(value?: MainSkillsResponse | null,
 
     return {
         
-        'skills': value['skills'],
+        'skills': value['skills'] == null ? undefined : ((value['skills'] as Array<any>).map(DatabaseGetSkillsByNameRowToJSON)),
     };
 }
 

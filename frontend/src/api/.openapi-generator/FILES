@@ -1,9 +1,11 @@
 .openapi-generator-ignore
 apis/SkillsApi.ts
 apis/index.ts
+docs/DatabaseGetSkillsByNameRow.md
 docs/MainSkillsResponse.md
 docs/SkillsApi.md
 index.ts
+models/DatabaseGetSkillsByNameRow.ts
 models/MainSkillsResponse.ts
 models/index.ts
 runtime.ts

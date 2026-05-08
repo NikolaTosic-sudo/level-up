@@ -1,22 +1,24 @@
 
-# MainSkillsResponse
+# DatabaseGetSkillsByNameRow
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`skills` | [Array&lt;DatabaseGetSkillsByNameRow&gt;](DatabaseGetSkillsByNameRow.md)
+`id` | number
+`name` | string
 
 ## Example
 
 ```typescript
-import type { MainSkillsResponse } from ''
+import type { DatabaseGetSkillsByNameRow } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "skills": null,
-} satisfies MainSkillsResponse
+  "id": null,
+  "name": null,
+} satisfies DatabaseGetSkillsByNameRow
 
 console.log(example)
 
@@ -25,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as MainSkillsResponse
+const exampleParsed = JSON.parse(exampleJSON) as DatabaseGetSkillsByNameRow
 console.log(exampleParsed)
 ```
 

@@ -32,10 +32,9 @@ export interface V1LevelupApiSkillsGetRequest {
 export class SkillsApi extends runtime.BaseAPI {
 
     /**
-     * get skills, limited to 200 results
-     * Get skills from database
+     * Creates request options for v1LevelupApiSkillsGet without sending the request
      */
-    async v1LevelupApiSkillsGetRaw(requestParameters: V1LevelupApiSkillsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MainSkillsResponse>> {
+    async v1LevelupApiSkillsGetRequestOpts(requestParameters: V1LevelupApiSkillsGetRequest): Promise<runtime.RequestOpts> {
         const queryParameters: any = {};
 
         if (requestParameters['name'] != null) {
@@ -47,12 +46,21 @@ export class SkillsApi extends runtime.BaseAPI {
 
         let urlPath = `/v1/levelup_api/skills`;
 
-        const response = await this.request({
+        return {
             path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
-        }, initOverrides);
+        };
+    }
+
+    /**
+     * get skills, limited to 200 results
+     * Get skills from database
+     */
+    async v1LevelupApiSkillsGetRaw(requestParameters: V1LevelupApiSkillsGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MainSkillsResponse>> {
+        const requestOptions = await this.v1LevelupApiSkillsGetRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse(response, (jsonValue) => MainSkillsResponseFromJSON(jsonValue));
     }
