@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { PlusOutlined } from "@ant-design/icons";
 import Quest from "./Quest";
 import quests from "./quest.json";
+import QuestForm from "./QuestForm";
 
 function QuestsWrapper() {
   const { t } = useTranslation();
@@ -26,7 +27,12 @@ function QuestsWrapper() {
                   type: "primary",
                   icon: <PlusOutlined />,
                 }}
-              ></ModalComponent>
+                title={t("quest.repeating.modalTitle", {
+                  defaultValue: "Add a repeating quest",
+                })}
+              >
+                <QuestForm />
+              </ModalComponent>
             ),
           },
         ]}
