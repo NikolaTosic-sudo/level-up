@@ -14,6 +14,7 @@ import SkillRenderer from "../../profileCreation/components/SkillRenderer";
 import SelectSkills from "../../profileCreation/components/SelectSkills";
 import type { Quest } from "./Quest";
 import SelectRepeat from "./SelectRepeat";
+import HelperComponent from "../../common/HelperComponent";
 
 type QuestFormProps = {
   initialValue?: Quest;
@@ -131,9 +132,14 @@ function QuestForm({ initialValue }: QuestFormProps) {
 
                 <Form.Item
                   name={[field.name, "experience"]}
-                  label={t("quest.form.experience", {
-                    defaultValue: "Experience",
-                  })}
+                  label={
+                    <>
+                      {t("quest.form.experience", {
+                        defaultValue: "Experience",
+                      })}
+                      <HelperComponent text="Part of overall quest experience" />
+                    </>
+                  }
                   rules={[
                     {
                       required: true,
