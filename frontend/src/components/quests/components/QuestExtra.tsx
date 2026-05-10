@@ -35,6 +35,9 @@ function QuestExtra({ quest }: { quest: Quest }) {
       <ModalComponent
         buttonInner=""
         buttonProps={{ type: "primary", icon: <EditOutlined /> }}
+        title={t("quest.repeating.editModalTitle", {
+          defaultValue: "Edit quest",
+        })}
       >
         <QuestForm initialValue={quest} />
       </ModalComponent>

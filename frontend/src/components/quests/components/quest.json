@@ -9,6 +9,7 @@
         "experience": 100,
         "completed": false,
         "subQuestsCompleted": 1,
+        "type": "d",
         "skills": [
           {
             "id": "3242980",
@@ -50,6 +51,7 @@
       {
         "id": 230471,
         "title": "Work on the project",
+        "type": "d",
         "experience": 200
       }
     ]
@@ -62,6 +64,7 @@
         "id": 230470,
         "title": "Apply to jobs",
         "experience": 100,
+        "type": "w",
         "completed": true,
         "subQuestsCompleted": 2,
         "skills": [
@@ -105,6 +108,7 @@
       {
         "id": 230471,
         "title": "Work on the project",
+        "type": "w",
         "experience": 200
       }
     ]
@@ -117,6 +121,7 @@
         "id": 230470,
         "title": "Apply to jobs",
         "experience": 100,
+        "type": "m",
         "skills": [
           {
             "id": "3242980",
@@ -156,6 +161,7 @@
       {
         "id": 230471,
         "title": "Work on the project",
+        "type": "m",
         "experience": 200
       }
     ]
