@@ -1,5 +1,5 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { Divider, Flex, Typography } from "antd";
+import { Flex, Typography } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
@@ -25,7 +25,6 @@ function ProfileShop() {
               800
             </div>
           </Flex>
-          <Divider />
         </>
       }
       buttonInner={<DollarCircleOutlined style={{ fontSize: 18 }} />}

@@ -1,0 +1,55 @@
+[
+  {
+    "id": 230470,
+    "title": "Apply to jobs",
+    "experience": 100,
+    "completed": false,
+    "subQuestsCompleted": 1,
+    "startDate": "2026-05-07",
+    "endDate": "2026-05-10",
+    "type": "custom",
+    "skills": [
+      {
+        "id": "3242980",
+        "name": "Communication",
+        "level": 1,
+        "experience": 8,
+        "experienceNeeded": 21
+      },
+      {
+        "id": "32429348",
+        "name": "Programming",
+        "level": 1,
+        "experience": 8,
+        "experienceNeeded": 21
+      },
+      {
+        "id": "324212938",
+        "name": "Writing",
+        "level": 1,
+        "experience": 8,
+        "experienceNeeded": 21
+      }
+    ],
+    "subQuests": [
+      {
+        "id": 39284,
+        "title": "Apply on LinkedIn",
+        "completed": true,
+        "experience": 10
+      },
+      {
+        "id": 93428,
+        "title": "Apply on Indeed",
+        "completed": false,
+        "experience": 15
+      }
+    ]
+  },
+  {
+    "id": 230471,
+    "title": "Work on the project",
+    "type": "custom",
+    "experience": 200
+  }
+]

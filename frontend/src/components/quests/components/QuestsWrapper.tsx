@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { PlusOutlined } from "@ant-design/icons";
 import Quest from "./Quest";
 import quests from "./quest.json";
+import customQuests from "./customQuests.json";
 import QuestForm from "./QuestForm";
 
 function QuestsWrapper() {
@@ -43,7 +44,7 @@ function QuestsWrapper() {
           {
             key: "1",
             label: t("quest.custom", { defaultValue: "Custom quests" }),
-            children: <div>No</div>,
+            children: <Quest quests={customQuests} />,
             extra: (
               <ModalComponent
                 buttonInner={t("quest.add.custom", {
@@ -53,7 +54,13 @@ function QuestsWrapper() {
                   type: "primary",
                   icon: <PlusOutlined />,
                 }}
-              ></ModalComponent>
+                title={t("quest.custom.modalTitle", {
+                  defaultValue: "Add a custom quest",
+                })}
+                destroyOnHidden
+              >
+                <QuestForm custom />
+              </ModalComponent>
             ),
           },
         ]}

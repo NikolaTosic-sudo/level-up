@@ -9,13 +9,15 @@ export type Quest = {
   title: string;
   skills?: Array<Skill>;
   completed?: boolean;
+  type?: string;
   subQuestsCompleted?: number;
   experience: number;
   subQuests?: Array<Quest>;
 };
 
 type QuestProps = {
-  title: string;
+  title?: string;
+  custom?: boolean;
   quests: Array<Quest>;
 };
 
@@ -29,10 +31,11 @@ function Quest({ title, quests }: QuestProps) {
 
   return (
     <>
-      <Divider titlePlacement="start">
-        <Typography.Title level={4}>{title}</Typography.Title>
-      </Divider>
-
+      {title ? (
+        <Divider titlePlacement="start">
+          <Typography.Title level={4}>{title}</Typography.Title>
+        </Divider>
+      ) : null}
       <Collapse items={items} />
     </>
   );

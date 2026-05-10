@@ -16,6 +16,7 @@ type ModalComponentProps = {
   buttonInner: ReactElement | string;
   buttonProps?: ButtonProps;
   buttonTooltip?: ReactElement | string;
+  noDivider?: boolean;
 };
 
 function ModalComponent({
@@ -25,6 +26,7 @@ function ModalComponent({
   buttonTooltip,
   onCancel,
   title,
+  noDivider,
   ...props
 }: ModalComponentProps & ModalProps) {
   const [open, setOpen] = useState(false);
@@ -66,7 +68,7 @@ function ModalComponent({
           title ? (
             <>
               <Typography.Title level={4}>{title}</Typography.Title>
-              <Divider />
+              {noDivider ? null : <Divider />}
             </>
           ) : null
         }
