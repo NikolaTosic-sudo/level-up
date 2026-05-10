@@ -16,8 +16,12 @@ import { useTranslation } from "react-i18next";
 import { useGetSkills } from "../hooks/useGetSkills";
 import { useDebounce } from "../../../hooks/useDebounce";
 
+type Skill =
+  | { label?: string; value?: number }
+  | { label?: string; value?: number }[];
+
 type SelectSkillsProps = {
-  onChange?: (skill: string) => void;
+  onChange?: (skill: { id?: number; name?: string }) => void;
   forUser?: boolean;
   marginLeft?: number;
 };
@@ -45,17 +49,16 @@ const SelectSkills = ({
     setSkill(event.target.value);
   };
 
-  function handleChange(
-    _selectedString: string,
-    option?:
-      | { label?: string; value?: number }
-      | { label?: string; value?: number }[],
-  ) {
+  function handleChange(_selectedString: string, option?: Skill) {
     if (option && !Array.isArray(option)) {
       const skill = {
         id: option.value,
         name: option.label,
       };
+      if (onChange) {
+        onChange(skill);
+      }
+
       if (userSkills && userSkills.length) {
         formInstance.setFieldValue("skills", [...userSkills, skill]);
       } else {
@@ -71,7 +74,7 @@ const SelectSkills = ({
       setSkill("");
 
       if (onChange) {
-        onChange(skill);
+        onChange({ id: Math.random(), name: skill });
       } else {
         handleChange(skill);
       }
@@ -92,7 +95,7 @@ const SelectSkills = ({
           defaultValue: "Select skill",
         })}
         ref={selectRef}
-        onChange={onChange ?? handleChange}
+        onChange={handleChange}
         open={open}
         onFocus={() => setOpen(true)}
         onOpenChange={setOpen}

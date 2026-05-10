@@ -7,7 +7,9 @@ import SelectSkills from "../../profileCreation/components/SelectSkills";
 
 function NewSkillWrapper() {
   const { t } = useTranslation();
-  const [name, setName] = useState("");
+  const [skill, setSkill] = useState<{ id?: number; name?: string } | null>(
+    null,
+  );
 
   return (
     <ModalComponent
@@ -18,14 +20,14 @@ function NewSkillWrapper() {
       buttonInner={t("skill.modal.add", { defaultValue: "Add skill" })}
       okText={t("skill.modal.save", { defaultValue: "Save" })}
       destroyOnHidden
-      onCancel={() => setName("")}
-      footer={(children) => (name ? children : false)}
-      className={name ? "" : "new-skill"}
+      onCancel={() => setSkill(null)}
+      footer={(children) => (skill ? children : false)}
+      className={skill ? "" : "new-skill"}
     >
-      {name ? (
+      {skill ? (
         <SkillForm
           skill={{
-            name,
+            name: skill.name ?? "",
             experience: 0,
             experienceNeeded: 100,
             level: 1,
@@ -33,7 +35,7 @@ function NewSkillWrapper() {
           }}
         />
       ) : (
-        <SelectSkills onChange={setName} />
+        <SelectSkills onChange={setSkill} />
       )}
     </ModalComponent>
   );
