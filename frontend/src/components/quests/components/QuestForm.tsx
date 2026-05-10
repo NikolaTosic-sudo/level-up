@@ -1,5 +1,6 @@
 import {
   Button,
+  DatePicker,
   Divider,
   Flex,
   Form,
@@ -15,32 +16,36 @@ import SelectSkills from "../../profileCreation/components/SelectSkills";
 import type { Quest } from "./Quest";
 import SelectRepeat from "./SelectRepeat";
 import HelperComponent from "../../common/HelperComponent";
+import dayjs from "dayjs";
 
 type QuestFormProps = {
   initialValue?: Quest;
+  custom?: boolean;
 };
 
-function QuestForm({ initialValue }: QuestFormProps) {
+function QuestForm({ initialValue, custom }: QuestFormProps) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
 
   return (
     <Form form={form} layout="vertical" initialValues={initialValue}>
-      <Form.Item
-        name="type"
-        label={t("quest.form.group", { defaultValue: "Repeats" })}
-        rules={[
-          {
-            required: true,
-            message: t("quest.form.group.required", {
-              defaultValue: "Choose where this quest should repeat.",
-            }),
-          },
-        ]}
-        style={{ maxWidth: 380 }}
-      >
-        <SelectRepeat />
-      </Form.Item>
+      {custom || initialValue?.type === "custom" ? null : (
+        <Form.Item
+          name="type"
+          label={t("quest.form.repeats", { defaultValue: "Repeats" })}
+          rules={[
+            {
+              required: true,
+              message: t("quest.form.required.repeats", {
+                defaultValue: "Choose where this quest should repeat.",
+              }),
+            },
+          ]}
+          style={{ maxWidth: 380 }}
+        >
+          <SelectRepeat />
+        </Form.Item>
+      )}
 
       <Flex gap={16} align="start">
         <Form.Item
@@ -50,7 +55,7 @@ function QuestForm({ initialValue }: QuestFormProps) {
             {
               required: true,
               whitespace: true,
-              message: t("quest.form.title.required", {
+              message: t("quest.form.required.title", {
                 defaultValue: "Quest title is required.",
               }),
             },
@@ -58,7 +63,7 @@ function QuestForm({ initialValue }: QuestFormProps) {
           style={{ flex: 1 }}
         >
           <Input
-            placeholder={t("quest.form.title.placeholder", {
+            placeholder={t("quest.form.placeholder.title", {
               defaultValue: "Enter quest title",
             })}
           />
@@ -70,7 +75,7 @@ function QuestForm({ initialValue }: QuestFormProps) {
           rules={[
             {
               required: true,
-              message: t("quest.form.experience.required", {
+              message: t("quest.form.required.experience", {
                 defaultValue: "Experience is required.",
               }),
             },
@@ -79,6 +84,54 @@ function QuestForm({ initialValue }: QuestFormProps) {
           <InputNumber min={0} style={{ width: 140 }} />
         </Form.Item>
       </Flex>
+
+      {custom || initialValue?.type === "custom" ? (
+        <Flex gap={24} align="end">
+          <Form.Item
+            name="startDate"
+            label={t("quest.form.startDate", { defaultValue: "Start date" })}
+            rules={[
+              {
+                required: true,
+                message: t("quest.form.required.startDate", {
+                  defaultValue: "Choose the start date for this quest",
+                }),
+              },
+            ]}
+            style={{ maxWidth: 380 }}
+            getValueProps={(value) => ({
+              value: value ? dayjs(value, "YYYY-MM-DD") : null,
+            })}
+            normalize={(value) =>
+              value ? dayjs(value).format("YYYY-MM-DD") : null
+            }
+          >
+            <DatePicker
+              placeholder={t("quest.form.placeholder.startDate", {
+                defaultValue: "Start date",
+              })}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="endDate"
+            label={t("quest.form.endDate", { defaultValue: "End date" })}
+            style={{ maxWidth: 380 }}
+            getValueProps={(value) => ({
+              value: value ? dayjs(value, "YYYY-MM-DD") : null,
+            })}
+            normalize={(value) =>
+              value ? dayjs(value).format("YYYY-MM-DD") : null
+            }
+          >
+            <DatePicker
+              placeholder={t("quest.form.placeholder.endDate", {
+                defaultValue: "End date",
+              })}
+            />
+          </Form.Item>
+        </Flex>
+      ) : null}
 
       <Divider titlePlacement="start">
         <Typography.Title level={4}>
@@ -166,7 +219,7 @@ function QuestForm({ initialValue }: QuestFormProps) {
               <Button
                 type="primary"
                 ghost
-                onClick={() => add({ experience: 0 })}
+                onClick={() => add()}
                 icon={<PlusOutlined />}
               >
                 {t("quest.form.subquests.add", {
