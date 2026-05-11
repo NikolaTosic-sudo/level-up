@@ -1,5 +1,5 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { Flex, Typography } from "antd";
+import { Flex, Result, Spin, Typography } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
@@ -33,22 +33,12 @@ function ProfileShop() {
       }}
       buttonTooltip={t("profile.header.shop.tooltip", { defaultValue: "Shop" })}
     >
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
+      <Result
+        icon={<Spin size="large" />}
+        title={t("profile.header.shot.comingSoon", {
+          defaultValue: "Coming soon...",
+        })}
+      />
     </ModalComponent>
   );
 }
