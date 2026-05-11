@@ -21,13 +21,23 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
         <Card
           variant="borderless"
           title={
-            <Typography.Title
-              level={5}
-              italic={q.completed}
-              delete={q.completed}
-            >
-              {q.title}
-            </Typography.Title>
+            <Flex gap={64} align="end">
+              <Typography.Title
+                level={5}
+                italic={q.completed}
+                delete={q.completed}
+              >
+                {q.title}
+              </Typography.Title>
+
+              <Typography.Text
+                italic={q.completed}
+                delete={q.completed}
+                style={{ fontSize: 12, fontWeight: "normal" }}
+              >
+                Exp: {q.experience}
+              </Typography.Text>
+            </Flex>
           }
           extra={
             q.completed ? (
