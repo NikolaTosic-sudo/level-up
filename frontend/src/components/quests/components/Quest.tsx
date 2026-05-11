@@ -13,6 +13,8 @@ export type Quest = {
   subQuestsCompleted?: number;
   experience: number;
   subQuests?: Array<Quest>;
+  startDate?: string;
+  endDate?: string;
 };
 
 type QuestProps = {

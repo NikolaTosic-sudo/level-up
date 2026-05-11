@@ -96,6 +96,20 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
       children: quest.skills?.map((s) => s.name).join(", "),
       style: quest.skills && quest.skills.length ? {} : { display: "none" },
     },
+    {
+      label: t("quest.description.startDate", {
+        defaultValue: "Quest start date",
+      }),
+      children: quest.startDate,
+      style: quest.startDate ? {} : { display: "none" },
+    },
+    {
+      label: t("quest.description.endDate", {
+        defaultValue: "Quest end date",
+      }),
+      children: quest.endDate,
+      style: quest.endDate ? {} : { display: "none" },
+    },
   ];
 
   return (
