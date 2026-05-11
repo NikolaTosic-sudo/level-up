@@ -66,10 +66,10 @@ function ModalComponent({
         onCancel={handleClose}
         title={
           title ? (
-            <>
+            <div onClick={(e) => e.stopPropagation()}>
               <Typography.Title level={4}>{title}</Typography.Title>
               {noDivider ? null : <Divider />}
-            </>
+            </div>
           ) : null
         }
       >
