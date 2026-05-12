@@ -1,6 +1,7 @@
 import { Menu, type MenuProps } from "antd";
 import {
   DashboardOutlined,
+  HistoryOutlined,
   ReconciliationOutlined,
   ThunderboltOutlined,
   UserOutlined,
@@ -29,6 +30,11 @@ function ProfileMenu() {
       label: t("profile.menu.quests", { defaultValue: "Quests" }),
       key: "quests",
       icon: <ReconciliationOutlined />,
+    },
+    {
+      label: t("profile.menu.history", { defaultValue: "History" }),
+      key: "history",
+      icon: <HistoryOutlined />,
     },
     {
       label: t("profile.menu.profile", { defaultValue: "Profile" }),
