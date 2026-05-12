@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1",
+    "title": "first item",
+    "iconType": "reward",
+    "description": "extra je ovo neka bude jos vece"
+  },
+  {
+    "id": "2",
+    "title": "second item",
+    "iconType": "task",
+    "description": "more extra"
+  }
+]

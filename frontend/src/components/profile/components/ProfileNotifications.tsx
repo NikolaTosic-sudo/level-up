@@ -10,45 +10,26 @@ import {
   type MenuProps,
 } from "antd";
 import { useTranslation } from "react-i18next";
-import NotificationsIcon from "./NotificationsIcon";
+import NotificationsIcon, { type iconType } from "./NotificationsIcon";
+import notifications from "./notifications.json";
 
 function ProfileNotifications() {
   const { t } = useTranslation();
 
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: "first item",
-      title: "first item",
-      icon: <NotificationsIcon iconType="reward" />,
-      extra: (
-        <Typography.Text
-          ellipsis={{ tooltip: true }}
-          className="notifications-extra"
-        >
-          extra je ovo neka bude jos vece
-        </Typography.Text>
-      ),
-    },
-    {
-      key: "2",
-      label: <span>second item more more morem more</span>,
-      title: "second item more more morem more",
-      icon: <NotificationsIcon iconType="task" />,
-      extra: (
-        <Typography.Text
-          ellipsis={{ tooltip: true }}
-          className="notifications-extra"
-        >
-          more extra
-        </Typography.Text>
-      ),
-    },
-    {
-      key: "3",
-      label: "third item",
-    },
-  ];
+  const items: MenuProps["items"] = notifications.map((n) => ({
+    key: n.id,
+    label: n.title,
+    title: n.title,
+    icon: <NotificationsIcon iconType={n.iconType as iconType} />,
+    extra: (
+      <Typography.Text
+        ellipsis={{ tooltip: true }}
+        className="notifications-extra"
+      >
+        {n.description}
+      </Typography.Text>
+    ),
+  }));
 
   return (
     <Tooltip
@@ -76,7 +57,7 @@ function ProfileNotifications() {
           </>
         )}
       >
-        <Badge count={items.length} size="small" color="#008c95">
+        <Badge count={notifications.length} size="small" color="#008c95">
           <BellOutlined style={{ fontSize: 18 }} />
         </Badge>
       </Dropdown>

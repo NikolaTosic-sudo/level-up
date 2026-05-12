@@ -1,7 +1,9 @@
 import { GiftOutlined, VideoCameraOutlined } from "@ant-design/icons";
 
+export type iconType = "reward" | "task" | "failure";
+
 type NotificationsIconProps = {
-  iconType: "reward" | "task" | "failure"; // will be expanded
+  iconType: iconType; // will be expanded
 };
 
 const Icons = {
