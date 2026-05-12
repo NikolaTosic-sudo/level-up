@@ -1,5 +1,6 @@
 import { Select, type SelectProps } from "antd";
 import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 type SelectRepeatProps = {
   value?: string;
@@ -8,25 +9,36 @@ type SelectRepeatProps = {
 
 const options: SelectProps["options"] = [
   {
-    label: t("", { defaultValue: "Daily" }),
+    label: t("quest.form.questRepeats.daily", { defaultValue: "Daily" }),
     value: "d",
   },
   {
-    label: t("", { defaultValue: "Weekly" }),
+    label: t("quest.form.questRepeats.weekly", { defaultValue: "Weekly" }),
     value: "w",
   },
   {
-    label: t("", { defaultValue: "Monthly" }),
+    label: t("quest.form.questRepeats.monthly", { defaultValue: "Monthly" }),
     value: "m",
   },
   {
-    label: t("", { defaultValue: "Yearly" }),
+    label: t("quest.form.questRepeats.yearly", { defaultValue: "Yearly" }),
     value: "y",
   },
 ];
 
 function SelectRepeat({ value, onChange }: SelectRepeatProps) {
-  return <Select value={value} onChange={onChange} options={options} />;
+  const { t } = useTranslation();
+
+  return (
+    <Select
+      placeholder={t("quest.form.placeholder.questRepeats", {
+        defaultValue: "Select how quest repeats",
+      })}
+      value={value}
+      onChange={onChange}
+      options={options}
+    />
+  );
 }
 
 export default SelectRepeat;
