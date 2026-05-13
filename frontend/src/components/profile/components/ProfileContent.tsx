@@ -3,6 +3,7 @@ import { useProfileWrapStore } from "../store/useProfileWrapStore";
 import Skills from "../../skills/Skills";
 import { Activity } from "react";
 import Quests from "../../quests/Quests";
+import Dashboard from "../../dashboard/Dashboard";
 
 const { Content } = Layout;
 
@@ -19,9 +20,15 @@ function ProfileContent() {
         <Quests />
       </Activity>
 
+      <Activity mode={currentModule === "dash" ? "visible" : "hidden"}>
+        <Dashboard />
+      </Activity>
+
       <Activity
         mode={
-          currentModule !== "skills" && currentModule !== "quests"
+          currentModule !== "skills" &&
+          currentModule !== "quests" &&
+          currentModule !== "dash"
             ? "visible"
             : "hidden"
         }
