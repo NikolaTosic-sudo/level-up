@@ -1,0 +1,32 @@
+.react-calendar-heatmap {
+  .activity-empty {
+    fill: transparent;
+    stroke: #008c95;
+    stroke-width: 0.3px;
+  }
+
+  .color-scale-1 {
+    fill: #006f76;
+  }
+  .color-scale-2 {
+    fill: #007d85;
+  }
+  .color-scale-3 {
+    fill: #008c95;
+  }
+  .color-scale-4 {
+    fill: #1ca6ae;
+  }
+  .color-scale-5 {
+    fill: #46c0c7;
+  }
+
+  text {
+    fill: white;
+    font-size: 10px;
+  }
+
+  .react-calendar-heatmap-weekday-label {
+    transform: translateX(-10px);
+  }
+}
