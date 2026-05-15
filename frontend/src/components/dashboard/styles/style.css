@@ -30,3 +30,13 @@
     transform: translateX(-10px);
   }
 }
+
+.dashboard-wrap {
+  .ant-card {
+    height: 100%;
+  }
+
+  .ant-typography-edit {
+    height: fit-content;
+  }
+}

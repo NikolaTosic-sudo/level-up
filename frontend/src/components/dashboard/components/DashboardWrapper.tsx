@@ -7,7 +7,7 @@ import ActivityCard from "./ActivityCard";
 
 function DashboardWrapper() {
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[16, 16]} className="dashboard-wrap">
       <Col span={8}>
         <ProfileCard />
       </Col>
