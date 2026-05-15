@@ -14,8 +14,9 @@ function ActivityCard() {
       <CalendarHeatmap
         startDate={dayjs(new Date()).subtract(1, "year").toString()}
         endDate={new Date()}
-        transformDayElement={(element, value) => (
+        transformDayElement={(element, value, index) => (
           <Tooltip
+            key={index}
             title={
               value
                 ? t("dashboard.activity.tooltip", {

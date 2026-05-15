@@ -169,3 +169,15 @@ body {
 .fire-icon {
   color: #008c95;
 }
+
+.flex {
+  display: flex;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
