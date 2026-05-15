@@ -8,12 +8,13 @@ function BioCard() {
   return (
     <Card title={t("", { defaultValue: "Bio" })}>
       <EditableText
-        content={
+        val={
           "ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst"
         }
         editable
         onChange={(value) => console.log(value)}
         style={{ display: "flex", marginLeft: 0, alignItems: "start" }}
+        mode="textArea"
       />
     </Card>
   );

@@ -9,30 +9,31 @@ function ProfileCard() {
     <Card title={t("", { defaultValue: "Profile" })}>
       <EditableText
         title={t("", { defaultValue: "Name:" })}
-        content={"Nikola Tosic"}
+        val={"Nikola Tosic"}
         onChange={(value) => console.log(value, "value name")}
         editable
       />
 
       <EditableText
         title={t("", { defaultValue: "Email:" })}
-        content={"toleslaoffice@gmail.com"}
+        val={"toleslaoffice@gmail.com"}
         onChange={(value) => console.log(value, "value name")}
         editable
       />
 
       <EditableText
         title={t("", { defaultValue: "Nickname:" })}
-        content={"Krdzina"}
+        val={"Krdzina"}
         onChange={(value) => console.log(value, "value name")}
         editable
       />
 
       <EditableText
         title={t("", { defaultValue: "Date of Birth:" })}
-        content={"Krdzina"}
+        val={"1997-09-07"}
         onChange={(value) => console.log(value, "value name")}
         editable
+        mode="date"
       />
     </Card>
   );

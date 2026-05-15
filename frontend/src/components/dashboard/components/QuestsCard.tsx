@@ -9,22 +9,22 @@ function QuestsCard() {
     <Card title={t("", { defaultValue: "Quests" })}>
       <EditableText
         title={t("", { defaultValue: "Quests completed:" })}
-        content={"8"}
+        val={"8"}
       />
 
       <EditableText
         title={t("", { defaultValue: "Repeating quests completed:" })}
-        content={"8"}
+        val={"8"}
       />
 
       <EditableText
         title={t("", { defaultValue: "Custom quests completed:" })}
-        content={"8"}
+        val={"8"}
       />
 
       <EditableText
         title={t("", { defaultValue: "Experience gained:" })}
-        content={"8"}
+        val={"8"}
       />
     </Card>
   );

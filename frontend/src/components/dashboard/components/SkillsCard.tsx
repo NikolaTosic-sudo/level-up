@@ -9,12 +9,12 @@ function SkillsCard() {
     <Card title={t("", { defaultValue: "Skills" })}>
       <EditableText
         title={t("", { defaultValue: "Skill with the highest level:" })}
-        content={"Development"}
+        val={"Development"}
       />
 
       <EditableText
         title={t("", { defaultValue: "Most recently leveled-up skill:" })}
-        content={"Development"}
+        val={"Development"}
       />
     </Card>
   );
