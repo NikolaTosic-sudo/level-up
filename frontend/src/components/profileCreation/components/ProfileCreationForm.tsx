@@ -45,6 +45,20 @@ function ProfileCreationForm() {
         </Form.Item>
 
         <Form.Item
+          name="bio"
+          label={t("profileCreationTrans.formProfile.bio", {
+            defaultValue: "Bio",
+          })}
+        >
+          <Input.TextArea
+            rows={4}
+            placeholder={t("profileCreationTrans.formProfile.placeholder.bio", {
+              defaultValue: "Please tell us a little something about yourself",
+            })}
+          />
+        </Form.Item>
+
+        <Form.Item
           name="dateOfBirth"
           label={t("profileCreationTrans.formProfile.dateOfBirth", {
             defaultValue: "Date of birth",

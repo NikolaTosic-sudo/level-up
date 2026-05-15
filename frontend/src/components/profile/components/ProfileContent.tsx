@@ -12,16 +12,16 @@ function ProfileContent() {
 
   return (
     <Content className="profile-content">
+      <Activity mode={currentModule === "dash" ? "visible" : "hidden"}>
+        <Dashboard />
+      </Activity>
+
       <Activity mode={currentModule === "skills" ? "visible" : "hidden"}>
         <Skills />
       </Activity>
 
       <Activity mode={currentModule === "quests" ? "visible" : "hidden"}>
         <Quests />
-      </Activity>
-
-      <Activity mode={currentModule === "dash" ? "visible" : "hidden"}>
-        <Dashboard />
       </Activity>
 
       <Activity

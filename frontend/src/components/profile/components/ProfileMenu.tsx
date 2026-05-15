@@ -4,7 +4,6 @@ import {
   HistoryOutlined,
   ReconciliationOutlined,
   ThunderboltOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { useProfileWrapStore } from "../store/useProfileWrapStore";
 import { useTranslation } from "react-i18next";
@@ -35,11 +34,6 @@ function ProfileMenu() {
       label: t("profile.menu.history", { defaultValue: "History" }),
       key: "history",
       icon: <HistoryOutlined />,
-    },
-    {
-      label: t("profile.menu.profile", { defaultValue: "Profile" }),
-      key: "profile",
-      icon: <UserOutlined />,
     },
   ];
 
