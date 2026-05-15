@@ -14,6 +14,7 @@ function BioCard() {
         editable
         onChange={(value) => console.log(value)}
         style={{ display: "flex", marginLeft: 0, alignItems: "start" }}
+        spaceStyle={{ width: "100%" }}
         mode="textArea"
       />
     </Card>

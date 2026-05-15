@@ -8,6 +8,7 @@ type EditableTextProps = {
   onChange?: (value: string, e?: MouseEvent) => void;
   editable?: boolean;
   style?: CSSProperties;
+  spaceStyle?: CSSProperties;
   mode?: "input" | "textArea" | "date";
   val?: string;
 };
@@ -17,6 +18,7 @@ function EditableText({
   editable,
   onChange,
   style,
+  spaceStyle,
   val,
   mode = "input",
 }: EditableTextProps) {
@@ -40,8 +42,13 @@ function EditableText({
       {title ? <span style={{ fontWeight: "bold" }}>{title}</span> : null}
 
       {editing ? (
-        <Space.Compact style={{ marginLeft: 12 }}>
-          <RenderInput mode={mode} val={value} change={setValue} />
+        <Space.Compact style={{ marginLeft: 12, ...spaceStyle }}>
+          <RenderInput
+            style={style}
+            mode={mode}
+            val={value}
+            change={setValue}
+          />
           <Button
             icon={<CloseOutlined />}
             danger
