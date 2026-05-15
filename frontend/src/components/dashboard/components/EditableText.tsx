@@ -42,7 +42,7 @@ function EditableText({
       {title ? <span style={{ fontWeight: "bold" }}>{title}</span> : null}
 
       {editing ? (
-        <Space.Compact style={{ marginLeft: 12, ...spaceStyle }}>
+        <Space.Compact style={{ marginLeft: title ? 12 : 0, ...spaceStyle }}>
           <RenderInput
             style={style}
             mode={mode}
@@ -63,7 +63,7 @@ function EditableText({
             className="space-between align-center"
             style={{
               display: "inline-flex",
-              marginLeft: 12,
+              marginLeft: title ? 12 : 0,
               ...style,
             }}
           >

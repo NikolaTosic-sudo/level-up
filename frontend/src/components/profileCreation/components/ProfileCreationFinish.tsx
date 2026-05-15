@@ -11,6 +11,7 @@ import {
 import type { DescriptionsItemType } from "antd/es/descriptions";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import type { Skill } from "../../skills/components/SkillModal";
 
 export const ProfileCreationFinish = () => {
   const { t } = useTranslation();
@@ -89,13 +90,13 @@ export const ProfileCreationFinish = () => {
             </Typography.Title>
           </Divider>
           <Flex gap={16} wrap>
-            {values.skills.map((s: string, index: number) => (
-              <Tag key={`${s}_${index}`} className="skills-finish">
+            {values.skills.map((s: Skill, index: number) => (
+              <Tag key={`${s.id}_${index}`} className="skills-finish">
                 <Typography.Paragraph
                   ellipsis={{ tooltip: true }}
                   style={{ maxWidth: 140 }}
                 >
-                  {s}
+                  {s.name}
                 </Typography.Paragraph>
               </Tag>
             ))}
