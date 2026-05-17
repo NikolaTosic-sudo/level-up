@@ -6,7 +6,16 @@ CREATE TABLE users(
   firstName TEXT NOT NULL,
   lastName TEXT NOT NULL,
   nickname TEXT NOT NULL,
-  dateOfBirth DATE
+  dateOfBirth DATE,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  hot_streak NUMBER,
+  quests_completed NUMBER,
+  repeating_completed NUMBER,
+  customs_completed NUMBER,
+  experience NUMBER,
+  experience_needed NUMBER,
+  level NUMBER
 );
 
 -- +goose down
