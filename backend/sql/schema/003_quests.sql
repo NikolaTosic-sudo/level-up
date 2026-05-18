@@ -6,7 +6,10 @@ CREATE TABLE quests(
   name TEXT NOT NULL UNIQUE,
   experience NUMBER,
   experience_needed NUMBER,
-  level NUMBER
+  level NUMBER,
+  start_date DATE,
+  end_date DATE,
+  parent_quest_id BIGINT REFERENCES quests(id) ON DELETE CASCADE
 );
 
 -- +goose down
