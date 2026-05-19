@@ -9,7 +9,15 @@ function SignUpComponent() {
       <Form.Item
         name="emailUp"
         label={t("", { defaultValue: "Email" })}
-        rules={[{ required: true }]}
+        rules={[
+          { required: true, message: t("Please enter your email!") },
+          {
+            type: "email",
+            message: t("", {
+              defaultValue: "Please enter a valid email address!",
+            }),
+          },
+        ]}
       >
         <Input
           type={"email"}
@@ -19,8 +27,8 @@ function SignUpComponent() {
 
       <Form.Item
         name="passwordUp"
-        rules={[{ required: true }]}
         label={t("", { defaultValue: "Password" })}
+        rules={[{ required: true, message: t("Please enter your password!") }]}
       >
         <Input.Password
           placeholder={t("", { defaultValue: "Enter your password here" })}
@@ -29,8 +37,32 @@ function SignUpComponent() {
 
       <Form.Item
         name="confirm"
-        rules={[{ required: true }]}
         label={t("", { defaultValue: "Confirm password" })}
+        dependencies={["passwordUp"]}
+        rules={[
+          {
+            required: true,
+            message: t("", {
+              defaultValue: "Please enter your password again!",
+            }),
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("passwordUp") === value) {
+                return Promise.resolve();
+              }
+
+              return Promise.reject(
+                new Error(
+                  t("", {
+                    defaultValue:
+                      "The new password that you entered do not match!",
+                  }),
+                ),
+              );
+            },
+          }),
+        ]}
       >
         <Input.Password
           placeholder={t("", { defaultValue: "Enter your password here" })}

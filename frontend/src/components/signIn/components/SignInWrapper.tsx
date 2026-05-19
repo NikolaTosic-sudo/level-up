@@ -12,9 +12,10 @@ function SignInWrapper() {
   const [form] = Form.useForm();
 
   const handleOk = () => {
-    const values = form.getFieldsValue();
-
-    console.log(values, "values");
+    form
+      .validateFields()
+      .then((values) => console.log(values, "values"))
+      .catch((e) => console.error(e));
   };
 
   return (
@@ -33,7 +34,11 @@ function SignInWrapper() {
         destroyOnHidden
         footer={(_children, btns) => (
           <Space>
-            <Button onClick={() => setSignIn((prevState) => !prevState)}>
+            <Button
+              color="gold"
+              variant="solid"
+              onClick={() => setSignIn((prevState) => !prevState)}
+            >
               {signIn
                 ? t("", { defaultValue: "Sign Up" })
                 : t("", { defaultValue: "Sign In" })}
