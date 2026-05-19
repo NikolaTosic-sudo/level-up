@@ -87,7 +87,7 @@ body {
   padding-bottom: 0;
   top: 60px;
   height: calc(100vh - 120px);
-  width: 100% !important;
+  width: 100%;
 
   div:not([class]) {
     height: 100%;

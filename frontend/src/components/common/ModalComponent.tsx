@@ -61,6 +61,7 @@ function ModalComponent({
       <Modal
         closable={false}
         cancelButtonProps={{ danger: true, type: "primary" }}
+        width={"100%"}
         {...props}
         open={open}
         onCancel={handleClose}
