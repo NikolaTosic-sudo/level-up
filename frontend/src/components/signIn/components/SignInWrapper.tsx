@@ -4,17 +4,23 @@ import ModalComponent from "../../common/ModalComponent";
 import SignInComponent from "./SignInComponent";
 import SignUpComponent from "./SignUpComponents";
 import { Button, Form, Space } from "antd";
+import { useSignUp } from "../hooks/useSignUp";
 
 function SignInWrapper() {
   const { t } = useTranslation();
   const [signIn, setSignIn] = useState<boolean>(true);
+
+  const { mutate } = useSignUp();
 
   const [form] = Form.useForm();
 
   const handleOk = () => {
     form
       .validateFields()
-      .then((values) => console.log(values, "values"))
+      .then((values) => {
+        console.log(values, "values");
+        mutate({ body: values });
+      })
       .catch((e) => console.error(e));
   };
 
