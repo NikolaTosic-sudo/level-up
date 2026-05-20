@@ -12,15 +12,12 @@
  * Do not edit the class manually.
  */
 
-
 import * as runtime from '../runtime';
-import type {
-  MainSkillsResponse,
-} from '../models/index';
 import {
+    type MainSkillsResponse,
     MainSkillsResponseFromJSON,
     MainSkillsResponseToJSON,
-} from '../models/index';
+} from '../models/MainSkillsResponse';
 
 export interface V1LevelupApiSkillsGetRequest {
     name?: string;
