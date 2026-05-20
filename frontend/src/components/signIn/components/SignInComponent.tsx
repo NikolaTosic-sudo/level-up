@@ -8,7 +8,15 @@ function SignInComponent() {
       <Form.Item
         name="email"
         label={t("", { defaultValue: "Email" })}
-        rules={[{ required: true }]}
+        rules={[
+          { required: true, message: t("Please enter your email!") },
+          {
+            type: "email",
+            message: t("", {
+              defaultValue: "Please enter a valid email address!",
+            }),
+          },
+        ]}
       >
         <Input
           type={"email"}
@@ -18,7 +26,7 @@ function SignInComponent() {
 
       <Form.Item
         name="password"
-        rules={[{ required: true }]}
+        rules={[{ required: true, message: t("Please enter your password!") }]}
         label={t("", { defaultValue: "Password" })}
       >
         <Input.Password

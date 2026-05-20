@@ -18,7 +18,6 @@ function SignInWrapper() {
     form
       .validateFields()
       .then((values) => {
-        console.log(values, "values");
         mutate({ body: values });
       })
       .catch((e) => console.error(e));
