@@ -6,6 +6,13 @@ definitions:
       name:
         type: string
     type: object
+  main.LoginBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   main.SkillsResponse:
     properties:
       skills:
@@ -20,6 +27,27 @@ info:
   title: Level-Up API
   version: "0.1"
 paths:
+  /v1/levelup_api/signUp:
+    post:
+      consumes:
+      - application/json
+      description: take the email and the password, hash the password, create the
+        user and make cookies
+      parameters:
+      - description: Login/Signup payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.LoginBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Sign up the user
+      tags:
+      - Login
   /v1/levelup_api/skills:
     get:
       description: get skills, limited to 200 results
