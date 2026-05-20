@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { ConfigProvider, Spin, type ThemeConfig } from "antd";
+import { App, ConfigProvider, Spin, type ThemeConfig } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Outlet } from "@tanstack/react-router";
 
@@ -75,9 +75,11 @@ function PageWrapper() {
       fallback={<Spin indicator={<LoadingOutlined spin />} size={"large"} />}
     >
       <ConfigProvider theme={theme}>
-        <div className="page">
-          <Outlet />
-        </div>
+        <App>
+          <div className="page">
+            <Outlet />
+          </div>
+        </App>
       </ConfigProvider>
     </Suspense>
   );

@@ -12,6 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -39,6 +40,7 @@ func main() {
 
 	dbURL := os.Getenv("DB_URL")
 	port := os.Getenv("PORT")
+	secret := os.Getenv("SECRET")
 
 	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
@@ -49,6 +51,8 @@ func main() {
 
 	cfg := appConfig{
 		database: dbQueries,
+		users:    make(map[uuid.UUID]User, 0),
+		secret:   secret,
 	}
 
 	r.Use(middleware.Logger)
@@ -61,6 +65,7 @@ func main() {
 	}))
 
 	r.Get("/v1/levelup_api/skills", cfg.getSkillsHandler)
+	r.Post("/v1/levelup_api/signUp", cfg.signupHandler)
 
 	r.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),

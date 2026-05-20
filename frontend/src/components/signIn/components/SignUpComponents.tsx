@@ -7,7 +7,7 @@ function SignUpComponent() {
   return (
     <>
       <Form.Item
-        name="emailUp"
+        name="email"
         label={t("", { defaultValue: "Email" })}
         rules={[
           { required: true, message: t("Please enter your email!") },
@@ -26,7 +26,7 @@ function SignUpComponent() {
       </Form.Item>
 
       <Form.Item
-        name="passwordUp"
+        name="password"
         label={t("", { defaultValue: "Password" })}
         rules={[{ required: true, message: t("Please enter your password!") }]}
       >
@@ -38,7 +38,7 @@ function SignUpComponent() {
       <Form.Item
         name="confirm"
         label={t("", { defaultValue: "Confirm password" })}
-        dependencies={["passwordUp"]}
+        dependencies={["password"]}
         rules={[
           {
             required: true,
@@ -48,7 +48,7 @@ function SignUpComponent() {
           },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (!value || getFieldValue("passwordUp") === value) {
+              if (!value || getFieldValue("password") === value) {
                 return Promise.resolve();
               }
 

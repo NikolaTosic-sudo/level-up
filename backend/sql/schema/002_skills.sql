@@ -4,9 +4,9 @@ CREATE TABLE skills(
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
   name TEXT NOT NULL UNIQUE,
-  experience NUMBER,
-  experience_needed NUMBER,
-  level NUMBER
+  experience INTEGER,
+  experience_needed INTEGER,
+  level INTEGER
 );
 
 -- +goose down

@@ -7,21 +7,57 @@ package database
 import (
 	"database/sql"
 	"time"
+
+	"github.com/google/uuid"
 )
 
+type Quest struct {
+	ID               int32         `json:"id"`
+	CreatedAt        time.Time     `json:"created_at"`
+	UpdatedAt        time.Time     `json:"updated_at"`
+	Name             string        `json:"name"`
+	Experience       sql.NullInt32 `json:"experience"`
+	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
+	Level            sql.NullInt32 `json:"level"`
+	StartDate        sql.NullTime  `json:"start_date"`
+	EndDate          sql.NullTime  `json:"end_date"`
+	ParentQuestID    sql.NullInt64 `json:"parent_quest_id"`
+}
+
+type RefreshToken struct {
+	Token     string       `json:"token"`
+	CreatedAt time.Time    `json:"created_at"`
+	UpdatedAt time.Time    `json:"updated_at"`
+	UserID    uuid.UUID    `json:"user_id"`
+	ExpiresAt time.Time    `json:"expires_at"`
+	RevokedAt sql.NullTime `json:"revoked_at"`
+}
+
 type Skill struct {
-	ID        int32     `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Name      string    `json:"name"`
+	ID               int32         `json:"id"`
+	CreatedAt        time.Time     `json:"created_at"`
+	UpdatedAt        time.Time     `json:"updated_at"`
+	Name             string        `json:"name"`
+	Experience       sql.NullInt32 `json:"experience"`
+	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
+	Level            sql.NullInt32 `json:"level"`
 }
 
 type User struct {
-	ID          int32        `json:"id"`
-	CreatedAt   time.Time    `json:"created_at"`
-	UpdatedAt   time.Time    `json:"updated_at"`
-	Firstname   string       `json:"firstname"`
-	Lastname    string       `json:"lastname"`
-	Nickname    string       `json:"nickname"`
-	Dateofbirth sql.NullTime `json:"dateofbirth"`
+	ID                 uuid.UUID      `json:"id"`
+	CreatedAt          time.Time      `json:"created_at"`
+	UpdatedAt          time.Time      `json:"updated_at"`
+	Firstname          sql.NullString `json:"firstname"`
+	Lastname           sql.NullString `json:"lastname"`
+	Nickname           sql.NullString `json:"nickname"`
+	Dateofbirth        sql.NullTime   `json:"dateofbirth"`
+	Email              string         `json:"email"`
+	Password           string         `json:"password"`
+	HotStreak          sql.NullInt32  `json:"hot_streak"`
+	QuestsCompleted    sql.NullInt32  `json:"quests_completed"`
+	RepeatingCompleted sql.NullInt32  `json:"repeating_completed"`
+	CustomsCompleted   sql.NullInt32  `json:"customs_completed"`
+	Experience         sql.NullInt32  `json:"experience"`
+	ExperienceNeeded   sql.NullInt32  `json:"experience_needed"`
+	Level              sql.NullInt32  `json:"level"`
 }
