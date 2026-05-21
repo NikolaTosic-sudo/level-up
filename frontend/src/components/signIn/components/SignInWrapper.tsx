@@ -3,8 +3,9 @@ import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
 import SignInComponent from "./SignInComponent";
 import SignUpComponent from "./SignUpComponents";
-import { Button, Form, Space } from "antd";
+import { Button, Form, message, Space } from "antd";
 import { useSignUp } from "../hooks/useSignUp";
+import ErrorMessageComponent from "../../common/ErrorMessageComponent";
 
 function SignInWrapper() {
   const { t } = useTranslation();
@@ -20,7 +21,16 @@ function SignInWrapper() {
       .then((values) => {
         mutate({ body: values });
       })
-      .catch((e) => console.error(e));
+      .catch((e) =>
+        message.error(
+          <ErrorMessageComponent error={e?.message ?? ""} notApiError />,
+        ),
+      );
+  };
+
+  const handleChangeSignIn = () => {
+    setSignIn((prevState) => !prevState);
+    form.resetFields();
   };
 
   return (
@@ -39,11 +49,7 @@ function SignInWrapper() {
         destroyOnHidden
         footer={(_children, btns) => (
           <Space>
-            <Button
-              color="gold"
-              variant="solid"
-              onClick={() => setSignIn((prevState) => !prevState)}
-            >
+            <Button color="gold" variant="solid" onClick={handleChangeSignIn}>
               {signIn
                 ? t("", { defaultValue: "Sign Up" })
                 : t("", { defaultValue: "Sign In" })}
