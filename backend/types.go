@@ -12,6 +12,7 @@ type appConfig struct {
 }
 
 type User struct {
-	Id    uuid.UUID
-	Email string
+	Id       uuid.UUID
+	Nickname string
+	Email    string
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -17,13 +16,18 @@ type LoginBody struct {
 	Password string `json:"password"`
 }
 
+type LoginResponse struct {
+	Code     string `json:"code"`
+	Redirect string `json:"redirect"`
+}
+
 // @Tags Login
 // @Summary Sign up the user
 // @Description take the email and the password, hash the password, create the user and make cookies
 // @Accept json
 // @Produce json
-// @Success 200
-// @Param body body LoginBody true "Login/Signup payload"
+// @Success 200 {object} LoginResponse
+// @Param body body LoginBody true "SignUp payload"
 // @Router /v1/levelup_api/signUp [post]
 func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 	var b LoginBody
@@ -34,8 +38,6 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 
 	email := b.Email
 	password := b.Password
-
-	fmt.Println(email, password)
 
 	if email == "" || password == "" {
 		w.WriteHeader(500)
@@ -101,6 +103,115 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 		Email: user.Email,
 	}
 
-	w.Header().Add("Hx-Redirect", "/private")
 	w.WriteHeader(200)
+
+	json.NewEncoder(w).Encode(LoginResponse{
+		Code:     "200",
+		Redirect: "/profile-creation",
+	})
+}
+
+// @Tags Login
+// @Summary Log In the user
+// @Description take the email and the password, hash the password, check for user and login
+// @Accept json
+// @Produce json
+// @Success 200 {object} LoginResponse
+// @Param body body LoginBody true "Login payload"
+// @Router /v1/levelup_api/logIn [post]
+func (cfg *appConfig) loginHandler(w http.ResponseWriter, r *http.Request) {
+	var b LoginBody
+
+	data, err := io.ReadAll(r.Body)
+
+	json.Unmarshal(data, &b)
+
+	email := b.Email
+	password := b.Password
+
+	if email == "" || password == "" {
+		w.WriteHeader(500)
+		return
+	}
+
+	if err != nil {
+		w.WriteHeader(500)
+		return
+	}
+
+	user, err := cfg.database.GetUserByEmail(r.Context(), email)
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows in result") {
+			w.WriteHeader(500)
+			if err != nil {
+				w.WriteHeader(500)
+				return
+			}
+		}
+
+		w.WriteHeader(500)
+		return
+	}
+
+	err = auth.CheckPassword(password, user.Password)
+	if err != nil {
+		if strings.Contains(err.Error(), "hashedPassword is not the hash of the given password") {
+			w.WriteHeader(500)
+			if err != nil {
+				w.WriteHeader(500)
+				return
+			}
+		}
+		w.WriteHeader(500)
+		return
+	}
+
+	token, err := auth.MakeJWT(user.ID, cfg.secret)
+	if err != nil {
+		w.WriteHeader(500)
+		return
+	}
+
+	refreshString, err := auth.MakeRefreshToken()
+	if err != nil {
+		w.WriteHeader(500)
+		return
+	}
+
+	_, err = cfg.database.CreateRefreshToken(r.Context(), database.CreateRefreshTokenParams{
+		Token:     refreshString,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID:    user.ID,
+		ExpiresAt: time.Now().Add(time.Hour * 168),
+	})
+	if err != nil {
+		w.WriteHeader(500)
+		return
+	}
+
+	c := cfg.makeCookieMaxAge("access_token", token, "/", 3600)
+	refreshC := cfg.makeCookie("refresh_token", refreshString, "/api/refresh")
+
+	http.SetCookie(w, &c)
+	http.SetCookie(w, &refreshC)
+
+	cfg.users[user.ID] = User{
+		Id:       user.ID,
+		Nickname: user.Nickname.String,
+		Email:    user.Email,
+	}
+
+	redirect := "/profile"
+
+	if user.Nickname.String == "" {
+		redirect = "/profile-creation"
+	}
+
+	w.WriteHeader(200)
+
+	json.NewEncoder(w).Encode(LoginResponse{
+		Code:     "200",
+		Redirect: redirect,
+	})
 }

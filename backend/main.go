@@ -66,6 +66,7 @@ func main() {
 
 	r.Get("/v1/levelup_api/skills", cfg.getSkillsHandler)
 	r.Post("/v1/levelup_api/signUp", cfg.signupHandler)
+	r.Post("/v1/levelup_api/logIn", cfg.loginHandler)
 
 	r.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
