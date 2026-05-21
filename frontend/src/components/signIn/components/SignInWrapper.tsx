@@ -11,7 +11,7 @@ function SignInWrapper() {
   const { t } = useTranslation();
   const [signIn, setSignIn] = useState<boolean>(true);
 
-  const { mutate } = useSignUp();
+  const { mutate } = useSignUp(signIn);
 
   const [form] = Form.useForm();
 
