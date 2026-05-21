@@ -1,7 +1,9 @@
 import { useRef } from "react";
 import { LoginApi, type V1LevelupApiSignUpPostRequest } from "../../../api";
 import { useMutation } from "@tanstack/react-query";
-import { getTheError, type ApiError } from "../../common/ErrorMessageComponent";
+import ErrorMessageComponent, {
+  type ApiError,
+} from "../../common/ErrorMessageComponent";
 import { message } from "antd";
 
 export function useSignUp() {
@@ -13,9 +15,7 @@ export function useSignUp() {
     },
     onSuccess: () => message.success("Success"),
     onError: async (e: ApiError) => {
-      const mes = await getTheError(e);
-
-      message.error(mes);
+      message.error(<ErrorMessageComponent error={e} />);
     },
   });
 
