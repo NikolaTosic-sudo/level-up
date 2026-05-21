@@ -15,6 +15,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/levelup_api/logIn": {
+            "post": {
+                "description": "take the email and the password, hash the password, check for user and login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Log In the user",
+                "parameters": [
+                    {
+                        "description": "Login payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.LoginBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.LoginResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/signUp": {
             "post": {
                 "description": "take the email and the password, hash the password, create the user and make cookies",
@@ -30,7 +64,7 @@ const docTemplate = `{
                 "summary": "Sign up the user",
                 "parameters": [
                     {
-                        "description": "Login/Signup payload",
+                        "description": "SignUp payload",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -41,7 +75,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.LoginResponse"
+                        }
                     }
                 }
             }
@@ -94,6 +131,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "redirect": {
                     "type": "string"
                 }
             }

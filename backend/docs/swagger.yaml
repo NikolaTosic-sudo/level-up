@@ -13,6 +13,13 @@ definitions:
       password:
         type: string
     type: object
+  main.LoginResponse:
+    properties:
+      code:
+        type: string
+      redirect:
+        type: string
+    type: object
   main.SkillsResponse:
     properties:
       skills:
@@ -27,14 +34,14 @@ info:
   title: Level-Up API
   version: "0.1"
 paths:
-  /v1/levelup_api/signUp:
+  /v1/levelup_api/logIn:
     post:
       consumes:
       - application/json
-      description: take the email and the password, hash the password, create the
-        user and make cookies
+      description: take the email and the password, hash the password, check for user
+        and login
       parameters:
-      - description: Login/Signup payload
+      - description: Login payload
         in: body
         name: body
         required: true
@@ -45,6 +52,31 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/main.LoginResponse'
+      summary: Log In the user
+      tags:
+      - Login
+  /v1/levelup_api/signUp:
+    post:
+      consumes:
+      - application/json
+      description: take the email and the password, hash the password, create the
+        user and make cookies
+      parameters:
+      - description: SignUp payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.LoginBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.LoginResponse'
       summary: Sign up the user
       tags:
       - Login
