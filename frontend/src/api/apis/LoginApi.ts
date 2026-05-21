@@ -18,6 +18,15 @@ import {
     MainLoginBodyFromJSON,
     MainLoginBodyToJSON,
 } from '../models/MainLoginBody';
+import {
+    type MainLoginResponse,
+    MainLoginResponseFromJSON,
+    MainLoginResponseToJSON,
+} from '../models/MainLoginResponse';
+
+export interface V1LevelupApiLogInPostRequest {
+    body: MainLoginBody;
+}
 
 export interface V1LevelupApiSignUpPostRequest {
     body: MainLoginBody;
@@ -27,6 +36,55 @@ export interface V1LevelupApiSignUpPostRequest {
  * 
  */
 export class LoginApi extends runtime.BaseAPI {
+
+    /**
+     * Creates request options for v1LevelupApiLogInPost without sending the request
+     */
+    async v1LevelupApiLogInPostRequestOpts(requestParameters: V1LevelupApiLogInPostRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['body'] == null) {
+            throw new runtime.RequiredError(
+                'body',
+                'Required parameter "body" was null or undefined when calling v1LevelupApiLogInPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/levelup_api/logIn`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: MainLoginBodyToJSON(requestParameters['body']),
+        };
+    }
+
+    /**
+     * take the email and the password, hash the password, check for user and login
+     * Log In the user
+     */
+    async v1LevelupApiLogInPostRaw(requestParameters: V1LevelupApiLogInPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MainLoginResponse>> {
+        const requestOptions = await this.v1LevelupApiLogInPostRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MainLoginResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * take the email and the password, hash the password, check for user and login
+     * Log In the user
+     */
+    async v1LevelupApiLogInPost(requestParameters: V1LevelupApiLogInPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainLoginResponse> {
+        const response = await this.v1LevelupApiLogInPostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates request options for v1LevelupApiSignUpPost without sending the request
@@ -61,19 +119,20 @@ export class LoginApi extends runtime.BaseAPI {
      * take the email and the password, hash the password, create the user and make cookies
      * Sign up the user
      */
-    async v1LevelupApiSignUpPostRaw(requestParameters: V1LevelupApiSignUpPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async v1LevelupApiSignUpPostRaw(requestParameters: V1LevelupApiSignUpPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MainLoginResponse>> {
         const requestOptions = await this.v1LevelupApiSignUpPostRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => MainLoginResponseFromJSON(jsonValue));
     }
 
     /**
      * take the email and the password, hash the password, create the user and make cookies
      * Sign up the user
      */
-    async v1LevelupApiSignUpPost(requestParameters: V1LevelupApiSignUpPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.v1LevelupApiSignUpPostRaw(requestParameters, initOverrides);
+    async v1LevelupApiSignUpPost(requestParameters: V1LevelupApiSignUpPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainLoginResponse> {
+        const response = await this.v1LevelupApiSignUpPostRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
 }
