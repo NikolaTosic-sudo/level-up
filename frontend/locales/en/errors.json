@@ -1,0 +1,4 @@
+{
+  "error": "Something went wrong",
+  "emailNotUnique": "User with this email already exists"
+}

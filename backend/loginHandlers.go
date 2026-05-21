@@ -54,7 +54,7 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if strings.Contains(err.Error(), "violates unique constraint") {
-			writeJSONError(w, 401, "not unique")
+			writeJSONError(w, 401, "emailNotUnique")
 			if err != nil {
 				w.WriteHeader(500)
 				return
