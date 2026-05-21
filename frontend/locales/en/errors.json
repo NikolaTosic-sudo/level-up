@@ -1,4 +1,7 @@
 {
   "error": "Something went wrong",
-  "emailNotUnique": "User with this email already exists"
+  "emailNotUnique": "User with this email already exists",
+  "signUpBadRequest": "There are fields missing, please revise and try again.",
+  "loginNoUserFound": "User with that email was not found, please try again.",
+  "loginBadPassword": "Invalid password"
 }

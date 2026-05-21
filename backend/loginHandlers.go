@@ -40,13 +40,13 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 	password := b.Password
 
 	if email == "" || password == "" {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusBadRequest, "signUpBadRequest")
 		return
 	}
 
 	hashedPassword, err := auth.HashedPassword(password)
 	if err != nil {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
@@ -56,26 +56,24 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if strings.Contains(err.Error(), "violates unique constraint") {
-			writeJSONError(w, 401, "emailNotUnique")
-			if err != nil {
-				w.WriteHeader(500)
-				return
-			}
+			writeJSONError(w, http.StatusUnauthorized, "emailNotUnique")
+			return
 		}
-		w.WriteHeader(500)
+
+		writeJSONError(w, http.StatusInternalServerError, "error")
 
 		return
 	}
 
 	token, err := auth.MakeJWT(user.ID, cfg.secret)
 	if err != nil {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
 	refreshString, err := auth.MakeRefreshToken()
 	if err != nil {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
@@ -87,7 +85,7 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 		ExpiresAt: time.Now().Add(time.Hour * 168),
 	})
 	if err != nil {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
@@ -103,7 +101,7 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 		Email: user.Email,
 	}
 
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 
 	json.NewEncoder(w).Encode(LoginResponse{
 		Code:     "200",
@@ -130,51 +128,45 @@ func (cfg *appConfig) loginHandler(w http.ResponseWriter, r *http.Request) {
 	password := b.Password
 
 	if email == "" || password == "" {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusBadRequest, "signUpBadRequest")
 		return
 	}
 
 	if err != nil {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
 	user, err := cfg.database.GetUserByEmail(r.Context(), email)
 	if err != nil {
 		if strings.Contains(err.Error(), "no rows in result") {
-			w.WriteHeader(500)
-			if err != nil {
-				w.WriteHeader(500)
-				return
-			}
+			writeJSONError(w, http.StatusUnauthorized, "loginNoUserFound")
+			return
 		}
 
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
 	err = auth.CheckPassword(password, user.Password)
 	if err != nil {
 		if strings.Contains(err.Error(), "hashedPassword is not the hash of the given password") {
-			w.WriteHeader(500)
-			if err != nil {
-				w.WriteHeader(500)
-				return
-			}
+			writeJSONError(w, http.StatusUnauthorized, "loginBadPassword")
+			return
 		}
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
 	token, err := auth.MakeJWT(user.ID, cfg.secret)
 	if err != nil {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
 	refreshString, err := auth.MakeRefreshToken()
 	if err != nil {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
@@ -186,7 +178,7 @@ func (cfg *appConfig) loginHandler(w http.ResponseWriter, r *http.Request) {
 		ExpiresAt: time.Now().Add(time.Hour * 168),
 	})
 	if err != nil {
-		w.WriteHeader(500)
+		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
 
@@ -208,7 +200,7 @@ func (cfg *appConfig) loginHandler(w http.ResponseWriter, r *http.Request) {
 		redirect = "/profile-creation"
 	}
 
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 
 	json.NewEncoder(w).Encode(LoginResponse{
 		Code:     "200",
