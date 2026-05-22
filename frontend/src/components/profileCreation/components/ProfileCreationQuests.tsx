@@ -1,5 +1,5 @@
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Flex, Form, Input } from "antd";
+import { Button, Flex, Form, Input, InputNumber } from "antd";
 import { useTranslation } from "react-i18next";
 
 const ProfileCreationQuests = () => {
@@ -16,13 +16,13 @@ const ProfileCreationQuests = () => {
                   defaultValue: "Daily quest {{count}}",
                   count: index + 1,
                 })}
-                required={false}
                 key={field.key}
               >
                 <Flex align="start" gap={8}>
                   <Form.Item
                     {...field}
                     key={field.key}
+                    name={[field.name, "name"]}
                     validateTrigger={["onChange", "onBlur"]}
                     noStyle
                   >
@@ -36,6 +36,21 @@ const ProfileCreationQuests = () => {
                     style={{ fontSize: 20, color: "white" }}
                   />
                 </Flex>
+
+                <Form.Item
+                  name={[field.name, "experience"]}
+                  label={t("quest.form.experience", {
+                    defaultValue: "Experience for daily quest {{count}}",
+                    count: index + 1,
+                  })}
+                  style={{ marginTop: 24 }}
+                >
+                  <InputNumber
+                    defaultValue={0}
+                    min={0}
+                    style={{ width: 140 }}
+                  />
+                </Form.Item>
               </Form.Item>
             ))}
             <Form.Item>

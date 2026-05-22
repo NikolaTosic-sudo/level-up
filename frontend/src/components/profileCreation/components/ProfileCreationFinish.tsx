@@ -13,13 +13,20 @@ import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import type { Skill } from "../../skills/components/SkillModal";
 
+type FormQuest = {
+  name?: string;
+  experience: number;
+};
+
 export const ProfileCreationFinish = () => {
   const { t } = useTranslation();
   const formInstance = Form.useFormInstance();
 
   const values = formInstance.getFieldsValue(true);
 
-  const quests = values.quests ? values.quests.filter((q: string) => q) : [];
+  const quests = values.quests
+    ? values.quests.filter((q: FormQuest) => q && q.name)
+    : [];
 
   const valuesExist = Object.values(values).some((val: unknown) =>
     Array.isArray(val) ? val.length : val,
@@ -113,14 +120,20 @@ export const ProfileCreationFinish = () => {
             </Typography.Title>
           </Divider>
           <Flex gap={18} vertical>
-            {quests.map((q: string, idx: number) => (
+            {quests.map((q: FormQuest, idx: number) => (
               <Card
                 key={`${q}_${idx}`}
                 className="quest-card"
-                styles={{ body: { padding: 12 } }}
-              >
-                {q}
-              </Card>
+                styles={{
+                  body: { display: "none" },
+                  title: { maxWidth: "80%" },
+                }}
+                title={q.name}
+                extra={t("", {
+                  defaultValue: "Experience: {{exp}}",
+                  exp: q.experience,
+                })}
+              />
             ))}
           </Flex>
         </>
