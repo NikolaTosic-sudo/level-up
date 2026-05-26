@@ -16,7 +16,8 @@ CREATE TABLE users(
   customs_completed INTEGER,
   experience INTEGER,
   experience_needed INTEGER,
-  level INTEGER
+  level INTEGER,
+  money BIGINT
 );
 
 -- +goose down
