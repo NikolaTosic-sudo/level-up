@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { SkillsApi } from "../../../api/apis/SkillsApi";
+import { skillsApi } from "../../../types/newApi";
 
 export const useGetSkills = (name: string, forUser?: boolean) => {
-  const api = useRef(new SkillsApi());
+  const api = useRef(skillsApi);
 
   const fetchData = async () => {
     if (forUser) {

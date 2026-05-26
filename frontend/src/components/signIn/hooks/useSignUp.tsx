@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import {
-  LoginApi,
   type MainLoginResponse,
   type V1LevelupApiLogInPostRequest,
   type V1LevelupApiSignUpPostRequest,
@@ -12,9 +11,10 @@ import ErrorMessageComponent, {
 } from "../../common/ErrorMessageComponent";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
+import { loginApi } from "../../../types/newApi";
 
 export function useSignUp(isSignIn: boolean) {
-  const api = useRef(new LoginApi());
+  const api = useRef(loginApi);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
