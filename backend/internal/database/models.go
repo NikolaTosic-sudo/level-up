@@ -50,6 +50,7 @@ type User struct {
 	Firstname          sql.NullString `json:"firstname"`
 	Lastname           sql.NullString `json:"lastname"`
 	Nickname           sql.NullString `json:"nickname"`
+	Bio                sql.NullString `json:"bio"`
 	Dateofbirth        sql.NullTime   `json:"dateofbirth"`
 	Email              string         `json:"email"`
 	Password           string         `json:"password"`
@@ -60,4 +61,14 @@ type User struct {
 	Experience         sql.NullInt32  `json:"experience"`
 	ExperienceNeeded   sql.NullInt32  `json:"experience_needed"`
 	Level              sql.NullInt32  `json:"level"`
+}
+
+type UsersStat struct {
+	UserID                   uuid.UUID `json:"user_id"`
+	QuestsCompleted          int32     `json:"quests_completed"`
+	RepeatingQuestsCompleted int32     `json:"repeating_quests_completed"`
+	CustomQuestsCompleted    int32     `json:"custom_quests_completed"`
+	QuestExperienceGained    int32     `json:"quest_experience_gained"`
+	SkillExperienceGained    int32     `json:"skill_experience_gained"`
+	UpdatedAt                time.Time `json:"updated_at"`
 }
