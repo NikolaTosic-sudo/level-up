@@ -1,9 +1,9 @@
-import DashboardWrapper from "./components/DashboardWrapper";
+import DashboardLoader from "./components/DashboardLoader";
 
 import "./styles/style.css";
 
 function Dashboard() {
-  return <DashboardWrapper />;
+  return <DashboardLoader />;
 }
 
 export default Dashboard;
