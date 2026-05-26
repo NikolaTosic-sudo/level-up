@@ -207,3 +207,27 @@ func (cfg *appConfig) loginHandler(w http.ResponseWriter, r *http.Request) {
 		Redirect: redirect,
 	})
 }
+
+func (cfg *appConfig) logoutHandler(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("access_token")
+	if err != nil {
+		w.Header().Add("Hx-Redirect", "/")
+		return
+	}
+
+	userId, err := auth.ValidateJWT(c.Value, cfg.secret)
+	if err != nil {
+		w.Header().Add("Hx-Redirect", "/")
+		return
+	}
+
+	delete(cfg.users, userId)
+
+	accC := cfg.removeCookie("access_token")
+	refreshC := cfg.removeCookiePath("refresh_token", "/api/refresh")
+
+	http.SetCookie(w, &accC)
+	http.SetCookie(w, &refreshC)
+
+	w.Header().Add("Hx-Redirect", "/")
+}
