@@ -15,6 +15,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/levelup_api/createProfile": {
+            "post": {
+                "description": "Create the player with user's info, skills and quests",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Create the player",
+                "parameters": [
+                    {
+                        "description": "Profile creation payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.ProfileCreationBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.LoginResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/logIn": {
             "post": {
                 "description": "take the email and the password, hash the password, check for user and login",
@@ -110,6 +144,57 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/v1/levelup_api/updateUser": {
+            "post": {
+                "description": "Update the player",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Update the player",
+                "parameters": [
+                    {
+                        "description": "User update payload",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.UpdateUserBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/levelup_api/userProfile": {
+            "get": {
+                "description": "Get everything about the player",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Get the player",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.UserResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -146,6 +231,52 @@ const docTemplate = `{
                 }
             }
         },
+        "main.ProfileCreationBody": {
+            "type": "object",
+            "properties": {
+                "bio": {
+                    "type": "string"
+                },
+                "dateOfBirth": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "nickName": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.ProfileResponse": {
+            "type": "object",
+            "required": [
+                "email",
+                "firstName",
+                "lastName",
+                "nickName"
+            ],
+            "properties": {
+                "dateOfBirth": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "nickName": {
+                    "type": "string"
+                }
+            }
+        },
         "main.SkillsResponse": {
             "type": "object",
             "properties": {
@@ -154,6 +285,49 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/database.GetSkillsByNameRow"
                     }
+                }
+            }
+        },
+        "main.UpdateUserBody": {
+            "type": "object",
+            "required": [
+                "target"
+            ],
+            "properties": {
+                "bio": {
+                    "type": "string"
+                },
+                "dateOfBirth": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "nickName": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.UserResponse": {
+            "type": "object",
+            "required": [
+                "profile"
+            ],
+            "properties": {
+                "bio": {
+                    "type": "string"
+                },
+                "profile": {
+                    "$ref": "#/definitions/main.ProfileResponse"
                 }
             }
         }

@@ -20,12 +20,71 @@ definitions:
       redirect:
         type: string
     type: object
+  main.ProfileCreationBody:
+    properties:
+      bio:
+        type: string
+      dateOfBirth:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      nickName:
+        type: string
+    type: object
+  main.ProfileResponse:
+    properties:
+      dateOfBirth:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      nickName:
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - nickName
+    type: object
   main.SkillsResponse:
     properties:
       skills:
         items:
           $ref: '#/definitions/database.GetSkillsByNameRow'
         type: array
+    type: object
+  main.UpdateUserBody:
+    properties:
+      bio:
+        type: string
+      dateOfBirth:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      nickName:
+        type: string
+      target:
+        type: string
+    required:
+    - target
+    type: object
+  main.UserResponse:
+    properties:
+      bio:
+        type: string
+      profile:
+        $ref: '#/definitions/main.ProfileResponse'
+    required:
+    - profile
     type: object
 host: localhost:8080
 info:
@@ -34,6 +93,28 @@ info:
   title: Level-Up API
   version: "0.1"
 paths:
+  /v1/levelup_api/createProfile:
+    post:
+      consumes:
+      - application/json
+      description: Create the player with user's info, skills and quests
+      parameters:
+      - description: Profile creation payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.ProfileCreationBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.LoginResponse'
+      summary: Create the player
+      tags:
+      - Player
   /v1/levelup_api/logIn:
     post:
       consumes:
@@ -98,4 +179,37 @@ paths:
       summary: Get skills from database
       tags:
       - Skills
+  /v1/levelup_api/updateUser:
+    post:
+      consumes:
+      - application/json
+      description: Update the player
+      parameters:
+      - description: User update payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.UpdateUserBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update the player
+      tags:
+      - Player
+  /v1/levelup_api/userProfile:
+    get:
+      description: Get everything about the player
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.UserResponse'
+      summary: Get the player
+      tags:
+      - Player
 swagger: "2.0"
