@@ -1,18 +1,23 @@
 import { Card } from "antd";
 import { useTranslation } from "react-i18next";
 import EditableText from "./EditableText";
+import { useUpdateUser } from "../hooks/useUpdateUser";
 
-function BioCard() {
+type BioCardProps = {
+  bio: string;
+};
+
+function BioCard({ bio }: BioCardProps) {
   const { t } = useTranslation();
+
+  const { mutate } = useUpdateUser();
 
   return (
     <Card title={t("", { defaultValue: "Bio" })}>
       <EditableText
-        val={
-          "ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst ovo je neki tekst"
-        }
+        val={bio}
         editable
-        onChange={(value) => console.log(value)}
+        onChange={(value) => mutate({ body: { bio: value, target: "bio" } })}
         style={{ display: "flex", marginLeft: 0, alignItems: "start" }}
         spaceStyle={{ width: "100%" }}
         mode="textArea"

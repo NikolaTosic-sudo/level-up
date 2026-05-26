@@ -4,12 +4,17 @@ import QuestsCard from "./QuestsCard";
 import SkillsCard from "./SkillsCard";
 import BioCard from "./BioCard";
 import ActivityCard from "./ActivityCard";
+import type { MainUserResponse } from "../../../api";
 
-function DashboardWrapper() {
+type DashboardWrapperProps = {
+  user: MainUserResponse;
+};
+
+function DashboardWrapper({ user }: DashboardWrapperProps) {
   return (
     <Row gutter={[16, 16]} className="dashboard-wrap">
       <Col span={8}>
-        <ProfileCard />
+        <ProfileCard user={user.profile} />
       </Col>
 
       <Col span={8}>
@@ -21,7 +26,7 @@ function DashboardWrapper() {
       </Col>
 
       <Col span={8}>
-        <BioCard />
+        <BioCard bio={user.bio ?? ""} />
       </Col>
 
       <Col span={16}>
