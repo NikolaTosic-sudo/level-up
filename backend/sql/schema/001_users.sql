@@ -6,6 +6,7 @@ CREATE TABLE users(
   firstName TEXT NULL,
   lastName TEXT NULL,
   nickname TEXT NULL,
+  bio TEXT NULL,
   dateOfBirth DATE,
   email TEXT UNIQUE NOT NULL ,
   password TEXT NOT NULL,
