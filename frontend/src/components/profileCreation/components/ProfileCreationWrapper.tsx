@@ -10,12 +10,15 @@ import { Activity } from "react";
 import ProfileCreationQuests from "./ProfileCreationQuests";
 import { ProfileCreationSkills } from "./ProfileCreationSkills";
 import { ProfileCreationFinish } from "./ProfileCreationFinish";
+import { useCreateProfile } from "../hooks/useCreateProfile";
 
 const ProfileCreationWrapper = () => {
   const { t } = useTranslation();
 
   const { currentStep, setCurrentStep } = useProfileCreationStore();
   const [form] = Form.useForm();
+
+  const { mutate } = useCreateProfile();
 
   function handleNextStep() {
     if (currentStep === CurrentStepsEnum.Form) {
@@ -24,7 +27,15 @@ const ProfileCreationWrapper = () => {
       setCurrentStep(currentStep + 1);
     } else {
       const values = form.getFieldsValue(true);
-      alert(`finished with values: ${JSON.stringify(values)}`);
+      mutate({
+        body: {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          nickName: values.nickname,
+          bio: values.bio,
+          dateOfBirth: values.dateOfBirth,
+        },
+      });
     }
   }
 
