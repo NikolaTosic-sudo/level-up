@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -101,7 +100,6 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 		Email: user.Email,
 	})
 	if err != nil {
-		fmt.Println(err, "koji error ide")
 		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
 	}
@@ -167,9 +165,6 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 	userID, err := cfg.getUserId(r)
 
 	json.Unmarshal(b, &res)
-
-	fmt.Println(res, "res")
-	fmt.Println(res.FirstName, "first name")
 
 	if res.Target == "firstName" {
 		err = cfg.database.UpdateUserFirstName(r.Context(), database.UpdateUserFirstNameParams{

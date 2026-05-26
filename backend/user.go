@@ -16,7 +16,6 @@ func (cfg *appConfig) getUserId(r *http.Request) (uuid.UUID, error) {
 
 	userC, err := r.Cookie("access_token")
 	if err != nil {
-		fmt.Println("odje?")
 		return userId, err
 	}
 
