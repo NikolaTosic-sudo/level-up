@@ -176,6 +176,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/levelup_api/user/skills": {
+            "get": {
+                "description": "get skills, limited to 200 results",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skills"
+                ],
+                "summary": "Get skills from database",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.UsersSkillsResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/userProfile": {
             "get": {
                 "description": "Get everything about the player",
@@ -300,6 +320,27 @@ const docTemplate = `{
                 }
             }
         },
+        "main.Skill": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "LinkedSkills": {},
+                "experience": {
+                    "type": "integer"
+                },
+                "experience_needed": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "main.SkillsCreation": {
             "type": "object",
             "properties": {
@@ -362,6 +403,17 @@ const docTemplate = `{
                 },
                 "profile": {
                     "$ref": "#/definitions/main.ProfileResponse"
+                }
+            }
+        },
+        "main.UsersSkillsResponse": {
+            "type": "object",
+            "properties": {
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.Skill"
+                    }
                 }
             }
         }

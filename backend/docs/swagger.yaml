@@ -66,6 +66,20 @@ definitions:
       name:
         type: string
     type: object
+  main.Skill:
+    properties:
+      LinkedSkills: {}
+      experience:
+        type: integer
+      experience_needed:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
   main.SkillsCreation:
     properties:
       id:
@@ -107,6 +121,13 @@ definitions:
         $ref: '#/definitions/main.ProfileResponse'
     required:
     - profile
+    type: object
+  main.UsersSkillsResponse:
+    properties:
+      skills:
+        items:
+          $ref: '#/definitions/main.Skill'
+        type: array
     type: object
 host: localhost:8080
 info:
@@ -221,6 +242,19 @@ paths:
       summary: Update the player
       tags:
       - Player
+  /v1/levelup_api/user/skills:
+    get:
+      description: get skills, limited to 200 results
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.UsersSkillsResponse'
+      summary: Get skills from database
+      tags:
+      - Skills
   /v1/levelup_api/userProfile:
     get:
       description: Get everything about the player

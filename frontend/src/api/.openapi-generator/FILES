@@ -10,10 +10,12 @@ docs/MainLoginResponse.md
 docs/MainProfileCreationBody.md
 docs/MainProfileResponse.md
 docs/MainQuestsCreation.md
+docs/MainSkill.md
 docs/MainSkillsCreation.md
 docs/MainSkillsResponse.md
 docs/MainUpdateUserBody.md
 docs/MainUserResponse.md
+docs/MainUsersSkillsResponse.md
 docs/PlayerApi.md
 docs/SkillsApi.md
 index.ts
@@ -23,9 +25,11 @@ models/MainLoginResponse.ts
 models/MainProfileCreationBody.ts
 models/MainProfileResponse.ts
 models/MainQuestsCreation.ts
+models/MainSkill.ts
 models/MainSkillsCreation.ts
 models/MainSkillsResponse.ts
 models/MainUpdateUserBody.ts
 models/MainUserResponse.ts
+models/MainUsersSkillsResponse.ts
 models/index.ts
 runtime.ts

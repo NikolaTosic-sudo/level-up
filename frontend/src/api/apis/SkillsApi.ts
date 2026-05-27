@@ -18,6 +18,11 @@ import {
     MainSkillsResponseFromJSON,
     MainSkillsResponseToJSON,
 } from '../models/MainSkillsResponse';
+import {
+    type MainUsersSkillsResponse,
+    MainUsersSkillsResponseFromJSON,
+    MainUsersSkillsResponseToJSON,
+} from '../models/MainUsersSkillsResponse';
 
 export interface V1LevelupApiSkillsGetRequest {
     name?: string;
@@ -68,6 +73,45 @@ export class SkillsApi extends runtime.BaseAPI {
      */
     async v1LevelupApiSkillsGet(requestParameters: V1LevelupApiSkillsGetRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainSkillsResponse> {
         const response = await this.v1LevelupApiSkillsGetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for v1LevelupApiUserSkillsGet without sending the request
+     */
+    async v1LevelupApiUserSkillsGetRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/v1/levelup_api/user/skills`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * get skills, limited to 200 results
+     * Get skills from database
+     */
+    async v1LevelupApiUserSkillsGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MainUsersSkillsResponse>> {
+        const requestOptions = await this.v1LevelupApiUserSkillsGetRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MainUsersSkillsResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * get skills, limited to 200 results
+     * Get skills from database
+     */
+    async v1LevelupApiUserSkillsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainUsersSkillsResponse> {
+        const response = await this.v1LevelupApiUserSkillsGetRaw(initOverrides);
         return await response.value();
     }
 
