@@ -248,6 +248,18 @@ const docTemplate = `{
                 },
                 "nickName": {
                     "type": "string"
+                },
+                "quests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.QuestsCreation"
+                    }
+                },
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.SkillsCreation"
+                    }
                 }
             }
         },
@@ -273,6 +285,28 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "nickName": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.QuestsCreation": {
+            "type": "object",
+            "properties": {
+                "experience": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.SkillsCreation": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }

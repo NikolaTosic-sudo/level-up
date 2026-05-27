@@ -32,6 +32,14 @@ definitions:
         type: string
       nickName:
         type: string
+      quests:
+        items:
+          $ref: '#/definitions/main.QuestsCreation'
+        type: array
+      skills:
+        items:
+          $ref: '#/definitions/main.SkillsCreation'
+        type: array
     type: object
   main.ProfileResponse:
     properties:
@@ -50,6 +58,20 @@ definitions:
     - firstName
     - lastName
     - nickName
+    type: object
+  main.QuestsCreation:
+    properties:
+      experience:
+        type: integer
+      name:
+        type: string
+    type: object
+  main.SkillsCreation:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
     type: object
   main.SkillsResponse:
     properties:
