@@ -11,7 +11,9 @@ docs/MainProfileCreationBody.md
 docs/MainProfileResponse.md
 docs/MainQuestsCreation.md
 docs/MainSkill.md
+docs/MainSkillExclude.md
 docs/MainSkillsCreation.md
+docs/MainSkillsExcludeResponse.md
 docs/MainSkillsResponse.md
 docs/MainUpdateUserBody.md
 docs/MainUserResponse.md
@@ -26,7 +28,9 @@ models/MainProfileCreationBody.ts
 models/MainProfileResponse.ts
 models/MainQuestsCreation.ts
 models/MainSkill.ts
+models/MainSkillExclude.ts
 models/MainSkillsCreation.ts
+models/MainSkillsExcludeResponse.ts
 models/MainSkillsResponse.ts
 models/MainUpdateUserBody.ts
 models/MainUserResponse.ts

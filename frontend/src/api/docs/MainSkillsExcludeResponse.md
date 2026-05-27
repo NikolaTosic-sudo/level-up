@@ -1,30 +1,22 @@
 
-# MainSkill
+# MainSkillsExcludeResponse
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`experience` | number
-`experienceNeeded` | number
-`level` | number
-`linkedSkills` | object
-`name` | string
+`skills` | [Array&lt;MainSkillExclude&gt;](MainSkillExclude.md)
 
 ## Example
 
 ```typescript
-import type { MainSkill } from ''
+import type { MainSkillsExcludeResponse } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "experience": null,
-  "experienceNeeded": null,
-  "level": null,
-  "linkedSkills": null,
-  "name": null,
-} satisfies MainSkill
+  "skills": null,
+} satisfies MainSkillsExcludeResponse
 
 console.log(example)
 
@@ -33,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as MainSkill
+const exampleParsed = JSON.parse(exampleJSON) as MainSkillsExcludeResponse
 console.log(exampleParsed)
 ```
 
