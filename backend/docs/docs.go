@@ -178,19 +178,63 @@ const docTemplate = `{
         },
         "/v1/levelup_api/user/skills": {
             "get": {
-                "description": "get skills, limited to 200 results",
+                "description": "get user's skills",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Skills"
                 ],
-                "summary": "Get skills from database",
+                "summary": "Get user's skills from database",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/main.UsersSkillsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/levelup_api/user/skills_exclude": {
+            "get": {
+                "description": "get user's skills",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skills"
+                ],
+                "summary": "Get user's skills from database",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Get skills with the typed in prefix",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "Exclude skills",
+                        "name": "exclude_ids",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Exclude given skill",
+                        "name": "excludeName",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.SkillsExcludeResponse"
                         }
                     }
                 }
@@ -326,14 +370,29 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
-                "LinkedSkills": {},
                 "experience": {
                     "type": "integer"
                 },
-                "experience_needed": {
+                "experienceNeeded": {
                     "type": "integer"
                 },
                 "level": {
+                    "type": "integer"
+                },
+                "linkedSkills": {},
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.SkillExclude": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
                     "type": "integer"
                 },
                 "name": {
@@ -349,6 +408,17 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "main.SkillsExcludeResponse": {
+            "type": "object",
+            "properties": {
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.SkillExclude"
+                    }
                 }
             }
         },

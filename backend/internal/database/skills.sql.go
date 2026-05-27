@@ -78,3 +78,14 @@ func (q *Queries) GetSkillsByName(ctx context.Context, name string) ([]GetSkills
 	}
 	return items, nil
 }
+
+const getUsersSkillsLinkedName = `-- name: GetUsersSkillsLinkedName :one
+SELECT name FROM skills WHERE id = $1
+`
+
+func (q *Queries) GetUsersSkillsLinkedName(ctx context.Context, id int32) (string, error) {
+	row := q.db.QueryRowContext(ctx, getUsersSkillsLinkedName, id)
+	var name string
+	err := row.Scan(&name)
+	return name, err
+}

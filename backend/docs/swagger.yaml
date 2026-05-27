@@ -68,16 +68,26 @@ definitions:
     type: object
   main.Skill:
     properties:
-      LinkedSkills: {}
       experience:
         type: integer
-      experience_needed:
+      experienceNeeded:
         type: integer
       level:
+        type: integer
+      linkedSkills: {}
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  main.SkillExclude:
+    properties:
+      id:
         type: integer
       name:
         type: string
     required:
+    - id
     - name
     type: object
   main.SkillsCreation:
@@ -86,6 +96,13 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  main.SkillsExcludeResponse:
+    properties:
+      skills:
+        items:
+          $ref: '#/definitions/main.SkillExclude'
+        type: array
     type: object
   main.SkillsResponse:
     properties:
@@ -244,7 +261,7 @@ paths:
       - Player
   /v1/levelup_api/user/skills:
     get:
-      description: get skills, limited to 200 results
+      description: get user's skills
       produces:
       - application/json
       responses:
@@ -252,7 +269,36 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/main.UsersSkillsResponse'
-      summary: Get skills from database
+      summary: Get user's skills from database
+      tags:
+      - Skills
+  /v1/levelup_api/user/skills_exclude:
+    get:
+      description: get user's skills
+      parameters:
+      - description: Get skills with the typed in prefix
+        in: query
+        name: name
+        type: string
+      - collectionFormat: csv
+        description: Exclude skills
+        in: query
+        items:
+          type: integer
+        name: exclude_ids
+        type: array
+      - description: Exclude given skill
+        in: query
+        name: excludeName
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.SkillsExcludeResponse'
+      summary: Get user's skills from database
       tags:
       - Skills
   /v1/levelup_api/userProfile:

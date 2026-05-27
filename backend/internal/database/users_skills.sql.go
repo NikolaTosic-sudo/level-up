@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 const createUsersSkills = `-- name: CreateUsersSkills :exec
@@ -96,17 +97,61 @@ func (q *Queries) GetUsersSkills(ctx context.Context, userID uuid.UUID) ([]GetUs
 	return items, nil
 }
 
-const getUsersSkillsLinked = `-- name: GetUsersSkillsLinked :many
+const getUsersSkillsExclude = `-- name: GetUsersSkillsExclude :many
+SELECT name, skill_id FROM users_skills WHERE user_id = $1 AND name LIKE $2 AND skill_id != ALL($3::int[]) AND name != $4
+`
+
+type GetUsersSkillsExcludeParams struct {
+	UserID  uuid.UUID `json:"user_id"`
+	Name    string    `json:"name"`
+	Column3 []int32   `json:"column_3"`
+	Name_2  string    `json:"name_2"`
+}
+
+type GetUsersSkillsExcludeRow struct {
+	Name    string `json:"name"`
+	SkillID int32  `json:"skill_id"`
+}
+
+func (q *Queries) GetUsersSkillsExclude(ctx context.Context, arg GetUsersSkillsExcludeParams) ([]GetUsersSkillsExcludeRow, error) {
+	rows, err := q.db.QueryContext(ctx, getUsersSkillsExclude,
+		arg.UserID,
+		arg.Name,
+		pq.Array(arg.Column3),
+		arg.Name_2,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUsersSkillsExcludeRow
+	for rows.Next() {
+		var i GetUsersSkillsExcludeRow
+		if err := rows.Scan(&i.Name, &i.SkillID); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUsersSkillsLinkedID = `-- name: GetUsersSkillsLinkedID :many
 SELECT child_skill_id FROM users_skills_links WHERE parent_skill_id = $1 AND user_id = $2
 `
 
-type GetUsersSkillsLinkedParams struct {
+type GetUsersSkillsLinkedIDParams struct {
 	ParentSkillID int32     `json:"parent_skill_id"`
 	UserID        uuid.UUID `json:"user_id"`
 }
 
-func (q *Queries) GetUsersSkillsLinked(ctx context.Context, arg GetUsersSkillsLinkedParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getUsersSkillsLinked, arg.ParentSkillID, arg.UserID)
+func (q *Queries) GetUsersSkillsLinkedID(ctx context.Context, arg GetUsersSkillsLinkedIDParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getUsersSkillsLinkedID, arg.ParentSkillID, arg.UserID)
 	if err != nil {
 		return nil, err
 	}
