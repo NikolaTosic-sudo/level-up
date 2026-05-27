@@ -5,9 +5,9 @@ CREATE TABLE users_skills(
   name TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
-  experience INTEGER,
-  experience_needed INTEGER,
-  level INTEGER,
+  experience INTEGER NOT NULL DEFAULT 0,
+  experience_needed INTEGER NOT NULL DEFAULT 100,
+  level INTEGER NOT NULL DEFAULT 1,
   PRIMARY KEY (user_id, skill_id),
 
   UNIQUE (user_id, name)
@@ -33,3 +33,8 @@ CREATE TABLE users_skills_links(
 
   CHECK (parent_skill_id <> child_skill_id)
 );
+
+-- +goose down
+DROP TABLE users_skills CASCADE;
+
+DROP TABLE users_skills_links CASCADE;

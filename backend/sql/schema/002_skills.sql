@@ -7,4 +7,4 @@ CREATE TABLE skills(
 );
 
 -- +goose down
-DROP TABLE skills;
+DROP TABLE skills CASCADE;
