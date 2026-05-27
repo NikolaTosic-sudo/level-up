@@ -76,7 +76,7 @@ const SelectSkills = ({
       if (onChange) {
         onChange({ id: Math.random(), name: skill });
       } else {
-        handleChange(skill);
+        handleChange("", { value: 0, label: skill });
       }
     }
   };

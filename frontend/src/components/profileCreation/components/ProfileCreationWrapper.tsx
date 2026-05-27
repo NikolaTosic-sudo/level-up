@@ -34,6 +34,8 @@ const ProfileCreationWrapper = () => {
           nickName: values.nickname,
           bio: values.bio,
           dateOfBirth: values.dateOfBirth,
+          skills: values.skills,
+          quests: values.quests,
         },
       });
     }

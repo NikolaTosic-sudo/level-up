@@ -17,10 +17,13 @@ function BioCard({ bio }: BioCardProps) {
       <EditableText
         val={bio}
         editable
-        onChange={(value) => mutate({ body: { bio: value, target: "bio" } })}
+        onChange={(value) =>
+          mutate({ body: { bio: value.trim(), target: "bio" } })
+        }
         style={{ display: "flex", marginLeft: 0, alignItems: "start" }}
         spaceStyle={{ width: "100%" }}
         mode="textArea"
+        placeholder={t("", { defaultValue: "Something about yourself" })}
       />
     </Card>
   );

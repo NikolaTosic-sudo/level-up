@@ -11,6 +11,7 @@ type EditableTextProps = {
   spaceStyle?: CSSProperties;
   mode?: "input" | "textArea" | "date";
   val?: string;
+  placeholder?: string;
 };
 
 function EditableText({
@@ -20,6 +21,7 @@ function EditableText({
   style,
   spaceStyle,
   val,
+  placeholder,
   mode = "input",
 }: EditableTextProps) {
   const [editing, setEditing] = useState(false);
@@ -46,6 +48,7 @@ function EditableText({
           <RenderInput
             style={style}
             mode={mode}
+            placeholder={placeholder}
             val={value}
             change={setValue}
           />
@@ -67,7 +70,7 @@ function EditableText({
               ...style,
             }}
           >
-            {val}
+            {val ? val : placeholder}
           </Typography.Paragraph>
           {editable ? (
             <EditOutlined
@@ -91,20 +94,28 @@ function RenderInput({
   val,
   change,
   style,
+  placeholder,
 }: Partial<EditableTextProps> & { change: (val: string) => void }) {
   return mode === "input" ? (
-    <Input value={val} style={style} onChange={(e) => change(e.target.value)} />
+    <Input
+      placeholder={placeholder}
+      value={val}
+      style={style}
+      onChange={(e) => change(e.target.value)}
+    />
   ) : mode === "textArea" ? (
     <Input.TextArea
       autoSize
       value={val}
       onChange={(e) => change(e.target.value)}
       style={style}
+      placeholder={placeholder}
     />
   ) : mode === "date" ? (
     <DatePicker
       style={style}
       value={dayjs(val)}
+      placeholder={placeholder}
       onChange={(_date, dateString) =>
         typeof dateString === "string" ? change(dateString) : null
       }

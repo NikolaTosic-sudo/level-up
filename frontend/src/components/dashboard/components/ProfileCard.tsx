@@ -20,7 +20,7 @@ function ProfileCard({ user }: ProfileCardProps) {
         title={t("", { defaultValue: "First name:" })}
         val={user.firstName}
         onChange={(value) =>
-          mutate({ body: { firstName: value, target: "firstName" } })
+          mutate({ body: { firstName: value.trim(), target: "firstName" } })
         }
         editable
       />
@@ -29,7 +29,7 @@ function ProfileCard({ user }: ProfileCardProps) {
         title={t("", { defaultValue: "Last name:" })}
         val={user.lastName}
         onChange={(value) =>
-          mutate({ body: { lastName: value, target: "lastName" } })
+          mutate({ body: { lastName: value.trim(), target: "lastName" } })
         }
         editable
       />
@@ -38,7 +38,7 @@ function ProfileCard({ user }: ProfileCardProps) {
         title={t("", { defaultValue: "Email:" })}
         val={user.email}
         onChange={(value) =>
-          mutate({ body: { email: value, target: "email" } })
+          mutate({ body: { email: value.trim(), target: "email" } })
         }
         editable
       />
@@ -47,7 +47,7 @@ function ProfileCard({ user }: ProfileCardProps) {
         title={t("", { defaultValue: "Nickname:" })}
         val={user.nickName}
         onChange={(value) =>
-          mutate({ body: { nickName: value, target: "nickname" } })
+          mutate({ body: { nickName: value.trim(), target: "nickname" } })
         }
         editable
       />
