@@ -9,13 +9,15 @@ import (
 	"context"
 )
 
-const createSkill = `-- name: CreateSkill :exec
-INSERT INTO skills(created_at, updated_at, name) VALUES (NOW(), NOW(), $1)
+const createSkill = `-- name: CreateSkill :one
+INSERT INTO skills(created_at, updated_at, name) VALUES (NOW(), NOW(), $1) RETURNING id
 `
 
-func (q *Queries) CreateSkill(ctx context.Context, name string) error {
-	_, err := q.db.ExecContext(ctx, createSkill, name)
-	return err
+func (q *Queries) CreateSkill(ctx context.Context, name string) (int32, error) {
+	row := q.db.QueryRowContext(ctx, createSkill, name)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
 }
 
 const getAllSkills = `-- name: GetAllSkills :many

@@ -41,7 +41,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateU
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, created_at, updated_at, firstname, lastname, nickname, bio, dateofbirth, email, password, hot_streak, quests_completed, repeating_completed, customs_completed, experience, experience_needed, level FROM users WHERE email = $1
+SELECT id, created_at, updated_at, firstname, lastname, nickname, bio, dateofbirth, email, password, hot_streak, quests_completed, repeating_completed, customs_completed, experience, experience_needed, level, money FROM users WHERE email = $1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -65,12 +65,13 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 		&i.Experience,
 		&i.ExperienceNeeded,
 		&i.Level,
+		&i.Money,
 	)
 	return i, err
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, created_at, updated_at, firstname, lastname, nickname, bio, dateofbirth, email, password, hot_streak, quests_completed, repeating_completed, customs_completed, experience, experience_needed, level FROM users WHERE id = $1
+SELECT id, created_at, updated_at, firstname, lastname, nickname, bio, dateofbirth, email, password, hot_streak, quests_completed, repeating_completed, customs_completed, experience, experience_needed, level, money FROM users WHERE id = $1
 `
 
 func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
@@ -94,6 +95,7 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.Experience,
 		&i.ExperienceNeeded,
 		&i.Level,
+		&i.Money,
 	)
 	return i, err
 }

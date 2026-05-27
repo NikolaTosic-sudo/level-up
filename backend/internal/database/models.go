@@ -12,7 +12,7 @@ import (
 )
 
 type Quest struct {
-	ID               int32         `json:"id"`
+	ID               int64         `json:"id"`
 	CreatedAt        time.Time     `json:"created_at"`
 	UpdatedAt        time.Time     `json:"updated_at"`
 	Name             string        `json:"name"`
@@ -21,6 +21,8 @@ type Quest struct {
 	Level            sql.NullInt32 `json:"level"`
 	StartDate        sql.NullTime  `json:"start_date"`
 	EndDate          sql.NullTime  `json:"end_date"`
+	Completed        sql.NullBool  `json:"completed"`
+	UserID           uuid.UUID     `json:"user_id"`
 	ParentQuestID    sql.NullInt64 `json:"parent_quest_id"`
 }
 
@@ -34,13 +36,10 @@ type RefreshToken struct {
 }
 
 type Skill struct {
-	ID               int32         `json:"id"`
-	CreatedAt        time.Time     `json:"created_at"`
-	UpdatedAt        time.Time     `json:"updated_at"`
-	Name             string        `json:"name"`
-	Experience       sql.NullInt32 `json:"experience"`
-	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
-	Level            sql.NullInt32 `json:"level"`
+	ID        int32     `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Name      string    `json:"name"`
 }
 
 type User struct {
@@ -61,6 +60,26 @@ type User struct {
 	Experience         sql.NullInt32  `json:"experience"`
 	ExperienceNeeded   sql.NullInt32  `json:"experience_needed"`
 	Level              sql.NullInt32  `json:"level"`
+	Money              sql.NullInt64  `json:"money"`
+}
+
+type UsersSkill struct {
+	UserID           uuid.UUID     `json:"user_id"`
+	SkillID          int32         `json:"skill_id"`
+	Name             string        `json:"name"`
+	CreatedAt        time.Time     `json:"created_at"`
+	UpdatedAt        time.Time     `json:"updated_at"`
+	Experience       sql.NullInt32 `json:"experience"`
+	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
+	Level            sql.NullInt32 `json:"level"`
+}
+
+type UsersSkillsLink struct {
+	UserID        uuid.UUID `json:"user_id"`
+	ParentSkillID int32     `json:"parent_skill_id"`
+	ChildSkillID  int32     `json:"child_skill_id"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
 }
 
 type UsersStat struct {
