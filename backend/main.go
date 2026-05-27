@@ -67,6 +67,7 @@ func main() {
 	r.Get("/v1/levelup_api/skills", cfg.getSkillsHandler)
 	r.Get("/v1/levelup_api/userProfile", cfg.getFullUser)
 	r.Get("/v1/levelup_api/user/skills", cfg.getUsersSkillsHandler)
+	r.Get("/v1/levelup_api/user/skills_exclude", cfg.getUsersSkillsExcludeHandler)
 
 	r.Post("/v1/levelup_api/signUp", cfg.signupHandler)
 	r.Post("/v1/levelup_api/logIn", cfg.loginHandler)
