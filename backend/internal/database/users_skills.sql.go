@@ -56,3 +56,74 @@ func (q *Queries) GetUserSkillID(ctx context.Context, arg GetUserSkillIDParams) 
 	err := row.Scan(&skill_id)
 	return skill_id, err
 }
+
+const getUsersSkills = `-- name: GetUsersSkills :many
+SELECT name, experience, experience_needed, level FROM users_skills WHERE user_id = $1
+`
+
+type GetUsersSkillsRow struct {
+	Name             string `json:"name"`
+	Experience       int32  `json:"experience"`
+	ExperienceNeeded int32  `json:"experience_needed"`
+	Level            int32  `json:"level"`
+}
+
+func (q *Queries) GetUsersSkills(ctx context.Context, userID uuid.UUID) ([]GetUsersSkillsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getUsersSkills, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUsersSkillsRow
+	for rows.Next() {
+		var i GetUsersSkillsRow
+		if err := rows.Scan(
+			&i.Name,
+			&i.Experience,
+			&i.ExperienceNeeded,
+			&i.Level,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUsersSkillsLinked = `-- name: GetUsersSkillsLinked :many
+SELECT child_skill_id FROM users_skills_links WHERE parent_skill_id = $1 AND user_id = $2
+`
+
+type GetUsersSkillsLinkedParams struct {
+	ParentSkillID int32     `json:"parent_skill_id"`
+	UserID        uuid.UUID `json:"user_id"`
+}
+
+func (q *Queries) GetUsersSkillsLinked(ctx context.Context, arg GetUsersSkillsLinkedParams) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getUsersSkillsLinked, arg.ParentSkillID, arg.UserID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var child_skill_id int32
+		if err := rows.Scan(&child_skill_id); err != nil {
+			return nil, err
+		}
+		items = append(items, child_skill_id)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

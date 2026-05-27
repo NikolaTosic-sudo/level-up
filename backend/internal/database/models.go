@@ -64,14 +64,14 @@ type User struct {
 }
 
 type UsersSkill struct {
-	UserID           uuid.UUID     `json:"user_id"`
-	SkillID          int32         `json:"skill_id"`
-	Name             string        `json:"name"`
-	CreatedAt        time.Time     `json:"created_at"`
-	UpdatedAt        time.Time     `json:"updated_at"`
-	Experience       sql.NullInt32 `json:"experience"`
-	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
-	Level            sql.NullInt32 `json:"level"`
+	UserID           uuid.UUID `json:"user_id"`
+	SkillID          int32     `json:"skill_id"`
+	Name             string    `json:"name"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
+	Experience       int32     `json:"experience"`
+	ExperienceNeeded int32     `json:"experience_needed"`
+	Level            int32     `json:"level"`
 }
 
 type UsersSkillsLink struct {
