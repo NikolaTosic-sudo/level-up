@@ -10,12 +10,24 @@ import (
 	"github.com/NikolaTosic-sudo/level-up/backend/internal/database"
 )
 
+type SkillsCreation struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+type QuestsCreation struct {
+	Name       string `json:"name"`
+	Experience int    `json:"experience"`
+}
+
 type ProfileCreationBody struct {
-	FirstName string    `json:"firstName"`
-	LastName  string    `json:"lastName"`
-	Nickname  string    `json:"nickName"`
-	Bio       string    `json:"bio"`
-	Date      time.Time `json:"dateOfBirth"`
+	FirstName string           `json:"firstName"`
+	LastName  string           `json:"lastName"`
+	Nickname  string           `json:"nickName"`
+	Bio       string           `json:"bio"`
+	Date      time.Time        `json:"dateOfBirth"`
+	Skills    []SkillsCreation `json:"skills"`
+	Quests    []QuestsCreation `json:"quests"`
 }
 
 type UserResponse struct {
@@ -74,6 +86,50 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		writeJSONError(w, http.StatusInternalServerError, "error")
 		return
+	}
+
+	if len(body.Quests) > 0 {
+		for _, q := range body.Quests {
+			err = cfg.database.CreateQuest(r.Context(), database.CreateQuestParams{
+				Name: q.Name,
+				Experience: sql.NullInt32{
+					Int32: int32(q.Experience),
+					Valid: true,
+				},
+				UserID: userID,
+			})
+			if err != nil {
+				writeJSONError(w, http.StatusInternalServerError, "error")
+				return
+			}
+		}
+	}
+
+	if len(body.Skills) > 0 {
+		for _, s := range body.Skills {
+			skillId, err := cfg.database.GetUserSkillID(r.Context(), database.GetUserSkillIDParams{
+				UserID: userID,
+				Name:   s.Name,
+			})
+
+			if s.Id == 0 && skillId == 0 {
+				skillId, err = cfg.database.CreateSkill(r.Context(), s.Name)
+				if err != nil {
+					writeJSONError(w, http.StatusInternalServerError, "error")
+					return
+				}
+			}
+
+			err = cfg.database.CreateUsersSkills(r.Context(), database.CreateUsersSkillsParams{
+				UserID:  userID,
+				SkillID: skillId,
+				Name:    s.Name,
+			})
+			if err != nil {
+				writeJSONError(w, http.StatusInternalServerError, "error")
+				return
+			}
+		}
 	}
 
 	err = cfg.database.UpdateUserProfile(r.Context(), database.UpdateUserProfileParams{
@@ -166,7 +222,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(b, &res)
 
-	if res.Target == "firstName" {
+	if res.Target == "firstName" && res.FirstName != "" {
 		err = cfg.database.UpdateUserFirstName(r.Context(), database.UpdateUserFirstNameParams{
 			Firstname: sql.NullString{
 				String: res.FirstName,
@@ -174,7 +230,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 			},
 			ID: userID,
 		})
-	} else if res.Target == "lastName" {
+	} else if res.Target == "lastName" && res.LastName != "" {
 		err = cfg.database.UpdateUserLastName(r.Context(), database.UpdateUserLastNameParams{
 			Lastname: sql.NullString{
 				String: res.LastName,
@@ -182,7 +238,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 			},
 			ID: userID,
 		})
-	} else if res.Target == "nickname" {
+	} else if res.Target == "nickname" && res.Nickname != "" {
 		err = cfg.database.UpdateUserNickname(r.Context(), database.UpdateUserNicknameParams{
 			Nickname: sql.NullString{
 				String: res.Nickname,
@@ -206,7 +262,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 			},
 			ID: userID,
 		})
-	} else if res.Target == "email" {
+	} else if res.Target == "email" && res.Email != "" {
 		err = cfg.database.UpdateUserEmail(r.Context(), database.UpdateUserEmailParams{
 			Email: res.Email,
 			ID:    userID,
