@@ -53,16 +53,17 @@ function SkillForm({ skill }: SkillFormProps) {
 
       <Row justify="space-between" gutter={[0, 8]}>
         <Col sm={13}>
-          <Form.Item
-            name="skills"
-            //initialValue={skill?.linkedSkills}
-          >
+          <Form.Item name="skills" initialValue={skill?.linkedSkills}>
             <SkillRenderer vertical={false} wrap />
           </Form.Item>
         </Col>
 
         <Col sm={10}>
-          <SelectSkills marginLeft={0} />
+          <SelectSkills
+            mode="excludeUsersSkills"
+            excludeSkill={skill.name}
+            marginLeft={0}
+          />
         </Col>
       </Row>
     </Form>

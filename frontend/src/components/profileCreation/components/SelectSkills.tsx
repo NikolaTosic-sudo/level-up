@@ -20,30 +20,42 @@ type Skill =
   | { label?: string; value?: number }
   | { label?: string; value?: number }[];
 
+export type Mode = "excludeUsersSkills" | "";
+
 type SelectSkillsProps = {
   onChange?: (skill: { id?: number; name?: string }) => void;
-  forUser?: boolean;
+  mode?: Mode;
   marginLeft?: number;
+  excludeSkill?: string;
 };
 
 const SelectSkills = ({
   onChange,
-  forUser,
+  mode,
   marginLeft = 24,
+  excludeSkill,
 }: SelectSkillsProps) => {
   const { t } = useTranslation();
   const [skill, setSkill] = useState("");
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 500);
   const [open, setOpen] = useState(false);
-
-  const { data: items, isLoading } = useGetSkills(debouncedSearch, forUser);
-
-  const selectRef = useRef<RefSelectProps>(null);
 
   const formInstance = Form.useFormInstance();
 
+  const debouncedSearch = useDebounce(search, 500);
+
   const userSkills = Form.useWatch("skills", formInstance);
+
+  const userIds = userSkills?.map((s: { id: number }) => s.id) ?? [];
+
+  const { data: items, isLoading } = useGetSkills(
+    debouncedSearch,
+    mode,
+    userIds,
+    excludeSkill,
+  );
+
+  const selectRef = useRef<RefSelectProps>(null);
 
   const onSkillChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSkill(event.target.value);
@@ -134,7 +146,7 @@ const SelectSkills = ({
           </>
         )}
         options={items?.skills
-          ?.filter((o) => !(userSkills ?? []).includes(o))
+          ?.filter((o) => !userIds.includes(o.id))
           .map((item) => ({ label: item.name, value: item.id }))}
       />
     </ConfigProvider>
