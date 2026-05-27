@@ -13,6 +13,21 @@
  */
 
 import { mapValues } from '../runtime';
+import type { MainQuestsCreation } from './MainQuestsCreation';
+import {
+    MainQuestsCreationFromJSON,
+    MainQuestsCreationFromJSONTyped,
+    MainQuestsCreationToJSON,
+    MainQuestsCreationToJSONTyped,
+} from './MainQuestsCreation';
+import type { MainSkillsCreation } from './MainSkillsCreation';
+import {
+    MainSkillsCreationFromJSON,
+    MainSkillsCreationFromJSONTyped,
+    MainSkillsCreationToJSON,
+    MainSkillsCreationToJSONTyped,
+} from './MainSkillsCreation';
+
 /**
  * 
  * @export
@@ -49,6 +64,18 @@ export interface MainProfileCreationBody {
      * @memberof MainProfileCreationBody
      */
     nickName?: string;
+    /**
+     * 
+     * @type {Array<MainQuestsCreation>}
+     * @memberof MainProfileCreationBody
+     */
+    quests?: Array<MainQuestsCreation>;
+    /**
+     * 
+     * @type {Array<MainSkillsCreation>}
+     * @memberof MainProfileCreationBody
+     */
+    skills?: Array<MainSkillsCreation>;
 }
 
 /**
@@ -73,6 +100,8 @@ export function MainProfileCreationBodyFromJSONTyped(json: any, ignoreDiscrimina
         'firstName': json['firstName'] == null ? undefined : json['firstName'],
         'lastName': json['lastName'] == null ? undefined : json['lastName'],
         'nickName': json['nickName'] == null ? undefined : json['nickName'],
+        'quests': json['quests'] == null ? undefined : ((json['quests'] as Array<any>).map(MainQuestsCreationFromJSON)),
+        'skills': json['skills'] == null ? undefined : ((json['skills'] as Array<any>).map(MainSkillsCreationFromJSON)),
     };
 }
 
@@ -92,6 +121,8 @@ export function MainProfileCreationBodyToJSONTyped(value?: MainProfileCreationBo
         'firstName': value['firstName'],
         'lastName': value['lastName'],
         'nickName': value['nickName'],
+        'quests': value['quests'] == null ? undefined : ((value['quests'] as Array<any>).map(MainQuestsCreationToJSON)),
+        'skills': value['skills'] == null ? undefined : ((value['skills'] as Array<any>).map(MainSkillsCreationToJSON)),
     };
 }
 

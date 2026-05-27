@@ -9,6 +9,8 @@ docs/MainLoginBody.md
 docs/MainLoginResponse.md
 docs/MainProfileCreationBody.md
 docs/MainProfileResponse.md
+docs/MainQuestsCreation.md
+docs/MainSkillsCreation.md
 docs/MainSkillsResponse.md
 docs/MainUpdateUserBody.md
 docs/MainUserResponse.md
@@ -20,6 +22,8 @@ models/MainLoginBody.ts
 models/MainLoginResponse.ts
 models/MainProfileCreationBody.ts
 models/MainProfileResponse.ts
+models/MainQuestsCreation.ts
+models/MainSkillsCreation.ts
 models/MainSkillsResponse.ts
 models/MainUpdateUserBody.ts
 models/MainUserResponse.ts

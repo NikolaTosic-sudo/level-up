@@ -11,6 +11,8 @@ Name | Type
 `firstName` | string
 `lastName` | string
 `nickName` | string
+`quests` | [Array&lt;MainQuestsCreation&gt;](MainQuestsCreation.md)
+`skills` | [Array&lt;MainSkillsCreation&gt;](MainSkillsCreation.md)
 
 ## Example
 
@@ -24,6 +26,8 @@ const example = {
   "firstName": null,
   "lastName": null,
   "nickName": null,
+  "quests": null,
+  "skills": null,
 } satisfies MainProfileCreationBody
 
 console.log(example)

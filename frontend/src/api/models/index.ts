@@ -5,6 +5,8 @@ export * from './MainLoginBody';
 export * from './MainLoginResponse';
 export * from './MainProfileCreationBody';
 export * from './MainProfileResponse';
+export * from './MainQuestsCreation';
+export * from './MainSkillsCreation';
 export * from './MainSkillsResponse';
 export * from './MainUpdateUserBody';
 export * from './MainUserResponse';
