@@ -1,9 +1,9 @@
-import SkillsWrapper from "./components/SkillsWrapper";
+import SkillsLoader from "./components/SkillsLoader";
 
 import "./styles/style.css";
 
 function Skills() {
-  return <SkillsWrapper />;
+  return <SkillsLoader />;
 }
 
 export default Skills;

@@ -1,13 +1,13 @@
 import { Button, Divider, Flex, Progress, Tooltip } from "antd";
-import type { Skill } from "./SkillModal";
 import { useHover } from "../../../hooks/useHover";
 import SkillModal from "./SkillModal";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import PopconfirmComponent from "../../common/PopconfirmComponent";
+import type { MainSkill } from "../../../api";
 
 type SkillWrapProps = {
-  skill: Skill;
+  skill: MainSkill;
 };
 
 function SkillWrap({ skill }: SkillWrapProps) {
@@ -29,7 +29,9 @@ function SkillWrap({ skill }: SkillWrapProps) {
         >
           <Progress
             showInfo={false}
-            percent={(skill.experience / skill.experienceNeeded) * 100}
+            percent={
+              ((skill.experience ?? 1) / (skill.experienceNeeded ?? 1)) * 100
+            }
             strokeColor="#008c95"
             style={{ minWidth: 60 }}
           />

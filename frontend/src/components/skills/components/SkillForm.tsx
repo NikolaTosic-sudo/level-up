@@ -11,10 +11,10 @@ import {
 import { useTranslation } from "react-i18next";
 import SkillRenderer from "../../profileCreation/components/SkillRenderer";
 import SelectSkills from "../../profileCreation/components/SelectSkills";
-import type { Skill } from "./SkillModal";
+import type { MainSkill } from "../../../api";
 
 type SkillFormProps = {
-  skill: Skill;
+  skill: MainSkill;
 };
 
 function SkillForm({ skill }: SkillFormProps) {
@@ -32,7 +32,9 @@ function SkillForm({ skill }: SkillFormProps) {
           >
             <Progress
               showInfo={false}
-              percent={(skill.experience / skill.experienceNeeded) * 100}
+              percent={
+                ((skill.experience ?? 1) / (skill.experienceNeeded ?? 1)) * 100
+              }
               strokeColor="#008c95"
               style={{ minWidth: 100 }}
             />
@@ -51,7 +53,10 @@ function SkillForm({ skill }: SkillFormProps) {
 
       <Row justify="space-between" gutter={[0, 8]}>
         <Col sm={13}>
-          <Form.Item name="skills" initialValue={skill?.linkedSkills}>
+          <Form.Item
+            name="skills"
+            //initialValue={skill?.linkedSkills}
+          >
             <SkillRenderer vertical={false} wrap />
           </Form.Item>
         </Col>

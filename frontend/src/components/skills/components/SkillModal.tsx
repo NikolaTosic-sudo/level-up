@@ -2,18 +2,10 @@ import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
 import SkillForm from "./SkillForm";
 import { EditOutlined } from "@ant-design/icons";
-
-export type Skill = {
-  id: string;
-  name: string;
-  level: number;
-  experience: number;
-  experienceNeeded: number;
-  linkedSkills?: Array<Skill>;
-};
+import type { MainSkill } from "../../../api";
 
 type SkillModalProps = {
-  skill: Skill;
+  skill: MainSkill;
 };
 
 function SkillModal({ skill }: SkillModalProps) {
