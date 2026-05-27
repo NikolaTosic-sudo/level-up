@@ -40,13 +40,13 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 	password := b.Password
 
 	if email == "" || password == "" {
-		writeJSONError(w, http.StatusBadRequest, "signUpBadRequest")
+		writeJSONError(w, http.StatusBadRequest, "signUpBadRequest", err)
 		return
 	}
 
 	hashedPassword, err := auth.HashedPassword(password)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
@@ -56,24 +56,24 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		if strings.Contains(err.Error(), "violates unique constraint") {
-			writeJSONError(w, http.StatusUnauthorized, "emailNotUnique")
+			writeJSONError(w, http.StatusUnauthorized, "emailNotUnique", err)
 			return
 		}
 
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 
 		return
 	}
 
 	token, err := auth.MakeJWT(user.ID, cfg.secret)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	refreshString, err := auth.MakeRefreshToken()
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
@@ -85,7 +85,7 @@ func (cfg *appConfig) signupHandler(w http.ResponseWriter, r *http.Request) {
 		ExpiresAt: time.Now().Add(time.Hour * 168),
 	})
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
@@ -128,45 +128,45 @@ func (cfg *appConfig) loginHandler(w http.ResponseWriter, r *http.Request) {
 	password := b.Password
 
 	if email == "" || password == "" {
-		writeJSONError(w, http.StatusBadRequest, "signUpBadRequest")
+		writeJSONError(w, http.StatusBadRequest, "signUpBadRequest", err)
 		return
 	}
 
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	user, err := cfg.database.GetUserByEmail(r.Context(), email)
 	if err != nil {
 		if strings.Contains(err.Error(), "no rows in result") {
-			writeJSONError(w, http.StatusUnauthorized, "loginNoUserFound")
+			writeJSONError(w, http.StatusUnauthorized, "loginNoUserFound", err)
 			return
 		}
 
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	err = auth.CheckPassword(password, user.Password)
 	if err != nil {
 		if strings.Contains(err.Error(), "hashedPassword is not the hash of the given password") {
-			writeJSONError(w, http.StatusUnauthorized, "loginBadPassword")
+			writeJSONError(w, http.StatusUnauthorized, "loginBadPassword", err)
 			return
 		}
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	token, err := auth.MakeJWT(user.ID, cfg.secret)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	refreshString, err := auth.MakeRefreshToken()
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
@@ -178,7 +178,7 @@ func (cfg *appConfig) loginHandler(w http.ResponseWriter, r *http.Request) {
 		ExpiresAt: time.Now().Add(time.Hour * 168),
 	})
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 

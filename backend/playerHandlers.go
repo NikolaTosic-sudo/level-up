@@ -66,25 +66,25 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	err = json.Unmarshal(b, &body)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	userID, err := cfg.getUserId(r)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	user, err := cfg.database.GetUserByID(r.Context(), userID)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
@@ -99,7 +99,7 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 				UserID: userID,
 			})
 			if err != nil {
-				writeJSONError(w, http.StatusInternalServerError, "error")
+				writeJSONError(w, http.StatusInternalServerError, "error", err)
 				return
 			}
 		}
@@ -115,7 +115,7 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 			if s.Id == 0 && skillId == 0 {
 				skillId, err = cfg.database.CreateSkill(r.Context(), s.Name)
 				if err != nil {
-					writeJSONError(w, http.StatusInternalServerError, "error")
+					writeJSONError(w, http.StatusInternalServerError, "error", err)
 					return
 				}
 			}
@@ -126,7 +126,7 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 				Name:    s.Name,
 			})
 			if err != nil {
-				writeJSONError(w, http.StatusInternalServerError, "error")
+				writeJSONError(w, http.StatusInternalServerError, "error", err)
 				return
 			}
 		}
@@ -156,7 +156,7 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 		Email: user.Email,
 	})
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
@@ -177,13 +177,13 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 func (cfg *appConfig) getFullUser(w http.ResponseWriter, r *http.Request) {
 	userID, err := cfg.getUserId(r)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
 	user, err := cfg.database.GetUserByID(r.Context(), userID)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
@@ -214,7 +214,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
@@ -268,12 +268,12 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 			ID:    userID,
 		})
 	} else {
-		writeJSONError(w, http.StatusBadRequest, "profileCreationBadRequest")
+		writeJSONError(w, http.StatusBadRequest, "profileCreationBadRequest", err)
 		return
 	}
 
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error")
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
 
