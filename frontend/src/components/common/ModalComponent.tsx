@@ -27,6 +27,7 @@ function ModalComponent({
   onCancel,
   title,
   noDivider,
+  onOk,
   ...props
 }: ModalComponentProps & ModalProps) {
   const [open, setOpen] = useState(false);
@@ -51,6 +52,14 @@ function ModalComponent({
     }
   }
 
+  function handleFinish(e: MouseEvent<HTMLButtonElement>) {
+    if (onOk) {
+      onOk(e);
+    } else {
+      setOpen(false);
+    }
+  }
+
   return (
     <>
       <Tooltip title={buttonTooltip}>
@@ -65,6 +74,7 @@ function ModalComponent({
         {...props}
         open={open}
         onCancel={handleClose}
+        onOk={handleFinish}
         title={
           title ? (
             <div onClick={(e) => e.stopPropagation()}>

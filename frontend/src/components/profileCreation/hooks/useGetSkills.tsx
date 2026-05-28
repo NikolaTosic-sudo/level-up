@@ -7,16 +7,18 @@ export const useGetSkills = (
   name: string,
   mode?: Mode,
   userSkills?: number[],
-  excludeSkill?: string,
 ) => {
   const api = useRef(skillsApi);
 
   const fetchData = async () => {
-    if (mode == "excludeUsersSkills") {
+    if (mode == "excludeSelectedUsersSkills") {
       return await api.current.v1LevelupApiUserSkillsExcludeGet({
         name,
         excludeIds: userSkills,
-        excludeName: excludeSkill,
+      });
+    } else if (mode === "excludeAllUsersSkills") {
+      return await api.current.v1LevelupApiSkillsNotUserGet({
+        name,
       });
     } else {
       return await api.current.v1LevelupApiSkillsGet({ name });
@@ -24,7 +26,7 @@ export const useGetSkills = (
   };
 
   return useQuery({
-    queryKey: ["useGetSkills", name],
+    queryKey: ["useGetSkills", name, mode],
     queryFn: fetchData,
     staleTime: 5 * 60 * 1000,
   });

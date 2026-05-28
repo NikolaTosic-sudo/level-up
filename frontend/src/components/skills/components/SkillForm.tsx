@@ -7,6 +7,7 @@ import {
   Row,
   Tooltip,
   Typography,
+  type FormInstance,
 } from "antd";
 import { useTranslation } from "react-i18next";
 import SkillRenderer from "../../profileCreation/components/SkillRenderer";
@@ -15,14 +16,15 @@ import type { MainSkill } from "../../../api";
 
 type SkillFormProps = {
   skill: MainSkill;
+  formInstance?: FormInstance;
 };
 
-function SkillForm({ skill }: SkillFormProps) {
+function SkillForm({ skill, formInstance }: SkillFormProps) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
 
   return (
-    <Form form={form}>
+    <Form form={formInstance ?? form}>
       <Flex className="skill-form" align="center">
         <Typography.Title level={3}>{skill?.name}</Typography.Title>
         <>
@@ -60,7 +62,7 @@ function SkillForm({ skill }: SkillFormProps) {
 
         <Col sm={10}>
           <SelectSkills
-            mode="excludeUsersSkills"
+            mode="excludeSelectedUsersSkills"
             excludeSkill={skill.name}
             marginLeft={0}
           />

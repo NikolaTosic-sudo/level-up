@@ -7,6 +7,7 @@ import {
   Flex,
   Form,
   Input,
+  message,
   Select,
   Space,
   Spin,
@@ -20,7 +21,7 @@ type Skill =
   | { label?: string; value?: number }
   | { label?: string; value?: number }[];
 
-export type Mode = "excludeUsersSkills" | "";
+export type Mode = "excludeSelectedUsersSkills" | "excludeAllUsersSkills";
 
 type SelectSkillsProps = {
   onChange?: (skill: { id?: number; name?: string }) => void;
@@ -48,11 +49,12 @@ const SelectSkills = ({
 
   const userIds = userSkills?.map((s: { id: number }) => s.id) ?? [];
 
+  const loweredTrimedExcluded = excludeSkill?.trim().toLowerCase();
+
   const { data: items, isLoading } = useGetSkills(
     debouncedSearch,
     mode,
     userIds,
-    excludeSkill,
   );
 
   const selectRef = useRef<RefSelectProps>(null);
@@ -83,10 +85,26 @@ const SelectSkills = ({
 
   const addItem = () => {
     if (skill) {
+      const loweredTrimedSkill = skill.trim().toLowerCase();
+
+      if (
+        loweredTrimedSkill == loweredTrimedExcluded ||
+        userSkills?.some(
+          (s: { name: string }) =>
+            s?.name?.trim().toLowerCase() === loweredTrimedSkill,
+        ) ||
+        items?.skills?.some(
+          (s: { name?: string }) =>
+            s?.name?.trim().toLowerCase() === loweredTrimedSkill,
+        )
+      ) {
+        message.error(t("", { defaultValue: "Skill already exists." }));
+        return;
+      }
       setSkill("");
 
       if (onChange) {
-        onChange({ id: Math.random(), name: skill });
+        onChange({ id: 0, name: skill });
       } else {
         handleChange("", { value: 0, label: skill });
       }
@@ -146,7 +164,11 @@ const SelectSkills = ({
           </>
         )}
         options={items?.skills
-          ?.filter((o) => !userIds.includes(o.id))
+          ?.filter(
+            (o) =>
+              !userIds.includes(o.id) &&
+              o.name?.trim().toLowerCase() !== loweredTrimedExcluded,
+          )
           .map((item) => ({ label: item.name, value: item.id }))}
       />
     </ConfigProvider>

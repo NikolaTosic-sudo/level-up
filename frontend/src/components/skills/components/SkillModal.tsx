@@ -3,6 +3,8 @@ import ModalComponent from "../../common/ModalComponent";
 import SkillForm from "./SkillForm";
 import { EditOutlined } from "@ant-design/icons";
 import type { MainSkill } from "../../../api";
+import { Form } from "antd";
+import { useEditSkill } from "../hooks/useEditSkill";
 
 type SkillModalProps = {
   skill: MainSkill;
@@ -10,10 +12,25 @@ type SkillModalProps = {
 
 function SkillModal({ skill }: SkillModalProps) {
   const { t } = useTranslation();
+  const { mutate } = useEditSkill();
+
+  const [form] = Form.useForm();
 
   return (
     <ModalComponent
       buttonInner={""}
+      onOk={() => {
+        if (skill && skill.name) {
+          const values = form.getFieldsValue();
+          mutate({
+            body: {
+              name: skill?.name,
+              id: skill?.id,
+              linkedSkills: values?.skills ?? [],
+            },
+          });
+        }
+      }}
       okText={t("skill.modal.save", { defaultValue: "Save" })}
       buttonProps={{
         type: "primary",
@@ -24,7 +41,7 @@ function SkillModal({ skill }: SkillModalProps) {
       buttonTooltip={t("skill.modal.edit", { defaultValue: "Edit skill" })}
       destroyOnHidden
     >
-      <SkillForm skill={skill} />
+      <SkillForm formInstance={form} skill={skill} />
     </ModalComponent>
   );
 }
