@@ -286,6 +286,21 @@ paths:
       summary: Sign up the user
       tags:
       - Login
+  /v1/levelup_api/skill/{id}/deactivate:
+    delete:
+      description: deactivate the skill
+      parameters:
+      - description: Id of the skill
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Deactivate
+      tags:
+      - Skills
   /v1/levelup_api/skills:
     get:
       description: get skills, limited to 200 results

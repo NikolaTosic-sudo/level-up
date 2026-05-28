@@ -145,6 +145,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/levelup_api/skill/{id}/deactivate": {
+            "delete": {
+                "description": "deactivate the skill",
+                "tags": [
+                    "Skills"
+                ],
+                "summary": "Deactivate",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id of the skill",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/skills": {
             "get": {
                 "description": "get skills, limited to 200 results",
