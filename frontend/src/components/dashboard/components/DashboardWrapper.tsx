@@ -22,7 +22,12 @@ function DashboardWrapper({ user }: DashboardWrapperProps) {
       </Col>
 
       <Col span={8}>
-        <SkillsCard />
+        <SkillsCard
+          stats={{
+            highest: user.highestLeveledSkill,
+            recent: user.mostRecentLeveledSkill,
+          }}
+        />
       </Col>
 
       <Col span={8}>
