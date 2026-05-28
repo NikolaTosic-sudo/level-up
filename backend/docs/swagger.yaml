@@ -6,6 +6,22 @@ definitions:
       name:
         type: string
     type: object
+  database.GetSkillsNotOwnedByUserRow:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  main.LinkedSkill:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
   main.LoginBody:
     properties:
       email:
@@ -72,9 +88,27 @@ definitions:
         type: integer
       experienceNeeded:
         type: integer
+      id:
+        type: integer
       level:
         type: integer
-      linkedSkills: {}
+      linkedSkills:
+        items:
+          $ref: '#/definitions/main.LinkedSkill'
+        type: array
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  main.SkillCreationPayload:
+    properties:
+      id:
+        type: integer
+      linkedSkills:
+        items:
+          $ref: '#/definitions/main.LinkedSkill'
+        type: array
       name:
         type: string
     required:
@@ -84,6 +118,10 @@ definitions:
     properties:
       id:
         type: integer
+      linkedSkills:
+        items:
+          $ref: '#/definitions/main.LinkedSkill'
+        type: array
       name:
         type: string
     required:
@@ -102,6 +140,13 @@ definitions:
       skills:
         items:
           $ref: '#/definitions/main.SkillExclude'
+        type: array
+    type: object
+  main.SkillsNotOwnedResponse:
+    properties:
+      skills:
+        items:
+          $ref: '#/definitions/database.GetSkillsNotOwnedByUserRow'
         type: array
     type: object
   main.SkillsResponse:
@@ -153,6 +198,24 @@ info:
   title: Level-Up API
   version: "0.1"
 paths:
+  /v1/levelup_api/create-skill:
+    post:
+      consumes:
+      - application/json
+      description: create skill for user
+      parameters:
+      - description: Skill creation
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.SkillCreationPayload'
+      responses:
+        "200":
+          description: OK
+      summary: Create skill
+      tags:
+      - Skills
   /v1/levelup_api/createProfile:
     post:
       consumes:
@@ -236,6 +299,25 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/main.SkillsResponse'
+      summary: Get skills from database
+      tags:
+      - Skills
+  /v1/levelup_api/skills-not-user:
+    get:
+      description: get skills not owned by the user, limited to 200 results
+      parameters:
+      - description: Get skills with the typed in prefix and not owned by current
+          user
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.SkillsNotOwnedResponse'
       summary: Get skills from database
       tags:
       - Skills

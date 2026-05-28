@@ -15,6 +15,34 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/levelup_api/create-skill": {
+            "post": {
+                "description": "create skill for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skills"
+                ],
+                "summary": "Create skill",
+                "parameters": [
+                    {
+                        "description": "Skill creation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.SkillCreationPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/createProfile": {
             "post": {
                 "description": "Create the player with user's info, skills and quests",
@@ -140,6 +168,34 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/main.SkillsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/levelup_api/skills-not-user": {
+            "get": {
+                "description": "get skills not owned by the user, limited to 200 results",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Skills"
+                ],
+                "summary": "Get skills from database",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Get skills with the typed in prefix and not owned by current user",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.SkillsNotOwnedResponse"
                         }
                     }
                 }
@@ -273,6 +329,31 @@ const docTemplate = `{
                 }
             }
         },
+        "database.GetSkillsNotOwnedByUserRow": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.LinkedSkill": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "main.LoginBody": {
             "type": "object",
             "properties": {
@@ -376,10 +457,38 @@ const docTemplate = `{
                 "experienceNeeded": {
                     "type": "integer"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "level": {
                     "type": "integer"
                 },
-                "linkedSkills": {},
+                "linkedSkills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.LinkedSkill"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.SkillCreationPayload": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "linkedSkills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.LinkedSkill"
+                    }
+                },
                 "name": {
                     "type": "string"
                 }
@@ -394,6 +503,12 @@ const docTemplate = `{
             "properties": {
                 "id": {
                     "type": "integer"
+                },
+                "linkedSkills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.LinkedSkill"
+                    }
                 },
                 "name": {
                     "type": "string"
@@ -418,6 +533,17 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/main.SkillExclude"
+                    }
+                }
+            }
+        },
+        "main.SkillsNotOwnedResponse": {
+            "type": "object",
+            "properties": {
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/database.GetSkillsNotOwnedByUserRow"
                     }
                 }
             }

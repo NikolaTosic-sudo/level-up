@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { MainLinkedSkill } from './MainLinkedSkill';
+import {
+    MainLinkedSkillFromJSON,
+    MainLinkedSkillFromJSONTyped,
+    MainLinkedSkillToJSON,
+    MainLinkedSkillToJSONTyped,
+} from './MainLinkedSkill';
+
 /**
  * 
  * @export
@@ -36,13 +44,19 @@ export interface MainSkill {
      * @type {number}
      * @memberof MainSkill
      */
+    id?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MainSkill
+     */
     level?: number;
     /**
      * 
-     * @type {object}
+     * @type {Array<MainLinkedSkill>}
      * @memberof MainSkill
      */
-    linkedSkills?: object;
+    linkedSkills?: Array<MainLinkedSkill>;
     /**
      * 
      * @type {string}
@@ -71,8 +85,9 @@ export function MainSkillFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         
         'experience': json['experience'] == null ? undefined : json['experience'],
         'experienceNeeded': json['experienceNeeded'] == null ? undefined : json['experienceNeeded'],
+        'id': json['id'] == null ? undefined : json['id'],
         'level': json['level'] == null ? undefined : json['level'],
-        'linkedSkills': json['linkedSkills'] == null ? undefined : json['linkedSkills'],
+        'linkedSkills': json['linkedSkills'] == null ? undefined : ((json['linkedSkills'] as Array<any>).map(MainLinkedSkillFromJSON)),
         'name': json['name'],
     };
 }
@@ -90,8 +105,9 @@ export function MainSkillToJSONTyped(value?: MainSkill | null, ignoreDiscriminat
         
         'experience': value['experience'],
         'experienceNeeded': value['experienceNeeded'],
+        'id': value['id'],
         'level': value['level'],
-        'linkedSkills': value['linkedSkills'],
+        'linkedSkills': value['linkedSkills'] == null ? undefined : ((value['linkedSkills'] as Array<any>).map(MainLinkedSkillToJSON)),
         'name': value['name'],
     };
 }

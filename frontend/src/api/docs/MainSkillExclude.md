@@ -7,6 +7,7 @@
 Name | Type
 ------------ | -------------
 `id` | number
+`linkedSkills` | [Array&lt;MainLinkedSkill&gt;](MainLinkedSkill.md)
 `name` | string
 
 ## Example
@@ -17,6 +18,7 @@ import type { MainSkillExclude } from ''
 // TODO: Update the object below with actual values
 const example = {
   "id": null,
+  "linkedSkills": null,
   "name": null,
 } satisfies MainSkillExclude
 

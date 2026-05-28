@@ -14,10 +14,20 @@
 
 import * as runtime from "../runtime";
 import {
+  type MainSkillCreationPayload,
+  MainSkillCreationPayloadFromJSON,
+  MainSkillCreationPayloadToJSON,
+} from "../models/MainSkillCreationPayload";
+import {
   type MainSkillsExcludeResponse,
   MainSkillsExcludeResponseFromJSON,
   MainSkillsExcludeResponseToJSON,
 } from "../models/MainSkillsExcludeResponse";
+import {
+  type MainSkillsNotOwnedResponse,
+  MainSkillsNotOwnedResponseFromJSON,
+  MainSkillsNotOwnedResponseToJSON,
+} from "../models/MainSkillsNotOwnedResponse";
 import {
   type MainSkillsResponse,
   MainSkillsResponseFromJSON,
@@ -29,7 +39,15 @@ import {
   MainUsersSkillsResponseToJSON,
 } from "../models/MainUsersSkillsResponse";
 
+export interface V1LevelupApiCreateSkillPostRequest {
+  body: MainSkillCreationPayload;
+}
+
 export interface V1LevelupApiSkillsGetRequest {
+  name?: string;
+}
+
+export interface V1LevelupApiSkillsNotUserGetRequest {
   name?: string;
 }
 
@@ -43,6 +61,62 @@ export interface V1LevelupApiUserSkillsExcludeGetRequest {
  *
  */
 export class SkillsApi extends runtime.BaseAPI {
+  /**
+   * Creates request options for v1LevelupApiCreateSkillPost without sending the request
+   */
+  async v1LevelupApiCreateSkillPostRequestOpts(
+    requestParameters: V1LevelupApiCreateSkillPostRequest,
+  ): Promise<runtime.RequestOpts> {
+    if (requestParameters["body"] == null) {
+      throw new runtime.RequiredError(
+        "body",
+        'Required parameter "body" was null or undefined when calling v1LevelupApiCreateSkillPost().',
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters["Content-Type"] = "application/json";
+
+    let urlPath = `/v1/levelup_api/create-skill`;
+
+    return {
+      path: urlPath,
+      method: "POST",
+      headers: headerParameters,
+      query: queryParameters,
+      body: MainSkillCreationPayloadToJSON(requestParameters["body"]),
+    };
+  }
+
+  /**
+   * create skill for user
+   * Create skill
+   */
+  async v1LevelupApiCreateSkillPostRaw(
+    requestParameters: V1LevelupApiCreateSkillPostRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<void>> {
+    const requestOptions =
+      await this.v1LevelupApiCreateSkillPostRequestOpts(requestParameters);
+    const response = await this.request(requestOptions, initOverrides);
+
+    return new runtime.VoidApiResponse(response);
+  }
+
+  /**
+   * create skill for user
+   * Create skill
+   */
+  async v1LevelupApiCreateSkillPost(
+    requestParameters: V1LevelupApiCreateSkillPostRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<void> {
+    await this.v1LevelupApiCreateSkillPostRaw(requestParameters, initOverrides);
+  }
+
   /**
    * Creates request options for v1LevelupApiSkillsGet without sending the request
    */
@@ -93,6 +167,62 @@ export class SkillsApi extends runtime.BaseAPI {
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<MainSkillsResponse> {
     const response = await this.v1LevelupApiSkillsGetRaw(
+      requestParameters,
+      initOverrides,
+    );
+    return await response.value();
+  }
+
+  /**
+   * Creates request options for v1LevelupApiSkillsNotUserGet without sending the request
+   */
+  async v1LevelupApiSkillsNotUserGetRequestOpts(
+    requestParameters: V1LevelupApiSkillsNotUserGetRequest,
+  ): Promise<runtime.RequestOpts> {
+    const queryParameters: any = {};
+
+    if (requestParameters["name"] != null) {
+      queryParameters["name"] = requestParameters["name"];
+    }
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    let urlPath = `/v1/levelup_api/skills-not-user`;
+
+    return {
+      path: urlPath,
+      method: "GET",
+      headers: headerParameters,
+      query: queryParameters,
+    };
+  }
+
+  /**
+   * get skills not owned by the user, limited to 200 results
+   * Get skills from database
+   */
+  async v1LevelupApiSkillsNotUserGetRaw(
+    requestParameters: V1LevelupApiSkillsNotUserGetRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<MainSkillsNotOwnedResponse>> {
+    const requestOptions =
+      await this.v1LevelupApiSkillsNotUserGetRequestOpts(requestParameters);
+    const response = await this.request(requestOptions, initOverrides);
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      MainSkillsNotOwnedResponseFromJSON(jsonValue),
+    );
+  }
+
+  /**
+   * get skills not owned by the user, limited to 200 results
+   * Get skills from database
+   */
+  async v1LevelupApiSkillsNotUserGet(
+    requestParameters: V1LevelupApiSkillsNotUserGetRequest = {},
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<MainSkillsNotOwnedResponse> {
+    const response = await this.v1LevelupApiSkillsNotUserGetRaw(
       requestParameters,
       initOverrides,
     );

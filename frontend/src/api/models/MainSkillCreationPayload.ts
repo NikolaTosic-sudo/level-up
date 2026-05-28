@@ -24,59 +24,58 @@ import {
 /**
  * 
  * @export
- * @interface MainSkillExclude
+ * @interface MainSkillCreationPayload
  */
-export interface MainSkillExclude {
+export interface MainSkillCreationPayload {
     /**
      * 
      * @type {number}
-     * @memberof MainSkillExclude
+     * @memberof MainSkillCreationPayload
      */
-    id: number;
+    id?: number;
     /**
      * 
      * @type {Array<MainLinkedSkill>}
-     * @memberof MainSkillExclude
+     * @memberof MainSkillCreationPayload
      */
     linkedSkills?: Array<MainLinkedSkill>;
     /**
      * 
      * @type {string}
-     * @memberof MainSkillExclude
+     * @memberof MainSkillCreationPayload
      */
     name: string;
 }
 
 /**
- * Check if a given object implements the MainSkillExclude interface.
+ * Check if a given object implements the MainSkillCreationPayload interface.
  */
-export function instanceOfMainSkillExclude(value: object): value is MainSkillExclude {
-    if (!('id' in value) || value['id'] === undefined) return false;
+export function instanceOfMainSkillCreationPayload(value: object): value is MainSkillCreationPayload {
     if (!('name' in value) || value['name'] === undefined) return false;
     return true;
 }
 
-export function MainSkillExcludeFromJSON(json: any): MainSkillExclude {
-    return MainSkillExcludeFromJSONTyped(json, false);
+export function MainSkillCreationPayloadFromJSON(json: any): MainSkillCreationPayload {
+    return MainSkillCreationPayloadFromJSONTyped(json, false);
 }
 
-export function MainSkillExcludeFromJSONTyped(json: any, ignoreDiscriminator: boolean): MainSkillExclude {
+export function MainSkillCreationPayloadFromJSONTyped(json: any, ignoreDiscriminator: boolean): MainSkillCreationPayload {
     if (json == null) {
         return json;
     }
     return {
         
-        'id': json['id'],
+        'id': json['id'] == null ? undefined : json['id'],
         'linkedSkills': json['linkedSkills'] == null ? undefined : ((json['linkedSkills'] as Array<any>).map(MainLinkedSkillFromJSON)),
         'name': json['name'],
     };
 }
 
-export function MainSkillExcludeToJSON(json: any): MainSkillExclude {
-    return MainSkillExcludeToJSONTyped(json, false);
+export function MainSkillCreationPayloadToJSON(json: any): MainSkillCreationPayload {
+    return MainSkillCreationPayloadToJSONTyped(json, false);
 }
 
-export function MainSkillExcludeToJSONTyped(value?: MainSkillExclude | null, ignoreDiscriminator: boolean = false): any {
+export function MainSkillCreationPayloadToJSONTyped(value?: MainSkillCreationPayload | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

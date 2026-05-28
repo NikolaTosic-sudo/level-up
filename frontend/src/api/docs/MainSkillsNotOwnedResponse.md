@@ -1,32 +1,22 @@
 
-# MainSkill
+# MainSkillsNotOwnedResponse
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`experience` | number
-`experienceNeeded` | number
-`id` | number
-`level` | number
-`linkedSkills` | [Array&lt;MainLinkedSkill&gt;](MainLinkedSkill.md)
-`name` | string
+`skills` | [Array&lt;DatabaseGetSkillsNotOwnedByUserRow&gt;](DatabaseGetSkillsNotOwnedByUserRow.md)
 
 ## Example
 
 ```typescript
-import type { MainSkill } from ''
+import type { MainSkillsNotOwnedResponse } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "experience": null,
-  "experienceNeeded": null,
-  "id": null,
-  "level": null,
-  "linkedSkills": null,
-  "name": null,
-} satisfies MainSkill
+  "skills": null,
+} satisfies MainSkillsNotOwnedResponse
 
 console.log(example)
 
@@ -35,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as MainSkill
+const exampleParsed = JSON.parse(exampleJSON) as MainSkillsNotOwnedResponse
 console.log(exampleParsed)
 ```
 
