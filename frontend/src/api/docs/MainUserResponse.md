@@ -7,6 +7,8 @@
 Name | Type
 ------------ | -------------
 `bio` | string
+`highestLeveledSkill` | string
+`mostRecentLeveledSkill` | string
 `profile` | [MainProfileResponse](MainProfileResponse.md)
 
 ## Example
@@ -17,6 +19,8 @@ import type { MainUserResponse } from ''
 // TODO: Update the object below with actual values
 const example = {
   "bio": null,
+  "highestLeveledSkill": null,
+  "mostRecentLeveledSkill": null,
   "profile": null,
 } satisfies MainUserResponse
 

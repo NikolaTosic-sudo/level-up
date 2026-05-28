@@ -35,6 +35,18 @@ export interface MainUserResponse {
     bio?: string;
     /**
      * 
+     * @type {string}
+     * @memberof MainUserResponse
+     */
+    highestLeveledSkill?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MainUserResponse
+     */
+    mostRecentLeveledSkill?: string;
+    /**
+     * 
      * @type {MainProfileResponse}
      * @memberof MainUserResponse
      */
@@ -60,6 +72,8 @@ export function MainUserResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     return {
         
         'bio': json['bio'] == null ? undefined : json['bio'],
+        'highestLeveledSkill': json['highestLeveledSkill'] == null ? undefined : json['highestLeveledSkill'],
+        'mostRecentLeveledSkill': json['mostRecentLeveledSkill'] == null ? undefined : json['mostRecentLeveledSkill'],
         'profile': MainProfileResponseFromJSON(json['profile']),
     };
 }
@@ -76,6 +90,8 @@ export function MainUserResponseToJSONTyped(value?: MainUserResponse | null, ign
     return {
         
         'bio': value['bio'],
+        'highestLeveledSkill': value['highestLeveledSkill'],
+        'mostRecentLeveledSkill': value['mostRecentLeveledSkill'],
         'profile': MainProfileResponseToJSON(value['profile']),
     };
 }
