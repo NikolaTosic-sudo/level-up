@@ -99,6 +99,10 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 					Valid: true,
 				},
 				UserID: userID,
+				Type: sql.NullString{
+					String: "d",
+					Valid:  true,
+				},
 			})
 			if err != nil {
 				writeJSONError(w, http.StatusInternalServerError, "error", err)

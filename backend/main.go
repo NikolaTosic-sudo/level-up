@@ -69,6 +69,7 @@ func main() {
 	r.Get("/v1/levelup_api/user/skills", cfg.getUsersSkillsHandler)
 	r.Get("/v1/levelup_api/user/skills_exclude", cfg.getUsersSkillsExcludeHandler)
 	r.Get("/v1/levelup_api/skills-not-user", cfg.getSkillsNotOwnedByUserHandler)
+	r.Get("/v1/levelup_api/quests", cfg.getUsersQuests)
 
 	r.Post("/v1/levelup_api/signUp", cfg.signupHandler)
 	r.Post("/v1/levelup_api/logIn", cfg.loginHandler)
