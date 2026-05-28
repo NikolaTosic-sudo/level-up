@@ -7,6 +7,7 @@
 Name | Type
 ------------ | -------------
 `id` | number
+`isNew` | boolean
 `linkedSkills` | [Array&lt;MainLinkedSkill&gt;](MainLinkedSkill.md)
 `name` | string
 
@@ -18,6 +19,7 @@ import type { MainSkillCreationPayload } from ''
 // TODO: Update the object below with actual values
 const example = {
   "id": null,
+  "isNew": null,
   "linkedSkills": null,
   "name": null,
 } satisfies MainSkillCreationPayload

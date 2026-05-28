@@ -35,6 +35,12 @@ export interface MainSkillCreationPayload {
     id?: number;
     /**
      * 
+     * @type {boolean}
+     * @memberof MainSkillCreationPayload
+     */
+    isNew?: boolean;
+    /**
+     * 
      * @type {Array<MainLinkedSkill>}
      * @memberof MainSkillCreationPayload
      */
@@ -66,6 +72,7 @@ export function MainSkillCreationPayloadFromJSONTyped(json: any, ignoreDiscrimin
     return {
         
         'id': json['id'] == null ? undefined : json['id'],
+        'isNew': json['isNew'] == null ? undefined : json['isNew'],
         'linkedSkills': json['linkedSkills'] == null ? undefined : ((json['linkedSkills'] as Array<any>).map(MainLinkedSkillFromJSON)),
         'name': json['name'],
     };
@@ -83,6 +90,7 @@ export function MainSkillCreationPayloadToJSONTyped(value?: MainSkillCreationPay
     return {
         
         'id': value['id'],
+        'isNew': value['isNew'],
         'linkedSkills': value['linkedSkills'] == null ? undefined : ((value['linkedSkills'] as Array<any>).map(MainLinkedSkillToJSON)),
         'name': value['name'],
     };

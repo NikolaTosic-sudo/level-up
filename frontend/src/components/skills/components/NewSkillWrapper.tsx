@@ -7,12 +7,16 @@ import SelectSkills from "../../profileCreation/components/SelectSkills";
 import { Form } from "antd";
 import { useEditSkill } from "../hooks/useEditSkill";
 
+type BaseSkill = {
+  id?: number;
+  name?: string;
+  isNew?: boolean;
+};
+
 function NewSkillWrapper() {
   const { t } = useTranslation();
   const { mutate } = useEditSkill();
-  const [skill, setSkill] = useState<{ id?: number; name?: string } | null>(
-    null,
-  );
+  const [skill, setSkill] = useState<BaseSkill | null>(null);
 
   const [form] = Form.useForm();
 
@@ -28,13 +32,19 @@ function NewSkillWrapper() {
       onOk={() => {
         if (skill && skill.name) {
           const values = form.getFieldsValue();
-          mutate({
-            body: {
-              name: skill?.name,
-              id: skill?.id,
-              linkedSkills: values?.skills ?? [],
+          mutate(
+            {
+              body: {
+                name: skill?.name,
+                id: skill?.id,
+                linkedSkills: values?.skills ?? [],
+                isNew: skill?.isNew,
+              },
             },
-          });
+            {
+              onSuccess: () => setSkill(null),
+            },
+          );
         }
       }}
       onCancel={() => setSkill(null)}

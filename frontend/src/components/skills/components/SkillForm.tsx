@@ -24,7 +24,7 @@ function SkillForm({ skill, formInstance }: SkillFormProps) {
   const [form] = Form.useForm();
 
   return (
-    <Form form={formInstance ?? form}>
+    <Form clearOnDestroy form={formInstance ?? form}>
       <Flex className="skill-form" align="center">
         <Typography.Title level={3}>{skill?.name}</Typography.Title>
         <>

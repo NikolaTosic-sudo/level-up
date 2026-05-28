@@ -24,7 +24,7 @@ type Skill =
 export type Mode = "excludeSelectedUsersSkills" | "excludeAllUsersSkills";
 
 type SelectSkillsProps = {
-  onChange?: (skill: { id?: number; name?: string }) => void;
+  onChange?: (skill: { id?: number; name?: string; isNew?: boolean }) => void;
   mode?: Mode;
   marginLeft?: number;
   excludeSkill?: string;
@@ -63,11 +63,16 @@ const SelectSkills = ({
     setSkill(event.target.value);
   };
 
-  function handleChange(_selectedString: string, option?: Skill) {
+  function handleChange(
+    _selectedString: string,
+    option?: Skill,
+    isNew?: boolean,
+  ) {
     if (option && !Array.isArray(option)) {
       const skill = {
         id: option.value,
         name: option.label,
+        isNew: isNew,
       };
       if (onChange) {
         onChange(skill);
@@ -104,9 +109,9 @@ const SelectSkills = ({
       setSkill("");
 
       if (onChange) {
-        onChange({ id: 0, name: skill });
+        onChange({ id: 0, name: skill, isNew: true });
       } else {
-        handleChange("", { value: 0, label: skill });
+        handleChange("", { value: 0, label: skill }, true);
       }
     }
   };

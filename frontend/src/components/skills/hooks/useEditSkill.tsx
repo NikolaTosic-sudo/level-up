@@ -25,7 +25,13 @@ export function useEditSkill() {
             }),
       );
 
-      query.invalidateQueries({ queryKey: ["useGetUsersSkills"] });
+      query.invalidateQueries({
+        queryKey: ["useGetUsersSkills"],
+      });
+
+      query.invalidateQueries({
+        queryKey: ["useGetSkills"],
+      });
     },
     onError: async (e: ApiError) => {
       message.error(<ErrorMessageComponent error={e} />);

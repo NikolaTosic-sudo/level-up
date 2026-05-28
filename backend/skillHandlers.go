@@ -29,6 +29,7 @@ type LinkedSkill struct {
 type SkillCreationPayload struct {
 	ID           int32         `json:"id"`
 	Name         string        `json:"name" binding:"required"`
+	IsNew        bool          `json:"isNew"`
 	LinkedSkills []LinkedSkill `json:"linkedSkills"`
 }
 
@@ -248,7 +249,7 @@ func (cfg *appConfig) skillEditHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if body.ID == 0 {
+	if body.IsNew {
 		skillId, err := cfg.database.CreateSkill(r.Context(), body.Name)
 		if err != nil {
 			writeJSONError(w, http.StatusInternalServerError, "error", err)

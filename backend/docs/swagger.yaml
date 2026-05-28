@@ -105,6 +105,8 @@ definitions:
     properties:
       id:
         type: integer
+      isNew:
+        type: boolean
       linkedSkills:
         items:
           $ref: '#/definitions/main.LinkedSkill'

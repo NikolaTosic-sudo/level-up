@@ -483,6 +483,9 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "isNew": {
+                    "type": "boolean"
+                },
                 "linkedSkills": {
                     "type": "array",
                     "items": {
