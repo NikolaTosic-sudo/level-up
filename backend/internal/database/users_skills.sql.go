@@ -13,7 +13,30 @@ import (
 )
 
 const createUsersSkills = `-- name: CreateUsersSkills :exec
-INSERT INTO users_skills(user_id, skill_id, created_at, updated_at, name, experience, experience_needed, level) VALUES ($1, $2, NOW(), NOW(), $3, 0, 100, 1)
+INSERT INTO users_skills(
+  user_id,
+  skill_id,
+  created_at,
+  updated_at,
+  name,
+  experience,
+  experience_needed,
+  level
+) VALUES (
+  $1,
+  $2,
+  NOW(),
+  NOW(),
+  $3,
+  0,
+  100,
+  1
+)
+ON CONFLICT (user_id, skill_id)
+DO UPDATE SET
+  deleted_at = NULL,
+  deleted_reason = NULL,
+  updated_at = NOW()
 `
 
 type CreateUsersSkillsParams struct {
@@ -27,24 +50,10 @@ func (q *Queries) CreateUsersSkills(ctx context.Context, arg CreateUsersSkillsPa
 	return err
 }
 
-const createUsersSkillsLinks = `-- name: CreateUsersSkillsLinks :exec
-INSERT INTO users_skills_links(user_id, parent_skill_id, child_skill_id, created_at, updated_at) VALUES ($1, $2, $3, NOW(), NOW())
-`
-
-type CreateUsersSkillsLinksParams struct {
-	UserID        uuid.UUID `json:"user_id"`
-	ParentSkillID int32     `json:"parent_skill_id"`
-	ChildSkillID  int32     `json:"child_skill_id"`
-}
-
-func (q *Queries) CreateUsersSkillsLinks(ctx context.Context, arg CreateUsersSkillsLinksParams) error {
-	_, err := q.db.ExecContext(ctx, createUsersSkillsLinks, arg.UserID, arg.ParentSkillID, arg.ChildSkillID)
-	return err
-}
-
 const deactivateRemovedLinkedSkills = `-- name: DeactivateRemovedLinkedSkills :exec
 UPDATE users_skills_links
 SET deleted_at = NOW(),
+    deleted_reason = 'manual',
     updated_at = NOW()
 WHERE user_id = $1
   AND parent_skill_id = $2
@@ -103,7 +112,9 @@ LEFT JOIN users_skills_links link
 LEFT JOIN users_skills child
   ON child.user_id = parent.user_id
   AND child.skill_id = link.child_skill_id
+  AND child.deleted_at IS NULL
 WHERE parent.user_id = $1
+  AND parent.deleted_at IS NULL
 GROUP BY
   parent.skill_id,
   parent.name,
@@ -227,6 +238,43 @@ func (q *Queries) GetUsersSkillsLinkedID(ctx context.Context, arg GetUsersSkills
 	return items, nil
 }
 
+const softDeleteUserSkill = `-- name: SoftDeleteUserSkill :exec
+WITH deleted_skill AS (
+  UPDATE users_skills
+  SET
+    deleted_at = NOW(),
+    deleted_reason = 'manual',
+    updated_at = NOW()
+  WHERE users_skills.user_id = $1
+    AND users_skills.skill_id = $2
+    AND users_skills.deleted_at IS NULL
+)
+UPDATE users_skills_links
+SET
+  deleted_at = NOW(),
+  deleted_reason = CASE
+    WHEN parent_skill_id = $2 THEN 'parent_skill_deleted'
+    WHEN child_skill_id = $2 THEN 'child_skill_deleted'
+  END,
+  updated_at = NOW()
+WHERE users_skills_links.user_id = $1
+  AND users_skills_links.deleted_at IS NULL
+  AND (
+    parent_skill_id = $2
+    OR child_skill_id = $2
+  )
+`
+
+type SoftDeleteUserSkillParams struct {
+	UserID        uuid.UUID `json:"user_id"`
+	ParentSkillID int32     `json:"parent_skill_id"`
+}
+
+func (q *Queries) SoftDeleteUserSkill(ctx context.Context, arg SoftDeleteUserSkillParams) error {
+	_, err := q.db.ExecContext(ctx, softDeleteUserSkill, arg.UserID, arg.ParentSkillID)
+	return err
+}
+
 const upsertLinkedSkills = `-- name: UpsertLinkedSkills :exec
 INSERT INTO users_skills_links (
   user_id,
@@ -247,6 +295,7 @@ FROM unnest($3::int[]) AS child_id
 ON CONFLICT (user_id, parent_skill_id, child_skill_id)
 DO UPDATE SET
   deleted_at = NULL,
+  deleted_reason = NULL,
   updated_at = NOW()
 `
 

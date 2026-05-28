@@ -64,23 +64,26 @@ type User struct {
 }
 
 type UsersSkill struct {
-	UserID           uuid.UUID `json:"user_id"`
-	SkillID          int32     `json:"skill_id"`
-	Name             string    `json:"name"`
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
-	Experience       int32     `json:"experience"`
-	ExperienceNeeded int32     `json:"experience_needed"`
-	Level            int32     `json:"level"`
+	UserID           uuid.UUID      `json:"user_id"`
+	SkillID          int32          `json:"skill_id"`
+	Name             string         `json:"name"`
+	CreatedAt        time.Time      `json:"created_at"`
+	UpdatedAt        time.Time      `json:"updated_at"`
+	Experience       int32          `json:"experience"`
+	ExperienceNeeded int32          `json:"experience_needed"`
+	Level            int32          `json:"level"`
+	DeletedAt        sql.NullTime   `json:"deleted_at"`
+	DeletedReason    sql.NullString `json:"deleted_reason"`
 }
 
 type UsersSkillsLink struct {
-	UserID        uuid.UUID    `json:"user_id"`
-	ParentSkillID int32        `json:"parent_skill_id"`
-	ChildSkillID  int32        `json:"child_skill_id"`
-	CreatedAt     time.Time    `json:"created_at"`
-	UpdatedAt     time.Time    `json:"updated_at"`
-	DeletedAt     sql.NullTime `json:"deleted_at"`
+	UserID        uuid.UUID      `json:"user_id"`
+	ParentSkillID int32          `json:"parent_skill_id"`
+	ChildSkillID  int32          `json:"child_skill_id"`
+	CreatedAt     time.Time      `json:"created_at"`
+	UpdatedAt     time.Time      `json:"updated_at"`
+	DeletedAt     sql.NullTime   `json:"deleted_at"`
+	DeletedReason sql.NullString `json:"deleted_reason"`
 }
 
 type UsersStat struct {

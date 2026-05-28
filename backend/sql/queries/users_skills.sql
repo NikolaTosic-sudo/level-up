@@ -25,7 +25,9 @@ LEFT JOIN users_skills_links link
 LEFT JOIN users_skills child
   ON child.user_id = parent.user_id
   AND child.skill_id = link.child_skill_id
+  AND child.deleted_at IS NULL
 WHERE parent.user_id = $1
+  AND parent.deleted_at IS NULL
 GROUP BY
   parent.skill_id,
   parent.name,
@@ -40,14 +42,35 @@ SELECT name, skill_id FROM users_skills WHERE user_id = $1 AND name LIKE $2 AND 
 SELECT child_skill_id FROM users_skills_links WHERE parent_skill_id = $1 AND user_id = $2 AND deleted_at IS NULL;
 
 -- name: CreateUsersSkills :exec
-INSERT INTO users_skills(user_id, skill_id, created_at, updated_at, name, experience, experience_needed, level) VALUES ($1, $2, NOW(), NOW(), $3, 0, 100, 1);
-
--- name: CreateUsersSkillsLinks :exec
-INSERT INTO users_skills_links(user_id, parent_skill_id, child_skill_id, created_at, updated_at) VALUES ($1, $2, $3, NOW(), NOW());
+INSERT INTO users_skills(
+  user_id,
+  skill_id,
+  created_at,
+  updated_at,
+  name,
+  experience,
+  experience_needed,
+  level
+) VALUES (
+  $1,
+  $2,
+  NOW(),
+  NOW(),
+  $3,
+  0,
+  100,
+  1
+)
+ON CONFLICT (user_id, skill_id)
+DO UPDATE SET
+  deleted_at = NULL,
+  deleted_reason = NULL,
+  updated_at = NOW();
 
 -- name: DeactivateRemovedLinkedSkills :exec
 UPDATE users_skills_links
 SET deleted_at = NOW(),
+    deleted_reason = 'manual',
     updated_at = NOW()
 WHERE user_id = $1
   AND parent_skill_id = $2
@@ -74,4 +97,31 @@ FROM unnest($3::int[]) AS child_id
 ON CONFLICT (user_id, parent_skill_id, child_skill_id)
 DO UPDATE SET
   deleted_at = NULL,
+  deleted_reason = NULL,
   updated_at = NOW();
+
+-- name: SoftDeleteUserSkill :exec
+WITH deleted_skill AS (
+  UPDATE users_skills
+  SET
+    deleted_at = NOW(),
+    deleted_reason = 'manual',
+    updated_at = NOW()
+  WHERE users_skills.user_id = $1
+    AND users_skills.skill_id = $2
+    AND users_skills.deleted_at IS NULL
+)
+UPDATE users_skills_links
+SET
+  deleted_at = NOW(),
+  deleted_reason = CASE
+    WHEN parent_skill_id = $2 THEN 'parent_skill_deleted'
+    WHEN child_skill_id = $2 THEN 'child_skill_deleted'
+  END,
+  updated_at = NOW()
+WHERE users_skills_links.user_id = $1
+  AND users_skills_links.deleted_at IS NULL
+  AND (
+    parent_skill_id = $2
+    OR child_skill_id = $2
+  );

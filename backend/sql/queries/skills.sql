@@ -14,6 +14,7 @@ WHERE s.name LIKE $1 AND NOT EXISTS (
   FROM users_skills us
   WHERE us.user_id = $2
     AND us.skill_id = s.id
+    AND us.deleted_at IS NULL
 )
 LIMIT 200;
 
