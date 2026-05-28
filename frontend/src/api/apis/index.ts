@@ -2,4 +2,5 @@
 /* eslint-disable */
 export * from './LoginApi';
 export * from './PlayerApi';
+export * from './QuestsApi';
 export * from './SkillsApi';

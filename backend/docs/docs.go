@@ -111,6 +111,25 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/levelup_api/quests": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Quests"
+                ],
+                "summary": "Get all quests for the user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.QuestsReponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/signUp": {
             "post": {
                 "description": "take the email and the password, hash the password, create the user and make cookies",
@@ -363,6 +382,50 @@ const docTemplate = `{
                 }
             }
         },
+        "main.CustomQuest": {
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "experience": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.QuestsSkills"
+                    }
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "subQuests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.RepeatingQuest"
+                    }
+                },
+                "subQuestsCompleted": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
         "main.LinkedSkill": {
             "type": "object",
             "required": [
@@ -464,6 +527,76 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.QuestsReponse": {
+            "type": "object",
+            "properties": {
+                "customQuests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.CustomQuest"
+                    }
+                },
+                "repeatingQuests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.TypeRepeatingQuest"
+                    }
+                }
+            }
+        },
+        "main.QuestsSkills": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.RepeatingQuest": {
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "completed": {
+                    "type": "boolean"
+                },
+                "experience": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.QuestsSkills"
+                    }
+                },
+                "subQuests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.RepeatingQuest"
+                    }
+                },
+                "subQuestsCompleted": {
+                    "type": "integer"
+                },
+                "type": {
                     "type": "string"
                 }
             }
@@ -582,6 +715,23 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/database.GetSkillsByNameRow"
                     }
+                }
+            }
+        },
+        "main.TypeRepeatingQuest": {
+            "type": "object",
+            "required": [
+                "type"
+            ],
+            "properties": {
+                "quests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.RepeatingQuest"
+                    }
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },

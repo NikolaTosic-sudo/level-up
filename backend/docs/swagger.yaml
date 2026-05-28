@@ -13,6 +13,35 @@ definitions:
       name:
         type: string
     type: object
+  main.CustomQuest:
+    properties:
+      completed:
+        type: boolean
+      end_date:
+        type: string
+      experience:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      skills:
+        items:
+          $ref: '#/definitions/main.QuestsSkills'
+        type: array
+      start_date:
+        type: string
+      subQuests:
+        items:
+          $ref: '#/definitions/main.RepeatingQuest'
+        type: array
+      subQuestsCompleted:
+        type: integer
+      type:
+        type: string
+    required:
+    - type
+    type: object
   main.LinkedSkill:
     properties:
       id:
@@ -81,6 +110,52 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  main.QuestsReponse:
+    properties:
+      customQuests:
+        items:
+          $ref: '#/definitions/main.CustomQuest'
+        type: array
+      repeatingQuests:
+        items:
+          $ref: '#/definitions/main.TypeRepeatingQuest'
+        type: array
+    type: object
+  main.QuestsSkills:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
+    type: object
+  main.RepeatingQuest:
+    properties:
+      completed:
+        type: boolean
+      experience:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      skills:
+        items:
+          $ref: '#/definitions/main.QuestsSkills'
+        type: array
+      subQuests:
+        items:
+          $ref: '#/definitions/main.RepeatingQuest'
+        type: array
+      subQuestsCompleted:
+        type: integer
+      type:
+        type: string
+    required:
+    - type
     type: object
   main.Skill:
     properties:
@@ -157,6 +232,17 @@ definitions:
         items:
           $ref: '#/definitions/database.GetSkillsByNameRow'
         type: array
+    type: object
+  main.TypeRepeatingQuest:
+    properties:
+      quests:
+        items:
+          $ref: '#/definitions/main.RepeatingQuest'
+        type: array
+      type:
+        type: string
+    required:
+    - type
     type: object
   main.UpdateUserBody:
     properties:
@@ -267,6 +353,18 @@ paths:
       summary: Log In the user
       tags:
       - Login
+  /v1/levelup_api/quests:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.QuestsReponse'
+      summary: Get all quests for the user
+      tags:
+      - Quests
   /v1/levelup_api/signUp:
     post:
       consumes:
