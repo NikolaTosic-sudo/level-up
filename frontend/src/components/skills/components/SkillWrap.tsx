@@ -5,6 +5,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import PopconfirmComponent from "../../common/PopconfirmComponent";
 import type { MainSkill } from "../../../api";
+import { useDeleteSkill } from "../hooks/useDeleteSkill";
 
 type SkillWrapProps = {
   skill: MainSkill;
@@ -14,8 +15,14 @@ function SkillWrap({ skill }: SkillWrapProps) {
   const { t } = useTranslation();
   const { isHovered, bind, setIsHovered } = useHover();
 
+  const { mutate: deleteSkill } = useDeleteSkill();
+
   const handleExit = () => {
     setTimeout(() => setIsHovered(false), 200);
+  };
+
+  const handleDelete = () => {
+    deleteSkill({ id: skill.id ?? 0 });
   };
 
   return (
@@ -51,6 +58,7 @@ function SkillWrap({ skill }: SkillWrapProps) {
               defaultValue: "Are you sure you want to remove this skill?",
             })}
             cancelButtonProps={{ danger: true, type: "primary" }}
+            onConfirm={handleDelete}
           >
             <Tooltip
               title={t("skill.tooltip.remove", {
