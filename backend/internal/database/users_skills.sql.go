@@ -42,6 +42,27 @@ func (q *Queries) CreateUsersSkillsLinks(ctx context.Context, arg CreateUsersSki
 	return err
 }
 
+const deactivateRemovedLinkedSkills = `-- name: DeactivateRemovedLinkedSkills :exec
+UPDATE users_skills_links
+SET deleted_at = NOW(),
+    updated_at = NOW()
+WHERE user_id = $1
+  AND parent_skill_id = $2
+  AND deleted_at IS NULL
+  AND child_skill_id != ALL($3::int[])
+`
+
+type DeactivateRemovedLinkedSkillsParams struct {
+	UserID        uuid.UUID `json:"user_id"`
+	ParentSkillID int32     `json:"parent_skill_id"`
+	Column3       []int32   `json:"column_3"`
+}
+
+func (q *Queries) DeactivateRemovedLinkedSkills(ctx context.Context, arg DeactivateRemovedLinkedSkillsParams) error {
+	_, err := q.db.ExecContext(ctx, deactivateRemovedLinkedSkills, arg.UserID, arg.ParentSkillID, pq.Array(arg.Column3))
+	return err
+}
+
 const getUserSkillID = `-- name: GetUserSkillID :one
 SELECT skill_id FROM users_skills WHERE user_id = $1 AND name = $2
 `
@@ -59,14 +80,45 @@ func (q *Queries) GetUserSkillID(ctx context.Context, arg GetUserSkillIDParams) 
 }
 
 const getUsersSkills = `-- name: GetUsersSkills :many
-SELECT name, experience, experience_needed, level FROM users_skills WHERE user_id = $1
+SELECT
+  parent.skill_id,
+  parent.name,
+  parent.experience,
+  parent.experience_needed,
+  parent.level,
+COALESCE(
+  jsonb_agg(
+    jsonb_build_object(
+      'id', child.skill_id,
+      'name', child.name
+    )
+  ) FILTER (WHERE child.skill_id IS NOT NULL),
+  '[]'::jsonb
+)::text AS linked_skills
+FROM users_skills parent
+LEFT JOIN users_skills_links link
+  ON link.user_id = parent.user_id
+  AND link.parent_skill_id = parent.skill_id
+  AND link.deleted_at IS NULL
+LEFT JOIN users_skills child
+  ON child.user_id = parent.user_id
+  AND child.skill_id = link.child_skill_id
+WHERE parent.user_id = $1
+GROUP BY
+  parent.skill_id,
+  parent.name,
+  parent.experience,
+  parent.experience_needed,
+  parent.level
 `
 
 type GetUsersSkillsRow struct {
+	SkillID          int32  `json:"skill_id"`
 	Name             string `json:"name"`
 	Experience       int32  `json:"experience"`
 	ExperienceNeeded int32  `json:"experience_needed"`
 	Level            int32  `json:"level"`
+	LinkedSkills     string `json:"linked_skills"`
 }
 
 func (q *Queries) GetUsersSkills(ctx context.Context, userID uuid.UUID) ([]GetUsersSkillsRow, error) {
@@ -79,10 +131,12 @@ func (q *Queries) GetUsersSkills(ctx context.Context, userID uuid.UUID) ([]GetUs
 	for rows.Next() {
 		var i GetUsersSkillsRow
 		if err := rows.Scan(
+			&i.SkillID,
 			&i.Name,
 			&i.Experience,
 			&i.ExperienceNeeded,
 			&i.Level,
+			&i.LinkedSkills,
 		); err != nil {
 			return nil, err
 		}
@@ -142,7 +196,7 @@ func (q *Queries) GetUsersSkillsExclude(ctx context.Context, arg GetUsersSkillsE
 }
 
 const getUsersSkillsLinkedID = `-- name: GetUsersSkillsLinkedID :many
-SELECT child_skill_id FROM users_skills_links WHERE parent_skill_id = $1 AND user_id = $2
+SELECT child_skill_id FROM users_skills_links WHERE parent_skill_id = $1 AND user_id = $2 AND deleted_at IS NULL
 `
 
 type GetUsersSkillsLinkedIDParams struct {
@@ -171,4 +225,38 @@ func (q *Queries) GetUsersSkillsLinkedID(ctx context.Context, arg GetUsersSkills
 		return nil, err
 	}
 	return items, nil
+}
+
+const upsertLinkedSkills = `-- name: UpsertLinkedSkills :exec
+INSERT INTO users_skills_links (
+  user_id,
+  parent_skill_id,
+  child_skill_id,
+  created_at,
+  updated_at,
+  deleted_at
+)
+SELECT
+  $1,
+  $2,
+  child_id,
+  NOW(),
+  NOW(),
+  NULL
+FROM unnest($3::int[]) AS child_id
+ON CONFLICT (user_id, parent_skill_id, child_skill_id)
+DO UPDATE SET
+  deleted_at = NULL,
+  updated_at = NOW()
+`
+
+type UpsertLinkedSkillsParams struct {
+	UserID        uuid.UUID `json:"user_id"`
+	ParentSkillID int32     `json:"parent_skill_id"`
+	Column3       []int32   `json:"column_3"`
+}
+
+func (q *Queries) UpsertLinkedSkills(ctx context.Context, arg UpsertLinkedSkillsParams) error {
+	_, err := q.db.ExecContext(ctx, upsertLinkedSkills, arg.UserID, arg.ParentSkillID, pq.Array(arg.Column3))
+	return err
 }

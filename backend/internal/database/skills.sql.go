@@ -7,6 +7,8 @@ package database
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 const createSkill = `-- name: CreateSkill :one
@@ -65,6 +67,50 @@ func (q *Queries) GetSkillsByName(ctx context.Context, name string) ([]GetSkills
 	var items []GetSkillsByNameRow
 	for rows.Next() {
 		var i GetSkillsByNameRow
+		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSkillsNotOwnedByUser = `-- name: GetSkillsNotOwnedByUser :many
+SELECT s.id, s.name FROM skills s
+WHERE s.name LIKE $1 AND NOT EXISTS (
+  SELECT 1
+  FROM users_skills us
+  WHERE us.user_id = $2
+    AND us.skill_id = s.id
+)
+LIMIT 200
+`
+
+type GetSkillsNotOwnedByUserParams struct {
+	Name   string    `json:"name"`
+	UserID uuid.UUID `json:"user_id"`
+}
+
+type GetSkillsNotOwnedByUserRow struct {
+	ID   int32  `json:"id"`
+	Name string `json:"name"`
+}
+
+func (q *Queries) GetSkillsNotOwnedByUser(ctx context.Context, arg GetSkillsNotOwnedByUserParams) ([]GetSkillsNotOwnedByUserRow, error) {
+	rows, err := q.db.QueryContext(ctx, getSkillsNotOwnedByUser, arg.Name, arg.UserID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetSkillsNotOwnedByUserRow
+	for rows.Next() {
+		var i GetSkillsNotOwnedByUserRow
 		if err := rows.Scan(&i.ID, &i.Name); err != nil {
 			return nil, err
 		}

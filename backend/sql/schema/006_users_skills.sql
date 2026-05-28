@@ -20,6 +20,7 @@ CREATE TABLE users_skills_links(
 
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
+  deleted_at TIMESTAMP NULL,
 
   PRIMARY KEY (user_id, parent_skill_id, child_skill_id),
 

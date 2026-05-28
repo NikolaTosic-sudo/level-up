@@ -75,11 +75,12 @@ type UsersSkill struct {
 }
 
 type UsersSkillsLink struct {
-	UserID        uuid.UUID `json:"user_id"`
-	ParentSkillID int32     `json:"parent_skill_id"`
-	ChildSkillID  int32     `json:"child_skill_id"`
-	CreatedAt     time.Time `json:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at"`
+	UserID        uuid.UUID    `json:"user_id"`
+	ParentSkillID int32        `json:"parent_skill_id"`
+	ChildSkillID  int32        `json:"child_skill_id"`
+	CreatedAt     time.Time    `json:"created_at"`
+	UpdatedAt     time.Time    `json:"updated_at"`
+	DeletedAt     sql.NullTime `json:"deleted_at"`
 }
 
 type UsersStat struct {
