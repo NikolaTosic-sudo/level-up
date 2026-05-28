@@ -12,7 +12,11 @@ type SkillWrapProps = {
 
 function SkillWrap({ skill }: SkillWrapProps) {
   const { t } = useTranslation();
-  const { isHovered, bind } = useHover();
+  const { isHovered, bind, setIsHovered } = useHover();
+
+  const handleExit = () => {
+    setTimeout(() => setIsHovered(false), 200);
+  };
 
   return (
     <div {...bind} style={{ position: "relative" }}>
@@ -41,7 +45,7 @@ function SkillWrap({ skill }: SkillWrapProps) {
 
       {isHovered ? (
         <div className="skill-actions">
-          <SkillModal skill={skill} />
+          <SkillModal skill={skill} onExit={handleExit} />
           <PopconfirmComponent
             title={t("skill.confirm.remove", {
               defaultValue: "Are you sure you want to remove this skill?",

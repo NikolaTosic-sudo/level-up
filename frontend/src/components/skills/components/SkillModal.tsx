@@ -8,9 +8,10 @@ import { useEditSkill } from "../hooks/useEditSkill";
 
 type SkillModalProps = {
   skill: MainSkill;
+  onExit?: () => void;
 };
 
-function SkillModal({ skill }: SkillModalProps) {
+function SkillModal({ skill, onExit }: SkillModalProps) {
   const { t } = useTranslation();
   const { mutate } = useEditSkill();
 
@@ -29,6 +30,7 @@ function SkillModal({ skill }: SkillModalProps) {
               linkedSkills: values?.skills ?? [],
             },
           });
+          if (onExit) onExit();
         }
       }}
       okText={t("skill.modal.save", { defaultValue: "Save" })}
@@ -40,6 +42,7 @@ function SkillModal({ skill }: SkillModalProps) {
       }}
       buttonTooltip={t("skill.modal.edit", { defaultValue: "Edit skill" })}
       destroyOnHidden
+      onCancel={onExit}
     >
       <SkillForm formInstance={form} skill={skill} />
     </ModalComponent>

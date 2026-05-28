@@ -7,5 +7,5 @@ export function useHover() {
     onMouseLeave: () => setIsHovered(false),
   };
 
-  return { isHovered, bind };
+  return { isHovered, bind, setIsHovered };
 }

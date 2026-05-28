@@ -16,14 +16,16 @@ export function useEditSkill() {
   const mutation = useMutation({
     mutationFn: (data: V1LevelupApiCreateSkillPostRequest) =>
       api.current.v1LevelupApiCreateSkillPost(data),
-    onSuccess: () => {
+    onSuccess: (_, data) => {
       message.success(
-        t("", {
-          defaultValue: "Successfully created skill, refreshing...",
-        }),
+        data.body.id
+          ? t("", { defaultValue: "Successfully edited skill." })
+          : t("", {
+              defaultValue: "Successfully created skill.",
+            }),
       );
 
-      query.invalidateQueries({ queryKey: ["useGetSkill"] });
+      query.invalidateQueries({ queryKey: ["useGetUsersSkills"] });
     },
     onError: async (e: ApiError) => {
       message.error(<ErrorMessageComponent error={e} />);
