@@ -12,18 +12,29 @@ import (
 )
 
 type Quest struct {
-	ID               int64         `json:"id"`
-	CreatedAt        time.Time     `json:"created_at"`
-	UpdatedAt        time.Time     `json:"updated_at"`
-	Name             string        `json:"name"`
-	Experience       sql.NullInt32 `json:"experience"`
-	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
-	Level            sql.NullInt32 `json:"level"`
-	StartDate        sql.NullTime  `json:"start_date"`
-	EndDate          sql.NullTime  `json:"end_date"`
-	Completed        sql.NullBool  `json:"completed"`
-	UserID           uuid.UUID     `json:"user_id"`
-	ParentQuestID    sql.NullInt64 `json:"parent_quest_id"`
+	ID               int64          `json:"id"`
+	CreatedAt        time.Time      `json:"created_at"`
+	UpdatedAt        time.Time      `json:"updated_at"`
+	Name             string         `json:"name"`
+	Experience       sql.NullInt32  `json:"experience"`
+	ExperienceNeeded sql.NullInt32  `json:"experience_needed"`
+	Level            sql.NullInt32  `json:"level"`
+	StartDate        sql.NullTime   `json:"start_date"`
+	EndDate          sql.NullTime   `json:"end_date"`
+	Completed        sql.NullBool   `json:"completed"`
+	UserID           uuid.UUID      `json:"user_id"`
+	ParentQuestID    sql.NullInt64  `json:"parent_quest_id"`
+	CompletedAt      sql.NullTime   `json:"completed_at"`
+	DeletedAt        sql.NullTime   `json:"deleted_at"`
+	Type             sql.NullString `json:"type"`
+}
+
+type QuestsSkill struct {
+	QuestID   int64     `json:"quest_id"`
+	UserID    uuid.UUID `json:"user_id"`
+	SkillID   int32     `json:"skill_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type RefreshToken struct {

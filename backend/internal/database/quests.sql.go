@@ -13,16 +13,256 @@ import (
 )
 
 const createQuest = `-- name: CreateQuest :exec
-INSERT INTO quests(created_at, updated_at, name, experience, user_id) VALUES (NOW(), NOW(), $1, $2, $3)
+INSERT INTO quests(created_at, updated_at, name, experience, user_id, type) VALUES (NOW(), NOW(), $1, $2, $3, $4)
 `
 
 type CreateQuestParams struct {
-	Name       string        `json:"name"`
-	Experience sql.NullInt32 `json:"experience"`
-	UserID     uuid.UUID     `json:"user_id"`
+	Name       string         `json:"name"`
+	Experience sql.NullInt32  `json:"experience"`
+	UserID     uuid.UUID      `json:"user_id"`
+	Type       sql.NullString `json:"type"`
 }
 
 func (q *Queries) CreateQuest(ctx context.Context, arg CreateQuestParams) error {
-	_, err := q.db.ExecContext(ctx, createQuest, arg.Name, arg.Experience, arg.UserID)
+	_, err := q.db.ExecContext(ctx, createQuest,
+		arg.Name,
+		arg.Experience,
+		arg.UserID,
+		arg.Type,
+	)
 	return err
+}
+
+const createSubQuest = `-- name: CreateSubQuest :exec
+INSERT INTO quests(created_at, updated_at, name, experience, user_id, parent_quest_id) VALUES (NOW(), NOW(), $1, $2, $3, $4)
+`
+
+type CreateSubQuestParams struct {
+	Name          string        `json:"name"`
+	Experience    sql.NullInt32 `json:"experience"`
+	UserID        uuid.UUID     `json:"user_id"`
+	ParentQuestID sql.NullInt64 `json:"parent_quest_id"`
+}
+
+func (q *Queries) CreateSubQuest(ctx context.Context, arg CreateSubQuestParams) error {
+	_, err := q.db.ExecContext(ctx, createSubQuest,
+		arg.Name,
+		arg.Experience,
+		arg.UserID,
+		arg.ParentQuestID,
+	)
+	return err
+}
+
+const getQuestSkills = `-- name: GetQuestSkills :many
+SELECT
+  us.skill_id,
+  us.name
+FROM quests_skills qs
+JOIN users_skills us
+  ON us.user_id = qs.user_id
+  AND us.skill_id = qs.skill_id
+WHERE qs.quest_id = $2
+  AND qs.user_id = $1
+  AND us.deleted_at IS NULL
+ORDER BY us.name ASC
+`
+
+type GetQuestSkillsParams struct {
+	UserID  uuid.UUID `json:"user_id"`
+	QuestID int64     `json:"quest_id"`
+}
+
+type GetQuestSkillsRow struct {
+	SkillID int32  `json:"skill_id"`
+	Name    string `json:"name"`
+}
+
+func (q *Queries) GetQuestSkills(ctx context.Context, arg GetQuestSkillsParams) ([]GetQuestSkillsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getQuestSkills, arg.UserID, arg.QuestID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetQuestSkillsRow
+	for rows.Next() {
+		var i GetQuestSkillsRow
+		if err := rows.Scan(&i.SkillID, &i.Name); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSubQuests = `-- name: GetSubQuests :many
+SELECT id, type, name, experience, completed FROM quests
+WHERE user_id = $1
+  AND deleted_at IS NULL
+  AND parent_quest_id = $2
+`
+
+type GetSubQuestsParams struct {
+	UserID        uuid.UUID     `json:"user_id"`
+	ParentQuestID sql.NullInt64 `json:"parent_quest_id"`
+}
+
+type GetSubQuestsRow struct {
+	ID         int64          `json:"id"`
+	Type       sql.NullString `json:"type"`
+	Name       string         `json:"name"`
+	Experience sql.NullInt32  `json:"experience"`
+	Completed  sql.NullBool   `json:"completed"`
+}
+
+func (q *Queries) GetSubQuests(ctx context.Context, arg GetSubQuestsParams) ([]GetSubQuestsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getSubQuests, arg.UserID, arg.ParentQuestID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetSubQuestsRow
+	for rows.Next() {
+		var i GetSubQuestsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Type,
+			&i.Name,
+			&i.Experience,
+			&i.Completed,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUsersCustomQuests = `-- name: GetUsersCustomQuests :many
+SELECT q.id, q.type, q.name, q.experience, q.completed, q.start_date, q.end_date,
+  (
+    SELECT COUNT(*)
+    FROM quests sub
+    WHERE sub.parent_quest_id = q.id
+      AND sub.user_id = q.user_id
+      AND sub.deleted_at IS NULL
+      AND sub.completed = true
+  ) as completed_sub_quests
+FROM quests q
+WHERE q.user_id = $1 
+  AND q.deleted_at IS NULL
+  AND q.type = 'custom'
+ORDER BY q.completed
+`
+
+type GetUsersCustomQuestsRow struct {
+	ID                 int64          `json:"id"`
+	Type               sql.NullString `json:"type"`
+	Name               string         `json:"name"`
+	Experience         sql.NullInt32  `json:"experience"`
+	Completed          sql.NullBool   `json:"completed"`
+	StartDate          sql.NullTime   `json:"start_date"`
+	EndDate            sql.NullTime   `json:"end_date"`
+	CompletedSubQuests int64          `json:"completed_sub_quests"`
+}
+
+func (q *Queries) GetUsersCustomQuests(ctx context.Context, userID uuid.UUID) ([]GetUsersCustomQuestsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getUsersCustomQuests, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUsersCustomQuestsRow
+	for rows.Next() {
+		var i GetUsersCustomQuestsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Type,
+			&i.Name,
+			&i.Experience,
+			&i.Completed,
+			&i.StartDate,
+			&i.EndDate,
+			&i.CompletedSubQuests,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUsersRepeatingQuests = `-- name: GetUsersRepeatingQuests :many
+SELECT q.id, q.type, q.name, q.experience, q.completed,
+  (
+    SELECT COUNT(*)
+    FROM quests sub
+    WHERE sub.parent_quest_id = q.id
+      AND sub.user_id = q.user_id
+      AND sub.deleted_at IS NULL
+      AND sub.completed = true
+  ) as completed_sub_quests
+FROM quests q
+WHERE q.user_id = $1
+  AND q.deleted_at IS NULL 
+  AND q.type != 'custom'
+  AND q.parent_quest_id IS NULL
+ORDER BY q.type, q.completed, q.name
+`
+
+type GetUsersRepeatingQuestsRow struct {
+	ID                 int64          `json:"id"`
+	Type               sql.NullString `json:"type"`
+	Name               string         `json:"name"`
+	Experience         sql.NullInt32  `json:"experience"`
+	Completed          sql.NullBool   `json:"completed"`
+	CompletedSubQuests int64          `json:"completed_sub_quests"`
+}
+
+func (q *Queries) GetUsersRepeatingQuests(ctx context.Context, userID uuid.UUID) ([]GetUsersRepeatingQuestsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getUsersRepeatingQuests, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUsersRepeatingQuestsRow
+	for rows.Next() {
+		var i GetUsersRepeatingQuestsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Type,
+			&i.Name,
+			&i.Experience,
+			&i.Completed,
+			&i.CompletedSubQuests,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
