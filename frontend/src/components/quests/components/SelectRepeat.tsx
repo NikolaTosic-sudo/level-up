@@ -9,19 +9,19 @@ type SelectRepeatProps = {
 
 const options: SelectProps["options"] = [
   {
-    label: t("quest.form.questRepeats.daily", { defaultValue: "Daily" }),
+    label: t("type.d", { defaultValue: "Daily" }),
     value: "d",
   },
   {
-    label: t("quest.form.questRepeats.weekly", { defaultValue: "Weekly" }),
+    label: t("type.w", { defaultValue: "Weekly" }),
     value: "w",
   },
   {
-    label: t("quest.form.questRepeats.monthly", { defaultValue: "Monthly" }),
+    label: t("type.m", { defaultValue: "Monthly" }),
     value: "m",
   },
   {
-    label: t("quest.form.questRepeats.yearly", { defaultValue: "Yearly" }),
+    label: t("type.y", { defaultValue: "Yearly" }),
     value: "y",
   },
 ];

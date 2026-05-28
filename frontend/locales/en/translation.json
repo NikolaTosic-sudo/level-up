@@ -1,3 +1,10 @@
 {
-	"test": "test here"
+  "test": "test here",
+  "type": {
+    "d": "Daily",
+    "w": "Weekly",
+    "m": "Monthly",
+    "y": "Yearly",
+    "c": "Custom"
+  }
 }
