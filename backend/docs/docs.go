@@ -623,6 +623,12 @@ const docTemplate = `{
                 "bio": {
                     "type": "string"
                 },
+                "highestLeveledSkill": {
+                    "type": "string"
+                },
+                "mostRecentLeveledSkill": {
+                    "type": "string"
+                },
                 "profile": {
                     "$ref": "#/definitions/main.ProfileResponse"
                 }

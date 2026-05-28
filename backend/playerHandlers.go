@@ -31,8 +31,10 @@ type ProfileCreationBody struct {
 }
 
 type UserResponse struct {
-	Profile ProfileResponse `json:"profile" binding:"required"`
-	Bio     string          `json:"bio"`
+	Profile                ProfileResponse `json:"profile" binding:"required"`
+	Bio                    string          `json:"bio"`
+	HighestLeveledSkill    string          `json:"highestLeveledSkill"`
+	MostRecentLeveledSkill string          `json:"mostRecentLeveledSkill"`
 }
 
 type ProfileResponse struct {
@@ -187,6 +189,10 @@ func (cfg *appConfig) getFullUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	highestSkill, err := cfg.database.GetUsersSkillHighestLevel(r.Context(), userID)
+
+	mostRecentLeveled, err := cfg.database.GetMostRecentLeveledSkill(r.Context(), userID)
+
 	w.WriteHeader(http.StatusOK)
 
 	json.NewEncoder(w).Encode(UserResponse{
@@ -197,7 +203,9 @@ func (cfg *appConfig) getFullUser(w http.ResponseWriter, r *http.Request) {
 			Email:       user.Email,
 			DateOfBirth: user.Dateofbirth.Time,
 		},
-		Bio: user.Bio.String,
+		Bio:                    user.Bio.String,
+		HighestLeveledSkill:    highestSkill,
+		MostRecentLeveledSkill: mostRecentLeveled,
 	})
 }
 
