@@ -43,6 +43,10 @@ export interface V1LevelupApiCreateSkillPostRequest {
     body: MainSkillCreationPayload;
 }
 
+export interface V1LevelupApiSkillIdDeactivateDeleteRequest {
+    id: number;
+}
+
 export interface V1LevelupApiSkillsGetRequest {
     name?: string;
 }
@@ -108,6 +112,52 @@ export class SkillsApi extends runtime.BaseAPI {
      */
     async v1LevelupApiCreateSkillPost(requestParameters: V1LevelupApiCreateSkillPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.v1LevelupApiCreateSkillPostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for v1LevelupApiSkillIdDeactivateDelete without sending the request
+     */
+    async v1LevelupApiSkillIdDeactivateDeleteRequestOpts(requestParameters: V1LevelupApiSkillIdDeactivateDeleteRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling v1LevelupApiSkillIdDeactivateDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/v1/levelup_api/skill/{id}/deactivate`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * deactivate the skill
+     * Deactivate
+     */
+    async v1LevelupApiSkillIdDeactivateDeleteRaw(requestParameters: V1LevelupApiSkillIdDeactivateDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.v1LevelupApiSkillIdDeactivateDeleteRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * deactivate the skill
+     * Deactivate
+     */
+    async v1LevelupApiSkillIdDeactivateDelete(requestParameters: V1LevelupApiSkillIdDeactivateDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.v1LevelupApiSkillIdDeactivateDeleteRaw(requestParameters, initOverrides);
     }
 
     /**
