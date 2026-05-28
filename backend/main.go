@@ -76,6 +76,8 @@ func main() {
 	r.Post("/v1/levelup_api/updateUser", cfg.updateUser)
 	r.Post("/v1/levelup_api/create-skill", cfg.skillEditHandler)
 
+	r.Delete("/v1/levelup_api/skill/{id}/deactivate", cfg.deactivateUsersSkill)
+
 	r.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),
 	))

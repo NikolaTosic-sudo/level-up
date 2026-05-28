@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -287,15 +286,17 @@ func (cfg *appConfig) skillEditHandler(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
-			err = cfg.database.CreateUsersSkillsLinks(r.Context(), database.CreateUsersSkillsLinksParams{
+			err = cfg.database.UpsertLinkedSkills(r.Context(), database.UpsertLinkedSkillsParams{
 				UserID:        userID,
 				ParentSkillID: skillId,
-				ChildSkillID:  sID,
+				Column3:       []int32{sID},
 			})
 			if err != nil {
 				writeJSONError(w, http.StatusInternalServerError, "error", err)
 				return
 			}
+
+			w.WriteHeader(http.StatusOK)
 		}
 	} else {
 		var linkedIds []int32
@@ -323,6 +324,8 @@ func (cfg *appConfig) skillEditHandler(w http.ResponseWriter, r *http.Request) {
 			writeJSONError(w, http.StatusInternalServerError, "error", err)
 			return
 		}
+
+		w.WriteHeader(http.StatusOK)
 	}
 }
 
@@ -360,8 +363,6 @@ func (cfg *appConfig) getSkillsNotOwnedByUserHandler(w http.ResponseWriter, r *h
 		return
 	}
 
-	fmt.Println(skills, "skills")
-
 	resp := SkillsNotOwnedResponse{
 		Skills: skills,
 	}
@@ -377,4 +378,43 @@ func (cfg *appConfig) getSkillsNotOwnedByUserHandler(w http.ResponseWriter, r *h
 		writeJSONError(w, http.StatusInternalServerError, "error", err)
 		return
 	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+// @Tags Skills
+// @Summary Deactivate
+// @Description deactivate the skill
+// @Success 200
+// @Param id path int true "Id of the skill"
+// @Router /v1/levelup_api/skill/{id}/deactivate [delete]
+func (cfg *appConfig) deactivateUsersSkill(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+
+	parts := strings.Split(path, "/")
+
+	skillIdStr := parts[4]
+
+	skillId, err := strconv.Atoi(skillIdStr)
+	if err != nil {
+		writeJSONError(w, http.StatusBadRequest, "wrongIdDeactivate", err)
+		return
+	}
+
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	err = cfg.database.SoftDeleteUserSkill(r.Context(), database.SoftDeleteUserSkillParams{
+		UserID:        userID,
+		ParentSkillID: int32(skillId),
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
