@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -12,16 +13,29 @@ import (
 )
 
 type Skill struct {
-	Name             string      `json:"name" binding:"required"`
-	Experience       int32       `json:"experience"`
-	ExperienceNeeded int32       `json:"experienceNeeded"`
-	Level            int32       `json:"level"`
-	LinkedSkills     interface{} `json:"linkedSkills"`
+	ID               int32         `json:"id"`
+	Name             string        `json:"name" binding:"required"`
+	Experience       int32         `json:"experience"`
+	ExperienceNeeded int32         `json:"experienceNeeded"`
+	Level            int32         `json:"level"`
+	LinkedSkills     []LinkedSkill `json:"linkedSkills"`
+}
+
+type LinkedSkill struct {
+	ID   int32  `json:"id"`
+	Name string `json:"name" binding:"required"`
+}
+
+type SkillCreationPayload struct {
+	ID           int32         `json:"id"`
+	Name         string        `json:"name" binding:"required"`
+	LinkedSkills []LinkedSkill `json:"linkedSkills"`
 }
 
 type SkillExclude struct {
-	ID   int32  `json:"id" binding:"required"`
-	Name string `json:"name" binding:"required"`
+	ID           int32         `json:"id" binding:"required"`
+	Name         string        `json:"name" binding:"required"`
+	LinkedSkills []LinkedSkill `json:"linkedSkills"`
 }
 
 type UsersSkillsResponse struct {
@@ -34,6 +48,10 @@ type SkillsResponse struct {
 
 type SkillsExcludeResponse struct {
 	Skills []SkillExclude `json:"skills"`
+}
+
+type SkillsNotOwnedResponse struct {
+	Skills []database.GetSkillsNotOwnedByUserRow `json:"skills"`
 }
 
 // @Tags Skills
@@ -100,11 +118,21 @@ func (cfg *appConfig) getUsersSkillsHandler(w http.ResponseWriter, r *http.Reque
 	s := []Skill{}
 
 	for _, sk := range skills {
+		var linkedSkills []LinkedSkill
+
+		err = json.Unmarshal([]byte(sk.LinkedSkills), &linkedSkills)
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
 		s = append(s, Skill{
+			ID:               sk.SkillID,
 			Name:             sk.Name,
 			Experience:       sk.Experience,
 			ExperienceNeeded: sk.ExperienceNeeded,
 			Level:            sk.Level,
+			LinkedSkills:     linkedSkills,
 		})
 	}
 
@@ -171,8 +199,6 @@ func (cfg *appConfig) getUsersSkillsExcludeHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	fmt.Println(skills, "skills", excludeIDs, exName)
-
 	s := []SkillExclude{}
 
 	for _, sk := range skills {
@@ -187,4 +213,167 @@ func (cfg *appConfig) getUsersSkillsExcludeHandler(w http.ResponseWriter, r *htt
 	json.NewEncoder(w).Encode(SkillsExcludeResponse{
 		Skills: s,
 	})
+}
+
+// @Tags Skills
+// @Summary Create skill
+// @Description create skill for user
+// @Accept json
+// @Success 200
+// @Param body body SkillCreationPayload true "Skill creation"
+// @Router /v1/levelup_api/create-skill [post]
+func (cfg *appConfig) skillEditHandler(w http.ResponseWriter, r *http.Request) {
+	var body SkillCreationPayload
+
+	b, err := io.ReadAll(r.Body)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	err = json.Unmarshal(b, &body)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	if body.Name == "" {
+		writeJSONError(w, http.StatusBadRequest, "editSkillBadRequest", err)
+		return
+	}
+
+	if body.ID == 0 {
+		skillId, err := cfg.database.CreateSkill(r.Context(), body.Name)
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		err = cfg.database.CreateUsersSkills(r.Context(), database.CreateUsersSkillsParams{
+			UserID:  userID,
+			SkillID: skillId,
+			Name:    body.Name,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		for _, lS := range body.LinkedSkills {
+			sID := lS.ID
+
+			if sID == 0 {
+				sID, err = cfg.database.CreateSkill(r.Context(), lS.Name)
+				if err != nil {
+					writeJSONError(w, http.StatusInternalServerError, "error", err)
+					return
+				}
+
+				err = cfg.database.CreateUsersSkills(r.Context(), database.CreateUsersSkillsParams{
+					UserID:  userID,
+					SkillID: sID,
+					Name:    lS.Name,
+				})
+				if err != nil {
+					writeJSONError(w, http.StatusInternalServerError, "error", err)
+					return
+				}
+			}
+
+			err = cfg.database.CreateUsersSkillsLinks(r.Context(), database.CreateUsersSkillsLinksParams{
+				UserID:        userID,
+				ParentSkillID: skillId,
+				ChildSkillID:  sID,
+			})
+			if err != nil {
+				writeJSONError(w, http.StatusInternalServerError, "error", err)
+				return
+			}
+		}
+	} else {
+		var linkedIds []int32
+
+		for _, sk := range body.LinkedSkills {
+			linkedIds = append(linkedIds, sk.ID)
+		}
+
+		err = cfg.database.DeactivateRemovedLinkedSkills(r.Context(), database.DeactivateRemovedLinkedSkillsParams{
+			UserID:        userID,
+			ParentSkillID: body.ID,
+			Column3:       linkedIds,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		err = cfg.database.UpsertLinkedSkills(r.Context(), database.UpsertLinkedSkillsParams{
+			UserID:        userID,
+			ParentSkillID: body.ID,
+			Column3:       linkedIds,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+	}
+}
+
+// @Tags Skills
+// @Summary Get skills from database
+// @Description get skills not owned by the user, limited to 200 results
+// @Produce json
+// @Success 200 {object} SkillsNotOwnedResponse
+// @Param name query string false "Get skills with the typed in prefix and not owned by current user"
+// @Router /v1/levelup_api/skills-not-user [get]
+func (cfg *appConfig) getSkillsNotOwnedByUserHandler(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query()
+	name, exists := query["name"]
+
+	reqName := ""
+
+	if exists {
+		reqName = name[0]
+	}
+
+	fullReq := strings.Join([]string{reqName, "%"}, "")
+
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	skills, err := cfg.database.GetSkillsNotOwnedByUser(context.Background(), database.GetSkillsNotOwnedByUserParams{
+		Name:   fullReq,
+		UserID: userID,
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	fmt.Println(skills, "skills")
+
+	resp := SkillsNotOwnedResponse{
+		Skills: skills,
+	}
+
+	response, err := json.Marshal(resp)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	_, err = w.Write(response)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
 }
