@@ -74,6 +74,7 @@ type UsersSkill struct {
 	Level            int32          `json:"level"`
 	DeletedAt        sql.NullTime   `json:"deleted_at"`
 	DeletedReason    sql.NullString `json:"deleted_reason"`
+	LeveledAt        sql.NullTime   `json:"leveled_at"`
 }
 
 type UsersSkillsLink struct {

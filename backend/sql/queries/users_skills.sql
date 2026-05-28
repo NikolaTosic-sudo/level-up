@@ -36,10 +36,28 @@ GROUP BY
   parent.level;
 
 -- name: GetUsersSkillsExclude :many
-SELECT name, skill_id FROM users_skills WHERE user_id = $1 AND name LIKE $2 AND skill_id != ALL($3::int[]) AND name != $4;
+SELECT name, skill_id FROM users_skills
+WHERE user_id = $1
+  AND name LIKE $2
+  AND skill_id != ALL($3::int[])
+  AND name != $4
+  AND deleted_at IS NULL;
 
 -- name: GetUsersSkillsLinkedID :many
-SELECT child_skill_id FROM users_skills_links WHERE parent_skill_id = $1 AND user_id = $2 AND deleted_at IS NULL;
+SELECT child_skill_id FROM users_skills_links
+WHERE parent_skill_id = $1 AND user_id = $2 AND deleted_at IS NULL;
+
+-- name: GetUsersSkillHighestLevel :one
+SELECT name FROM users_skills
+WHERE user_id = $1 AND deleted_at IS NULL
+ORDER BY level DESC, experience DESC
+LIMIT 1;
+
+-- name: GetMostRecentLeveledSkill :one
+SELECT name FROM users_skills
+WHERE user_id = $1 AND deleted_at IS NULL
+ORDER BY leveled_at DESC
+LIMIT 1;
 
 -- name: CreateUsersSkills :exec
 INSERT INTO users_skills(

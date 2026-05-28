@@ -72,6 +72,20 @@ func (q *Queries) DeactivateRemovedLinkedSkills(ctx context.Context, arg Deactiv
 	return err
 }
 
+const getMostRecentLeveledSkill = `-- name: GetMostRecentLeveledSkill :one
+SELECT name FROM users_skills
+WHERE user_id = $1 AND deleted_at IS NULL
+ORDER BY leveled_at DESC
+LIMIT 1
+`
+
+func (q *Queries) GetMostRecentLeveledSkill(ctx context.Context, userID uuid.UUID) (string, error) {
+	row := q.db.QueryRowContext(ctx, getMostRecentLeveledSkill, userID)
+	var name string
+	err := row.Scan(&name)
+	return name, err
+}
+
 const getUserSkillID = `-- name: GetUserSkillID :one
 SELECT skill_id FROM users_skills WHERE user_id = $1 AND name = $2
 `
@@ -86,6 +100,20 @@ func (q *Queries) GetUserSkillID(ctx context.Context, arg GetUserSkillIDParams) 
 	var skill_id int32
 	err := row.Scan(&skill_id)
 	return skill_id, err
+}
+
+const getUsersSkillHighestLevel = `-- name: GetUsersSkillHighestLevel :one
+SELECT name FROM users_skills
+WHERE user_id = $1 AND deleted_at IS NULL
+ORDER BY level DESC, experience DESC
+LIMIT 1
+`
+
+func (q *Queries) GetUsersSkillHighestLevel(ctx context.Context, userID uuid.UUID) (string, error) {
+	row := q.db.QueryRowContext(ctx, getUsersSkillHighestLevel, userID)
+	var name string
+	err := row.Scan(&name)
+	return name, err
 }
 
 const getUsersSkills = `-- name: GetUsersSkills :many
@@ -163,7 +191,12 @@ func (q *Queries) GetUsersSkills(ctx context.Context, userID uuid.UUID) ([]GetUs
 }
 
 const getUsersSkillsExclude = `-- name: GetUsersSkillsExclude :many
-SELECT name, skill_id FROM users_skills WHERE user_id = $1 AND name LIKE $2 AND skill_id != ALL($3::int[]) AND name != $4
+SELECT name, skill_id FROM users_skills
+WHERE user_id = $1
+  AND name LIKE $2
+  AND skill_id != ALL($3::int[])
+  AND name != $4
+  AND deleted_at IS NULL
 `
 
 type GetUsersSkillsExcludeParams struct {
@@ -207,7 +240,8 @@ func (q *Queries) GetUsersSkillsExclude(ctx context.Context, arg GetUsersSkillsE
 }
 
 const getUsersSkillsLinkedID = `-- name: GetUsersSkillsLinkedID :many
-SELECT child_skill_id FROM users_skills_links WHERE parent_skill_id = $1 AND user_id = $2 AND deleted_at IS NULL
+SELECT child_skill_id FROM users_skills_links
+WHERE parent_skill_id = $1 AND user_id = $2 AND deleted_at IS NULL
 `
 
 type GetUsersSkillsLinkedIDParams struct {
