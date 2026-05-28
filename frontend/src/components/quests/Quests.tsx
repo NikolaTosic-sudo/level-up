@@ -1,9 +1,9 @@
-import QuestsWrapper from "./components/QuestsWrapper";
+import QuestsLoader from "./components/QuestsLoader";
 
 import "./styles/styles.css";
 
 function Quests() {
-  return <QuestsWrapper />;
+  return <QuestsLoader />;
 }
 
 export default Quests;

@@ -1,12 +1,12 @@
 import { Button, Card, Descriptions, Flex, Typography } from "antd";
-import type { Quest } from "./Quest";
 import type { DescriptionsItemProps } from "antd/es/descriptions/Item";
 import { useTranslation } from "react-i18next";
 import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
 import PopconfirmComponent from "../../common/PopconfirmComponent";
+import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
 
 type QuestDescrptionProps = {
-  quest: Quest;
+  quest: MainRepeatingQuest | MainCustomQuest;
 };
 
 function QuestDescrption({ quest }: QuestDescrptionProps) {
@@ -27,7 +27,7 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
                 italic={q.completed}
                 delete={q.completed}
               >
-                {q.title}
+                {q.name}
               </Typography.Title>
 
               <Typography.Text
@@ -110,15 +110,15 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
       label: t("quest.description.startDate", {
         defaultValue: "Quest start date",
       }),
-      children: quest.startDate,
-      style: quest.startDate ? {} : { display: "none" },
+      children: "startDate" in quest && quest.startDate,
+      style: "startDate" in quest && quest.startDate ? {} : { display: "none" },
     },
     {
       label: t("quest.description.endDate", {
         defaultValue: "Quest end date",
       }),
-      children: quest.endDate,
-      style: quest.endDate ? {} : { display: "none" },
+      children: "endDate" in quest && quest.endDate,
+      style: "endDate" in quest && quest.endDate ? {} : { display: "none" },
     },
   ];
 
@@ -126,7 +126,7 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
     <Descriptions
       layout="vertical"
       column={3}
-      title={quest.title}
+      title={quest.name}
       items={items}
     />
   );

@@ -13,13 +13,13 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import SkillRenderer from "../../profileCreation/components/SkillRenderer";
 import SelectSkills from "../../profileCreation/components/SelectSkills";
-import type { Quest } from "./Quest";
 import SelectRepeat from "./SelectRepeat";
 import HelperComponent from "../../common/HelperComponent";
 import dayjs from "dayjs";
+import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
 
 type QuestFormProps = {
-  initialValue?: Quest;
+  initialValue?: MainRepeatingQuest | MainCustomQuest;
   custom?: boolean;
 };
 
@@ -49,7 +49,7 @@ function QuestForm({ initialValue, custom }: QuestFormProps) {
 
       <Flex gap={16} align="start">
         <Form.Item
-          name="title"
+          name="name"
           label={t("quest.form.title", { defaultValue: "Title" })}
           rules={[
             {
@@ -143,7 +143,7 @@ function QuestForm({ initialValue, custom }: QuestFormProps) {
         <Form.Item name="skills" style={{ flex: 1, minWidth: 260 }}>
           <SkillRenderer vertical={false} wrap />
         </Form.Item>
-        <SelectSkills marginLeft={0} />
+        <SelectSkills mode="excludeSelectedUsersSkills" marginLeft={0} />
       </Flex>
 
       <Divider titlePlacement="start">
@@ -164,7 +164,7 @@ function QuestForm({ initialValue, custom }: QuestFormProps) {
                 <Form.Item name={[field.name, "id"]} hidden />
 
                 <Form.Item
-                  name={[field.name, "title"]}
+                  name={[field.name, "name"]}
                   label={t("quest.form.subquestTitle", {
                     defaultValue: "Sub-quest {{count}}",
                     count: index + 1,

@@ -3,11 +3,14 @@ import ModalComponent from "../../common/ModalComponent";
 import { useTranslation } from "react-i18next";
 import { PlusOutlined } from "@ant-design/icons";
 import Quest from "./Quest";
-import quests from "./quest.json";
-import customQuests from "./customQuests.json";
 import QuestForm from "./QuestForm";
+import type { MainQuestsReponse } from "../../../api";
 
-function QuestsWrapper() {
+type QuestsWrapperProps = {
+  quests: MainQuestsReponse;
+};
+
+function QuestsWrapper({ quests }: QuestsWrapperProps) {
   const { t } = useTranslation();
   return (
     <>
@@ -16,8 +19,8 @@ function QuestsWrapper() {
           {
             key: "1",
             label: t("quest.repeating", { defaultValue: "Repeating quests" }),
-            children: quests.map((q) => (
-              <Quest quests={q.quests} title={q.title} />
+            children: quests.repeatingQuests?.map((q) => (
+              <Quest quests={q.quests} title={q.type} />
             )),
             extra: (
               <ModalComponent
@@ -44,7 +47,7 @@ function QuestsWrapper() {
           {
             key: "1",
             label: t("quest.custom", { defaultValue: "Custom quests" }),
-            children: <Quest quests={customQuests} />,
+            children: <Quest quests={quests.customQuests} />,
             extra: (
               <ModalComponent
                 buttonInner={t("quest.add.custom", {

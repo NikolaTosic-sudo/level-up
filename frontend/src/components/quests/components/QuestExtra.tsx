@@ -2,11 +2,15 @@ import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Flex, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
-import type { Quest } from "./Quest";
 import PopconfirmComponent from "../../common/PopconfirmComponent";
 import QuestForm from "./QuestForm";
+import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
 
-function QuestExtra({ quest }: { quest: Quest }) {
+function QuestExtra({
+  quest,
+}: {
+  quest: MainRepeatingQuest | MainCustomQuest;
+}) {
   const { t } = useTranslation();
 
   if (quest.completed)

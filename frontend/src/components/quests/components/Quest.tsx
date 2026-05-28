@@ -1,30 +1,20 @@
 import { Collapse, Divider, Flex, Progress, Typography } from "antd";
-import type { Skill } from "../../skills/components/SkillModal";
 import QuestDescrption from "./QuestDescription";
 import QuestExtra from "./QuestExtra";
+import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
+import { useTranslation } from "react-i18next";
 import { CheckCircleOutlined } from "@ant-design/icons";
-
-export type Quest = {
-  id: number;
-  title: string;
-  skills?: Array<Skill>;
-  completed?: boolean;
-  type?: string;
-  subQuestsCompleted?: number;
-  experience: number;
-  subQuests?: Array<Quest>;
-  startDate?: string;
-  endDate?: string;
-};
 
 type QuestProps = {
   title?: string;
   custom?: boolean;
-  quests: Array<Quest>;
+  quests?: Array<MainRepeatingQuest> | Array<MainCustomQuest>;
 };
 
 function Quest({ title, quests }: QuestProps) {
-  const items = quests.map((q) => ({
+  const { t } = useTranslation();
+
+  const items = quests?.map((q) => ({
     key: q.id,
     label: <QuestHeader quest={q} />,
     children: <QuestDescrption quest={q} />,
@@ -35,7 +25,7 @@ function Quest({ title, quests }: QuestProps) {
     <>
       {title ? (
         <Divider titlePlacement="start">
-          <Typography.Title level={4}>{title}</Typography.Title>
+          <Typography.Title level={4}>{t(`type.${title}`)}</Typography.Title>
         </Divider>
       ) : null}
       <Collapse items={items} />
@@ -45,7 +35,11 @@ function Quest({ title, quests }: QuestProps) {
 
 export default Quest;
 
-function QuestHeader({ quest }: { quest: Quest }) {
+function QuestHeader({
+  quest,
+}: {
+  quest: MainRepeatingQuest | MainCustomQuest;
+}) {
   return (
     <Flex align="center" gap={24}>
       <Typography.Title
@@ -53,7 +47,7 @@ function QuestHeader({ quest }: { quest: Quest }) {
         italic={quest.completed}
         delete={quest.completed}
       >
-        {quest.title}
+        {quest.name}
       </Typography.Title>
       {quest.subQuests && quest.subQuests.length && (
         <>
