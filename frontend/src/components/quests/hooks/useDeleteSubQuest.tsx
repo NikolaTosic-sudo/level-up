@@ -1,0 +1,35 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
+import { useTranslation } from "react-i18next";
+import ErrorMessageComponent, {
+  type ApiError,
+} from "../../common/ErrorMessageComponent";
+import { message } from "antd";
+import { questsApi } from "../../../types/newApi";
+
+export function useDeleteSubQuest() {
+  const api = useRef(questsApi);
+  const { t } = useTranslation();
+  const query = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (id: number) =>
+      api.current.v1LevelupApiUserQuestIdDeleteSubquestDelete({ id }),
+    onSuccess: () => {
+      message.success(
+        t("", {
+          defaultValue: "Successfully deleted sub-quest.",
+        }),
+      );
+
+      query.invalidateQueries({
+        queryKey: ["useGetQuests"],
+      });
+    },
+    onError: async (e: ApiError) => {
+      message.error(<ErrorMessageComponent error={e} />);
+    },
+  });
+
+  return mutation;
+}

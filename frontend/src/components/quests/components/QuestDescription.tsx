@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { CheckOutlined, DeleteOutlined } from "@ant-design/icons";
 import PopconfirmComponent from "../../common/PopconfirmComponent";
 import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
+import { useCompleteSubQuest } from "../hooks/useCompleteSubQuest";
+import { useDeleteSubQuest } from "../hooks/useDeleteSubQuest";
 
 type QuestDescrptionProps = {
   quest: MainRepeatingQuest | MainCustomQuest;
@@ -11,6 +13,18 @@ type QuestDescrptionProps = {
 
 function QuestDescrption({ quest }: QuestDescrptionProps) {
   const { t } = useTranslation();
+
+  const { mutate: finishSubQuest } = useCompleteSubQuest();
+
+  const { mutate: deleteSubQuest } = useDeleteSubQuest();
+
+  const handleFinish = (id: number) => {
+    finishSubQuest(id);
+  };
+
+  const handleDelete = (id: number) => {
+    deleteSubQuest(id);
+  };
 
   const items: DescriptionsItemProps[] = [
     {
@@ -52,6 +66,7 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
                   title={t("quest.subquest.confirm.done", {
                     defaultValue: "Are you done with this sub-quest?",
                   })}
+                  onConfirm={() => handleFinish(q.id ?? 0)}
                 >
                   <Button
                     variant="outlined"
@@ -62,11 +77,11 @@ function QuestDescrption({ quest }: QuestDescrptionProps) {
                   />
                 </PopconfirmComponent>
                 <PopconfirmComponent
-                  cancelButtonProps={{ type: "primary", danger: true }}
                   title={t("quest.subquest.confirm.delete", {
                     defaultValue:
                       "Are you sure you want to delete this sub-quest?",
                   })}
+                  onConfirm={() => handleDelete(q.id ?? 0)}
                 >
                   <Button
                     ghost

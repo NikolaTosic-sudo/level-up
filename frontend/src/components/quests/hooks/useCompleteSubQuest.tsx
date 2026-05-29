@@ -1,0 +1,38 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
+import { useTranslation } from "react-i18next";
+import ErrorMessageComponent, {
+  type ApiError,
+} from "../../common/ErrorMessageComponent";
+import { message } from "antd";
+import { questsApi } from "../../../types/newApi";
+
+export function useCompleteSubQuest() {
+  const api = useRef(questsApi);
+  const { t } = useTranslation();
+  const query = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (id: number) =>
+      api.current.v1LevelupApiUserQuestIdCompleteSubquestPost({ id }),
+    onSuccess: () => {
+      message.success(
+        t("", {
+          defaultValue: "Successfully completed sub-quest.",
+        }),
+      );
+
+      query.invalidateQueries({
+        queryKey: ["useGetQuests"],
+      });
+      query.invalidateQueries({
+        queryKey: ["useGetUserInfo"],
+      });
+    },
+    onError: async (e: ApiError) => {
+      message.error(<ErrorMessageComponent error={e} />);
+    },
+  });
+
+  return mutation;
+}
