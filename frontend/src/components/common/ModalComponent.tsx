@@ -17,6 +17,8 @@ type ModalComponentProps = {
   buttonProps?: ButtonProps;
   buttonTooltip?: ReactElement | string;
   noDivider?: boolean;
+  isOpen?: boolean;
+  setIsOpen?: (val: boolean) => void;
 };
 
 function ModalComponent({
@@ -24,25 +26,36 @@ function ModalComponent({
   buttonInner,
   buttonProps,
   buttonTooltip,
+  isOpen,
+  setIsOpen,
   onCancel,
   title,
   noDivider,
   onOk,
   ...props
 }: ModalComponentProps & ModalProps) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
   const [openPlay, closePlay] = useSound(openSound, closeSound);
 
+  const isControlled = isOpen !== undefined;
+  const open = isControlled ? isOpen : internalOpen;
+
   function closeModal() {
-    setOpen(false);
+    setInternalOpen(false);
     if (closePlay) {
       closePlay();
+    }
+    if (setIsOpen) {
+      setIsOpen(false);
     }
   }
 
   function handleOpen(e: MouseEvent) {
     e.stopPropagation();
-    setOpen(true);
+    setInternalOpen(true);
+    if (setIsOpen) {
+      setIsOpen(true);
+    }
     if (openPlay) {
       openPlay();
     }
@@ -51,16 +64,20 @@ function ModalComponent({
   function handleClose(e: MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
     closeModal();
+    if (setIsOpen) {
+      setIsOpen(false);
+    }
     if (onCancel) {
       onCancel(e);
     }
   }
 
   function handleFinish(e: MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
     if (onOk) {
       onOk(e);
     }
-    closeModal();
+    if (!isControlled) closeModal();
   }
 
   return (

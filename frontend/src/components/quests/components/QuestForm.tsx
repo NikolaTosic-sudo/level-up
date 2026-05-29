@@ -8,6 +8,7 @@ import {
   InputNumber,
   Space,
   Typography,
+  type FormInstance,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
@@ -19,16 +20,16 @@ import dayjs from "dayjs";
 import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
 
 type QuestFormProps = {
+  formInstance: FormInstance;
   initialValue?: MainRepeatingQuest | MainCustomQuest;
   custom?: boolean;
 };
 
-function QuestForm({ initialValue, custom }: QuestFormProps) {
+function QuestForm({ formInstance, initialValue, custom }: QuestFormProps) {
   const { t } = useTranslation();
-  const [form] = Form.useForm();
 
   return (
-    <Form form={form} layout="vertical" initialValues={initialValue}>
+    <Form form={formInstance} layout="vertical" initialValues={initialValue}>
       {custom || initialValue?.type === "custom" ? null : (
         <Form.Item
           name="type"

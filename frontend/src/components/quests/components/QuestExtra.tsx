@@ -1,10 +1,12 @@
 import { CheckOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Flex, Typography } from "antd";
+import { Button, Flex, Form, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import ModalComponent from "../../common/ModalComponent";
 import PopconfirmComponent from "../../common/PopconfirmComponent";
 import QuestForm from "./QuestForm";
 import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
+import { useState } from "react";
+import { useEditQuest } from "../hooks/useEditQuest";
 
 function QuestExtra({
   quest,
@@ -12,6 +14,21 @@ function QuestExtra({
   quest: MainRepeatingQuest | MainCustomQuest;
 }) {
   const { t } = useTranslation();
+
+  const [open, setOpen] = useState(false);
+
+  const { mutate } = useEditQuest();
+
+  const [form] = Form.useForm();
+
+  const handleFinish = () => {
+    form.validateFields().then((values) => {
+      mutate(
+        { body: { id: quest.id, ...values } },
+        { onSuccess: () => setOpen(false) },
+      );
+    });
+  };
 
   if (quest.completed)
     return (
@@ -42,8 +59,11 @@ function QuestExtra({
         title={t("quest.repeating.editModalTitle", {
           defaultValue: "Edit quest",
         })}
+        onOk={handleFinish}
+        isOpen={open}
+        setIsOpen={setOpen}
       >
-        <QuestForm initialValue={quest} />
+        <QuestForm formInstance={form} initialValue={quest} />
       </ModalComponent>
       <PopconfirmComponent
         title={t("quest.confirm.delete", {
