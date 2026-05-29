@@ -6,6 +6,8 @@ All URIs are relative to *http://localhost:8080*
 |------------- | ------------- | -------------|
 | [**v1LevelupApiQuestsGet**](QuestsApi.md#v1levelupapiquestsget) | **GET** /v1/levelup_api/quests | Get all quests for the user |
 | [**v1LevelupApiUserQuestCreationPost**](QuestsApi.md#v1levelupapiuserquestcreationpost) | **POST** /v1/levelup_api/user/quest-creation | Get all quests for the user |
+| [**v1LevelupApiUserQuestIdCompleteSubquestPost**](QuestsApi.md#v1levelupapiuserquestidcompletesubquestpost) | **POST** /v1/levelup_api/user/quest/{id}/complete-subquest | Complete a sub-quest |
+| [**v1LevelupApiUserQuestIdDeleteSubquestDelete**](QuestsApi.md#v1levelupapiuserquestiddeletesubquestdelete) | **DELETE** /v1/levelup_api/user/quest/{id}/delete-subquest | Delete a sub-quest |
 
 
 
@@ -120,6 +122,136 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
+- **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## v1LevelupApiUserQuestIdCompleteSubquestPost
+
+> v1LevelupApiUserQuestIdCompleteSubquestPost(id)
+
+Complete a sub-quest
+
+### Example
+
+```ts
+import {
+  Configuration,
+  QuestsApi,
+} from '';
+import type { V1LevelupApiUserQuestIdCompleteSubquestPostRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new QuestsApi();
+
+  const body = {
+    // number | ID of the quest
+    id: 56,
+  } satisfies V1LevelupApiUserQuestIdCompleteSubquestPostRequest;
+
+  try {
+    const data = await api.v1LevelupApiUserQuestIdCompleteSubquestPost(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `number` | ID of the quest | [Defaults to `undefined`] |
+
+### Return type
+
+`void` (Empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## v1LevelupApiUserQuestIdDeleteSubquestDelete
+
+> v1LevelupApiUserQuestIdDeleteSubquestDelete(id)
+
+Delete a sub-quest
+
+### Example
+
+```ts
+import {
+  Configuration,
+  QuestsApi,
+} from '';
+import type { V1LevelupApiUserQuestIdDeleteSubquestDeleteRequest } from '';
+
+async function example() {
+  console.log("🚀 Testing  SDK...");
+  const api = new QuestsApi();
+
+  const body = {
+    // number | ID of the quest
+    id: 56,
+  } satisfies V1LevelupApiUserQuestIdDeleteSubquestDeleteRequest;
+
+  try {
+    const data = await api.v1LevelupApiUserQuestIdDeleteSubquestDelete(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **id** | `number` | ID of the quest | [Defaults to `undefined`] |
+
+### Return type
+
+`void` (Empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: Not defined
 
 

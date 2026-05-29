@@ -6,6 +6,7 @@ export * from './MainCustomQuest';
 export * from './MainLinkedSkill';
 export * from './MainLoginBody';
 export * from './MainLoginResponse';
+export * from './MainPlayerInfoResponse';
 export * from './MainProfileCreationBody';
 export * from './MainProfileResponse';
 export * from './MainQuestCreationPayload';

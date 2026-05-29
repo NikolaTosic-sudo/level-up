@@ -19,6 +19,11 @@ import {
     MainLoginResponseToJSON,
 } from '../models/MainLoginResponse';
 import {
+    type MainPlayerInfoResponse,
+    MainPlayerInfoResponseFromJSON,
+    MainPlayerInfoResponseToJSON,
+} from '../models/MainPlayerInfoResponse';
+import {
     type MainProfileCreationBody,
     MainProfileCreationBodyFromJSON,
     MainProfileCreationBodyToJSON,
@@ -142,6 +147,45 @@ export class PlayerApi extends runtime.BaseAPI {
      */
     async v1LevelupApiUpdateUserPost(requestParameters: V1LevelupApiUpdateUserPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.v1LevelupApiUpdateUserPostRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for v1LevelupApiUserInfoGet without sending the request
+     */
+    async v1LevelupApiUserInfoGetRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/v1/levelup_api/user/info`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Get info for the header
+     * Get player info
+     */
+    async v1LevelupApiUserInfoGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MainPlayerInfoResponse>> {
+        const requestOptions = await this.v1LevelupApiUserInfoGetRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MainPlayerInfoResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Get info for the header
+     * Get player info
+     */
+    async v1LevelupApiUserInfoGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainPlayerInfoResponse> {
+        const response = await this.v1LevelupApiUserInfoGetRaw(initOverrides);
+        return await response.value();
     }
 
     /**

@@ -1,36 +1,30 @@
 
-# MainQuestCreationPayload
+# MainPlayerInfoResponse
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`endDate` | string
 `experience` | number
-`id` | number
+`experienceNeeded` | number
+`hotStreak` | number
+`level` | number
 `name` | string
-`skills` | [Array&lt;MainSkillCreationPayload&gt;](MainSkillCreationPayload.md)
-`startDate` | string
-`subQuests` | [Array&lt;MainRepeatingQuest&gt;](MainRepeatingQuest.md)
-`type` | string
 
 ## Example
 
 ```typescript
-import type { MainQuestCreationPayload } from ''
+import type { MainPlayerInfoResponse } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "endDate": null,
   "experience": null,
-  "id": null,
+  "experienceNeeded": null,
+  "hotStreak": null,
+  "level": null,
   "name": null,
-  "skills": null,
-  "startDate": null,
-  "subQuests": null,
-  "type": null,
-} satisfies MainQuestCreationPayload
+} satisfies MainPlayerInfoResponse
 
 console.log(example)
 
@@ -39,7 +33,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as MainQuestCreationPayload
+const exampleParsed = JSON.parse(exampleJSON) as MainPlayerInfoResponse
 console.log(exampleParsed)
 ```
 

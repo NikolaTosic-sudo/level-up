@@ -11,6 +11,7 @@ docs/MainCustomQuest.md
 docs/MainLinkedSkill.md
 docs/MainLoginBody.md
 docs/MainLoginResponse.md
+docs/MainPlayerInfoResponse.md
 docs/MainProfileCreationBody.md
 docs/MainProfileResponse.md
 docs/MainQuestCreationPayload.md
@@ -39,6 +40,7 @@ models/MainCustomQuest.ts
 models/MainLinkedSkill.ts
 models/MainLoginBody.ts
 models/MainLoginResponse.ts
+models/MainPlayerInfoResponse.ts
 models/MainProfileCreationBody.ts
 models/MainProfileResponse.ts
 models/MainQuestCreationPayload.ts

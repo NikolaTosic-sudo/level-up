@@ -36,6 +36,12 @@ import {
 export interface MainQuestCreationPayload {
     /**
      * 
+     * @type {string}
+     * @memberof MainQuestCreationPayload
+     */
+    endDate?: string;
+    /**
+     * 
      * @type {number}
      * @memberof MainQuestCreationPayload
      */
@@ -58,6 +64,12 @@ export interface MainQuestCreationPayload {
      * @memberof MainQuestCreationPayload
      */
     skills?: Array<MainSkillCreationPayload>;
+    /**
+     * 
+     * @type {string}
+     * @memberof MainQuestCreationPayload
+     */
+    startDate?: string;
     /**
      * 
      * @type {Array<MainRepeatingQuest>}
@@ -89,10 +101,12 @@ export function MainQuestCreationPayloadFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
+        'endDate': json['endDate'] == null ? undefined : json['endDate'],
         'experience': json['experience'] == null ? undefined : json['experience'],
         'id': json['id'] == null ? undefined : json['id'],
         'name': json['name'] == null ? undefined : json['name'],
         'skills': json['skills'] == null ? undefined : ((json['skills'] as Array<any>).map(MainSkillCreationPayloadFromJSON)),
+        'startDate': json['startDate'] == null ? undefined : json['startDate'],
         'subQuests': json['subQuests'] == null ? undefined : ((json['subQuests'] as Array<any>).map(MainRepeatingQuestFromJSON)),
         'type': json['type'] == null ? undefined : json['type'],
     };
@@ -109,10 +123,12 @@ export function MainQuestCreationPayloadToJSONTyped(value?: MainQuestCreationPay
 
     return {
         
+        'endDate': value['endDate'],
         'experience': value['experience'],
         'id': value['id'],
         'name': value['name'],
         'skills': value['skills'] == null ? undefined : ((value['skills'] as Array<any>).map(MainSkillCreationPayloadToJSON)),
+        'startDate': value['startDate'],
         'subQuests': value['subQuests'] == null ? undefined : ((value['subQuests'] as Array<any>).map(MainRepeatingQuestToJSON)),
         'type': value['type'],
     };
