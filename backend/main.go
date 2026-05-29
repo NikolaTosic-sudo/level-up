@@ -70,6 +70,7 @@ func main() {
 	r.Get("/v1/levelup_api/user/skills_exclude", cfg.getUsersSkillsExcludeHandler)
 	r.Get("/v1/levelup_api/skills-not-user", cfg.getSkillsNotOwnedByUserHandler)
 	r.Get("/v1/levelup_api/quests", cfg.getUsersQuests)
+	r.Get("/v1/levelup_api/user/info", cfg.getUserInfo)
 
 	r.Post("/v1/levelup_api/signUp", cfg.signupHandler)
 	r.Post("/v1/levelup_api/logIn", cfg.loginHandler)
@@ -77,8 +78,10 @@ func main() {
 	r.Post("/v1/levelup_api/updateUser", cfg.updateUser)
 	r.Post("/v1/levelup_api/create-skill", cfg.skillEditHandler)
 	r.Post("/v1/levelup_api/user/quest-creation", cfg.questCreation)
+	r.Post("/v1/levelup_api/user/quest/{id}/complete-subquest", cfg.completeSubQuest)
 
 	r.Delete("/v1/levelup_api/skill/{id}/deactivate", cfg.deactivateUsersSkill)
+	r.Delete("/v1/levelup_api/user/quest/{id}/delete-subquest", cfg.deleteSubQuest)
 
 	r.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),

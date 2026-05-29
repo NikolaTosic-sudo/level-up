@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"slices"
+	"strconv"
 	"time"
 
 	"github.com/NikolaTosic-sudo/level-up/backend/internal/database"
@@ -290,10 +291,6 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 				err = cfg.database.DeleteSubQuest(r.Context(), database.DeleteSubQuestParams{
 					UserID: userID,
 					ID:     q,
-					ParentQuestID: sql.NullInt64{
-						Int64: questID,
-						Valid: true,
-					},
 				})
 				if err != nil {
 					writeJSONError(w, http.StatusInternalServerError, "error", err)
@@ -333,6 +330,114 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 			writeJSONError(w, http.StatusInternalServerError, "error", err)
 			return
 		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+// @Tags Quests
+// @Summary Complete a sub-quest
+// @Success 200
+// @Param id path int true "ID of the quest"
+// @Router /v1/levelup_api/user/quest/{id}/complete-subquest [post]
+func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	questIDStr := r.PathValue("id")
+
+	questID, err := strconv.Atoi(questIDStr)
+	if err != nil {
+		writeJSONError(w, http.StatusBadRequest, "wrongIdDeactivate", err)
+		return
+	}
+
+	quest, err := cfg.database.CompleteQuest(r.Context(), database.CompleteQuestParams{
+		ID:     int64(questID),
+		UserID: userID,
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	user, err := cfg.database.GetUsersExperience(r.Context(), userID)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	if quest.Valid {
+		var newExperience int32
+
+		need := user.ExperienceNeeded.Int32
+		have := user.Experience.Int32
+		lvl := user.Level.Int32
+		gain := quest.Int32
+
+		if have+gain < need {
+			newExperience = have + gain
+		} else if have+gain >= need {
+			newExperience = have + gain - need
+			lvl += 1
+			// TODO: Update the need once I have some logic behind it :)
+			need += 100
+		}
+
+		err = cfg.database.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
+			ID: userID,
+			Experience: sql.NullInt32{
+				Int32: newExperience,
+				Valid: true,
+			},
+			Level: sql.NullInt32{
+				Int32: lvl,
+				Valid: true,
+			},
+			ExperienceNeeded: sql.NullInt32{
+				Int32: need,
+				Valid: true,
+			},
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+// @Tags Quests
+// @Summary Delete a sub-quest
+// @Success 200
+// @Param id path int true "ID of the quest"
+// @Router /v1/levelup_api/user/quest/{id}/delete-subquest [delete]
+func (cfg *appConfig) deleteSubQuest(w http.ResponseWriter, r *http.Request) {
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	questIDStr := r.PathValue("id")
+
+	questID, err := strconv.Atoi(questIDStr)
+	if err != nil {
+		writeJSONError(w, http.StatusBadRequest, "wrongIdDeactivate", err)
+		return
+	}
+
+	err = cfg.database.DeleteSubQuest(r.Context(), database.DeleteSubQuestParams{
+		ID:     int64(questID),
+		UserID: userID,
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)

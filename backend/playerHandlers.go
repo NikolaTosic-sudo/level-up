@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -53,6 +54,14 @@ type UpdateUserBody struct {
 	Date      time.Time `json:"dateOfBirth"`
 	Email     string    `json:"email"`
 	Target    string    `json:"target" binding:"required"`
+}
+
+type PlayerInfoResponse struct {
+	Name             string `json:"name"`
+	Experience       int32  `json:"experience"`
+	ExperienceNeeded int32  `json:"experienceNeeded"`
+	Level            int32  `json:"level"`
+	HotStreak        int32  `json:"hotStreak"`
 }
 
 // @Tags Player
@@ -290,4 +299,30 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+// @Tags Player
+// @Summary Get player info
+// @Description Get info for the header
+// @Produce json
+// @Success 200 {object} PlayerInfoResponse
+// @Router /v1/levelup_api/user/info [get]
+func (cfg *appConfig) getUserInfo(w http.ResponseWriter, r *http.Request) {
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	userInfo, err := cfg.database.GetUserByID(r.Context(), userID)
+
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(PlayerInfoResponse{
+		Name:             fmt.Sprintf("%v %v %v", userInfo.Firstname.String, userInfo.Nickname.String, userInfo.Lastname.String),
+		Experience:       userInfo.Experience.Int32,
+		ExperienceNeeded: userInfo.ExperienceNeeded.Int32,
+		Level:            userInfo.Level.Int32,
+		HotStreak:        userInfo.HotStreak.Int32,
+	})
 }

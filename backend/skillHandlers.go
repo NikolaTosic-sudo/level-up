@@ -389,11 +389,7 @@ func (cfg *appConfig) getSkillsNotOwnedByUserHandler(w http.ResponseWriter, r *h
 // @Param id path int true "Id of the skill"
 // @Router /v1/levelup_api/skill/{id}/deactivate [delete]
 func (cfg *appConfig) deactivateUsersSkill(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
-
-	parts := strings.Split(path, "/")
-
-	skillIdStr := parts[4]
+	skillIdStr := r.PathValue("id")
 
 	skillId, err := strconv.Atoi(skillIdStr)
 	if err != nil {
