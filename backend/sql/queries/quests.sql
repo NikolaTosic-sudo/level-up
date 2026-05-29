@@ -50,8 +50,31 @@ WHERE qs.quest_id = $2
   AND us.deleted_at IS NULL
 ORDER BY us.name ASC;
 
--- name: CreateQuest :exec
-INSERT INTO quests(created_at, updated_at, name, experience, user_id, type) VALUES (NOW(), NOW(), $1, $2, $3, $4);
+-- name: CreateQuest :one
+INSERT INTO quests(created_at, updated_at, name, experience, user_id, type, start_date, end_date) VALUES (NOW(), NOW(), $1, $2, $3, $4, $5, $6) RETURNING id;
 
 -- name: CreateSubQuest :exec
 INSERT INTO quests(created_at, updated_at, name, experience, user_id, parent_quest_id) VALUES (NOW(), NOW(), $1, $2, $3, $4);
+
+-- name: CreateQuestSkills :exec
+INSERT INTO quests_skills(quest_id, user_id, skill_id, created_at, updated_at) VALUES ($1, $2, $3, NOW(), NOW());
+
+-- name: UpdateQuest :exec
+UPDATE quests
+SET
+  updated_at = NOW(),
+  name = $2,
+  type = $3,
+  experience = $4,
+  start_date = $5,
+  end_date = $6
+WHERE id = $1;
+
+-- name: DeleteQuestSkills :exec
+DELETE FROM quests_skills WHERE user_id = $1 AND quest_id = $2;
+
+-- name: GetSubQuestsIDs :many
+SELECT id FROM quests WHERE parent_quest_id = $1;
+
+-- name: DeleteSubQuest :exec
+DELETE FROM quests WHERE user_id = $1 AND id = $2 AND parent_quest_id = $3;
