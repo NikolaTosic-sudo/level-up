@@ -100,6 +100,23 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
 	return i, err
 }
 
+const getUsersExperience = `-- name: GetUsersExperience :one
+SELECT experience, experience_needed, level FROM users WHERE id = $1
+`
+
+type GetUsersExperienceRow struct {
+	Experience       sql.NullInt32 `json:"experience"`
+	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
+	Level            sql.NullInt32 `json:"level"`
+}
+
+func (q *Queries) GetUsersExperience(ctx context.Context, id uuid.UUID) (GetUsersExperienceRow, error) {
+	row := q.db.QueryRowContext(ctx, getUsersExperience, id)
+	var i GetUsersExperienceRow
+	err := row.Scan(&i.Experience, &i.ExperienceNeeded, &i.Level)
+	return i, err
+}
+
 const updateUserBio = `-- name: UpdateUserBio :exec
 UPDATE users SET bio = $1 WHERE id = $2
 `
@@ -205,6 +222,27 @@ func (q *Queries) UpdateUserProfile(ctx context.Context, arg UpdateUserProfilePa
 		arg.Dateofbirth,
 		arg.Bio,
 		arg.Email,
+	)
+	return err
+}
+
+const updateUsersExperience = `-- name: UpdateUsersExperience :exec
+UPDATE users SET updated_at = NOW(), experience = $2, level = $3, experience_needed = $4 WHERE id = $1
+`
+
+type UpdateUsersExperienceParams struct {
+	ID               uuid.UUID     `json:"id"`
+	Experience       sql.NullInt32 `json:"experience"`
+	Level            sql.NullInt32 `json:"level"`
+	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
+}
+
+func (q *Queries) UpdateUsersExperience(ctx context.Context, arg UpdateUsersExperienceParams) error {
+	_, err := q.db.ExecContext(ctx, updateUsersExperience,
+		arg.ID,
+		arg.Experience,
+		arg.Level,
+		arg.ExperienceNeeded,
 	)
 	return err
 }

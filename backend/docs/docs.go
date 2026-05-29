@@ -274,6 +274,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/levelup_api/user/info": {
+            "get": {
+                "description": "Get info for the header",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Player"
+                ],
+                "summary": "Get player info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.PlayerInfoResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/user/quest-creation": {
             "post": {
                 "consumes": [
@@ -295,6 +315,50 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/main.QuestCreationPayload"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/levelup_api/user/quest/{id}/complete-subquest": {
+            "post": {
+                "tags": [
+                    "Quests"
+                ],
+                "summary": "Complete a sub-quest",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the quest",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/v1/levelup_api/user/quest/{id}/delete-subquest": {
+            "delete": {
+                "tags": [
+                    "Quests"
+                ],
+                "summary": "Delete a sub-quest",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the quest",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -492,6 +556,26 @@ const docTemplate = `{
                 }
             }
         },
+        "main.PlayerInfoResponse": {
+            "type": "object",
+            "properties": {
+                "experience": {
+                    "type": "integer"
+                },
+                "experienceNeeded": {
+                    "type": "integer"
+                },
+                "hotStreak": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "main.ProfileCreationBody": {
             "type": "object",
             "properties": {
@@ -553,6 +637,9 @@ const docTemplate = `{
         "main.QuestCreationPayload": {
             "type": "object",
             "properties": {
+                "endDate": {
+                    "type": "string"
+                },
                 "experience": {
                     "type": "integer"
                 },
@@ -567,6 +654,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/main.SkillCreationPayload"
                     }
+                },
+                "startDate": {
+                    "type": "string"
                 },
                 "subQuests": {
                     "type": "array",

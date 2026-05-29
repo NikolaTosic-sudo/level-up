@@ -12,6 +12,22 @@ import (
 	"github.com/google/uuid"
 )
 
+const completeQuest = `-- name: CompleteQuest :one
+UPDATE quests SET completed = TRUE, completed_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING experience
+`
+
+type CompleteQuestParams struct {
+	ID     int64     `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
+}
+
+func (q *Queries) CompleteQuest(ctx context.Context, arg CompleteQuestParams) (sql.NullInt32, error) {
+	row := q.db.QueryRowContext(ctx, completeQuest, arg.ID, arg.UserID)
+	var experience sql.NullInt32
+	err := row.Scan(&experience)
+	return experience, err
+}
+
 const createQuest = `-- name: CreateQuest :one
 INSERT INTO quests(created_at, updated_at, name, experience, user_id, type, start_date, end_date) VALUES (NOW(), NOW(), $1, $2, $3, $4, $5, $6) RETURNING id
 `
@@ -90,17 +106,16 @@ func (q *Queries) DeleteQuestSkills(ctx context.Context, arg DeleteQuestSkillsPa
 }
 
 const deleteSubQuest = `-- name: DeleteSubQuest :exec
-DELETE FROM quests WHERE user_id = $1 AND id = $2 AND parent_quest_id = $3
+DELETE FROM quests WHERE user_id = $1 AND id = $2
 `
 
 type DeleteSubQuestParams struct {
-	UserID        uuid.UUID     `json:"user_id"`
-	ID            int64         `json:"id"`
-	ParentQuestID sql.NullInt64 `json:"parent_quest_id"`
+	UserID uuid.UUID `json:"user_id"`
+	ID     int64     `json:"id"`
 }
 
 func (q *Queries) DeleteSubQuest(ctx context.Context, arg DeleteSubQuestParams) error {
-	_, err := q.db.ExecContext(ctx, deleteSubQuest, arg.UserID, arg.ID, arg.ParentQuestID)
+	_, err := q.db.ExecContext(ctx, deleteSubQuest, arg.UserID, arg.ID)
 	return err
 }
 

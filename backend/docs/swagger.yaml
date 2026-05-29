@@ -65,6 +65,19 @@ definitions:
       redirect:
         type: string
     type: object
+  main.PlayerInfoResponse:
+    properties:
+      experience:
+        type: integer
+      experienceNeeded:
+        type: integer
+      hotStreak:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+    type: object
   main.ProfileCreationBody:
     properties:
       bio:
@@ -106,6 +119,8 @@ definitions:
     type: object
   main.QuestCreationPayload:
     properties:
+      endDate:
+        type: string
       experience:
         type: integer
       id:
@@ -116,6 +131,8 @@ definitions:
         items:
           $ref: '#/definitions/main.SkillCreationPayload'
         type: array
+      startDate:
+        type: string
       subQuests:
         items:
           $ref: '#/definitions/main.RepeatingQuest'
@@ -479,6 +496,19 @@ paths:
       summary: Update the player
       tags:
       - Player
+  /v1/levelup_api/user/info:
+    get:
+      description: Get info for the header
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.PlayerInfoResponse'
+      summary: Get player info
+      tags:
+      - Player
   /v1/levelup_api/user/quest-creation:
     post:
       consumes:
@@ -496,6 +526,34 @@ paths:
         "200":
           description: OK
       summary: Get all quests for the user
+      tags:
+      - Quests
+  /v1/levelup_api/user/quest/{id}/complete-subquest:
+    post:
+      parameters:
+      - description: ID of the quest
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Complete a sub-quest
+      tags:
+      - Quests
+  /v1/levelup_api/user/quest/{id}/delete-subquest:
+    delete:
+      parameters:
+      - description: ID of the quest
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Delete a sub-quest
       tags:
       - Quests
   /v1/levelup_api/user/skills:
