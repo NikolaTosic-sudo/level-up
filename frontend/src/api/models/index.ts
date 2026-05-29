@@ -8,6 +8,7 @@ export * from './MainLoginBody';
 export * from './MainLoginResponse';
 export * from './MainProfileCreationBody';
 export * from './MainProfileResponse';
+export * from './MainQuestCreationPayload';
 export * from './MainQuestsCreation';
 export * from './MainQuestsReponse';
 export * from './MainQuestsSkills';

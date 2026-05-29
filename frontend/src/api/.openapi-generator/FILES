@@ -13,6 +13,7 @@ docs/MainLoginBody.md
 docs/MainLoginResponse.md
 docs/MainProfileCreationBody.md
 docs/MainProfileResponse.md
+docs/MainQuestCreationPayload.md
 docs/MainQuestsCreation.md
 docs/MainQuestsReponse.md
 docs/MainQuestsSkills.md
@@ -40,6 +41,7 @@ models/MainLoginBody.ts
 models/MainLoginResponse.ts
 models/MainProfileCreationBody.ts
 models/MainProfileResponse.ts
+models/MainQuestCreationPayload.ts
 models/MainQuestsCreation.ts
 models/MainQuestsReponse.ts
 models/MainQuestsSkills.ts

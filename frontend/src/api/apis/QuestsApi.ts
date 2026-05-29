@@ -14,10 +14,19 @@
 
 import * as runtime from '../runtime';
 import {
+    type MainQuestCreationPayload,
+    MainQuestCreationPayloadFromJSON,
+    MainQuestCreationPayloadToJSON,
+} from '../models/MainQuestCreationPayload';
+import {
     type MainQuestsReponse,
     MainQuestsReponseFromJSON,
     MainQuestsReponseToJSON,
 } from '../models/MainQuestsReponse';
+
+export interface V1LevelupApiUserQuestCreationPostRequest {
+    body: MainQuestCreationPayload;
+}
 
 /**
  * 
@@ -59,6 +68,52 @@ export class QuestsApi extends runtime.BaseAPI {
     async v1LevelupApiQuestsGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainQuestsReponse> {
         const response = await this.v1LevelupApiQuestsGetRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Creates request options for v1LevelupApiUserQuestCreationPost without sending the request
+     */
+    async v1LevelupApiUserQuestCreationPostRequestOpts(requestParameters: V1LevelupApiUserQuestCreationPostRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['body'] == null) {
+            throw new runtime.RequiredError(
+                'body',
+                'Required parameter "body" was null or undefined when calling v1LevelupApiUserQuestCreationPost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/levelup_api/user/quest-creation`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: MainQuestCreationPayloadToJSON(requestParameters['body']),
+        };
+    }
+
+    /**
+     * Get all quests for the user
+     */
+    async v1LevelupApiUserQuestCreationPostRaw(requestParameters: V1LevelupApiUserQuestCreationPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.v1LevelupApiUserQuestCreationPostRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Get all quests for the user
+     */
+    async v1LevelupApiUserQuestCreationPost(requestParameters: V1LevelupApiUserQuestCreationPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.v1LevelupApiUserQuestCreationPostRaw(requestParameters, initOverrides);
     }
 
 }
