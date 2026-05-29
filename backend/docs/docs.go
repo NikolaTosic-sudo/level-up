@@ -274,6 +274,36 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/levelup_api/user/quest-creation": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Quests"
+                ],
+                "summary": "Get all quests for the user",
+                "parameters": [
+                    {
+                        "description": "Skill creation",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.QuestCreationPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/user/skills": {
             "get": {
                 "description": "get user's skills",
@@ -516,6 +546,35 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "nickName": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.QuestCreationPayload": {
+            "type": "object",
+            "properties": {
+                "experience": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "skills": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.SkillCreationPayload"
+                    }
+                },
+                "subQuests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/main.RepeatingQuest"
+                    }
+                },
+                "type": {
                     "type": "string"
                 }
             }

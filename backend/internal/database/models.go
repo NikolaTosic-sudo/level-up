@@ -27,6 +27,8 @@ type Quest struct {
 	CompletedAt      sql.NullTime   `json:"completed_at"`
 	DeletedAt        sql.NullTime   `json:"deleted_at"`
 	Type             sql.NullString `json:"type"`
+	Failed           sql.NullBool   `json:"failed"`
+	FailedAt         sql.NullTime   `json:"failed_at"`
 }
 
 type QuestsSkill struct {

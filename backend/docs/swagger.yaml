@@ -104,6 +104,25 @@ definitions:
     - lastName
     - nickName
     type: object
+  main.QuestCreationPayload:
+    properties:
+      experience:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      skills:
+        items:
+          $ref: '#/definitions/main.SkillCreationPayload'
+        type: array
+      subQuests:
+        items:
+          $ref: '#/definitions/main.RepeatingQuest'
+        type: array
+      type:
+        type: string
+    type: object
   main.QuestsCreation:
     properties:
       experience:
@@ -460,6 +479,25 @@ paths:
       summary: Update the player
       tags:
       - Player
+  /v1/levelup_api/user/quest-creation:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Skill creation
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/main.QuestCreationPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get all quests for the user
+      tags:
+      - Quests
   /v1/levelup_api/user/skills:
     get:
       description: get user's skills
