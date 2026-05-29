@@ -4,7 +4,8 @@ import ProfileShop from "./ProfileShop";
 import ProfileProgress from "./ProfileProgress";
 import MuteButton from "../../common/MuteButton";
 import { FireFilled, FireOutlined } from "@ant-design/icons";
-import user from "./userPartially.json";
+import { useGetUserInfo } from "../hooks/useGetUserInfo";
+import LoadingComponent from "../../common/LoadingComponents";
 
 const { Header } = Layout;
 
@@ -18,21 +19,29 @@ export type User = {
 };
 
 function ProfileHeader() {
+  const { data: user, isLoading } = useGetUserInfo();
+
   return (
     <Header className="profile-header">
       <MuteButton />
       <ProfileNotifications />
       <ProfileShop />
-      <ProfileProgress user={user} />
-      <div>{user.name}</div>
-      <div>
-        {!user.hotStreak || user.hotStreak === 0 ? (
-          <FireOutlined />
-        ) : (
-          <FireFilled className="fire-icon" />
-        )}
-        <span style={{ marginLeft: 4 }}>{user.hotStreak}</span>
-      </div>
+      {isLoading ? (
+        <LoadingComponent />
+      ) : user ? (
+        <>
+          <ProfileProgress user={user} />
+          <div>{user.name}</div>
+          <div>
+            {!user.hotStreak || user.hotStreak === 0 ? (
+              <FireOutlined />
+            ) : (
+              <FireFilled className="fire-icon" />
+            )}
+            <span style={{ marginLeft: 4 }}>{user.hotStreak}</span>
+          </div>
+        </>
+      ) : null}
     </Header>
   );
 }

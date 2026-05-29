@@ -1,8 +1,8 @@
 import { Progress, Tooltip } from "antd";
-import type { User } from "./ProfileHeader";
+import type { MainPlayerInfoResponse } from "../../../api";
 
 type ProfileProgressProps = {
-  user: User;
+  user: MainPlayerInfoResponse;
 };
 
 function ProfileProgress({ user }: ProfileProgressProps) {
@@ -10,7 +10,9 @@ function ProfileProgress({ user }: ProfileProgressProps) {
     <>
       <Tooltip title={`${user.experience} / ${user.experienceNeeded} XP`}>
         <Progress
-          percent={(user.experience / user.experienceNeeded) * 100}
+          percent={
+            ((user.experience ?? 1) / (user.experienceNeeded ?? 1)) * 100
+          }
           showInfo={false}
           size={{ height: 10 }}
         />
