@@ -1,9 +1,14 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"io"
 	"net/http"
+	"slices"
 	"time"
+
+	"github.com/NikolaTosic-sudo/level-up/backend/internal/database"
 )
 
 type QuestsSkills struct {
@@ -43,6 +48,17 @@ type TypeRepeatingQuest struct {
 type QuestsReponse struct {
 	RepeatingQuests []TypeRepeatingQuest `json:"repeatingQuests"`
 	CustomQuests    []CustomQuest        `json:"customQuests"`
+}
+
+type QuestCreationPayload struct {
+	ID         int64                  `json:"id"`
+	Name       string                 `json:"name"`
+	Type       string                 `json:"type"`
+	Experience int32                  `json:"experience"`
+	StartDate  time.Time              `json:"startDate"`
+	EndDate    time.Time              `json:"endDate"`
+	Skills     []SkillCreationPayload `json:"skills"`
+	SubQuests  []RepeatingQuest       `json:"subQuests"`
 }
 
 // @Tags Quests
@@ -110,4 +126,214 @@ func (cfg *appConfig) getUsersQuests(w http.ResponseWriter, r *http.Request) {
 		RepeatingQuests: repeatQ,
 		CustomQuests:    customQ,
 	})
+}
+
+// @Tags Quests
+// @Summary Get all quests for the user
+// @Accept json
+// @Produce json
+// @Success 200
+// @Param body body QuestCreationPayload true "Skill creation"
+// @Router /v1/levelup_api/user/quest-creation [post]
+func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
+	var body QuestCreationPayload
+
+	b, err := io.ReadAll(r.Body)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	err = json.Unmarshal(b, &body)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	questID := body.ID
+
+	if questID == 0 {
+		questID, err = cfg.database.CreateQuest(r.Context(), database.CreateQuestParams{
+			UserID: userID,
+			Name:   body.Name,
+			Experience: sql.NullInt32{
+				Int32: body.Experience,
+				Valid: true,
+			},
+			Type: sql.NullString{
+				String: body.Type,
+				Valid:  true,
+			},
+			StartDate: sql.NullTime{
+				Time:  body.StartDate,
+				Valid: true,
+			},
+			EndDate: sql.NullTime{
+				Time:  body.EndDate,
+				Valid: true,
+			},
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		for _, q := range body.SubQuests {
+			err = cfg.database.CreateSubQuest(r.Context(), database.CreateSubQuestParams{
+				ParentQuestID: sql.NullInt64{
+					Int64: questID,
+					Valid: true,
+				},
+				UserID: userID,
+				Name:   q.Name,
+				Experience: sql.NullInt32{
+					Int32: q.Experience,
+					Valid: true,
+				},
+			})
+			if err != nil {
+				writeJSONError(w, http.StatusInternalServerError, "error", err)
+				return
+			}
+		}
+	} else {
+		err = cfg.database.UpdateQuest(r.Context(), database.UpdateQuestParams{
+			ID:   questID,
+			Name: body.Name,
+			Type: sql.NullString{
+				String: body.Type,
+				Valid:  true,
+			},
+			Experience: sql.NullInt32{
+				Int32: body.Experience,
+				Valid: true,
+			},
+			StartDate: sql.NullTime{
+				Time:  body.StartDate,
+				Valid: true,
+			},
+			EndDate: sql.NullTime{
+				Time:  body.EndDate,
+				Valid: true,
+			},
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		err = cfg.database.DeleteQuestSkills(r.Context(), database.DeleteQuestSkillsParams{
+			UserID:  userID,
+			QuestID: questID,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		subQuestsIds, err := cfg.database.GetSubQuestsIDs(r.Context(), sql.NullInt64{
+			Int64: questID,
+			Valid: true,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		for _, q := range body.SubQuests {
+			if slices.Contains(subQuestsIds, q.ID) {
+				err = cfg.database.UpdateQuest(r.Context(), database.UpdateQuestParams{
+					ID:   q.ID,
+					Name: q.Name,
+					Experience: sql.NullInt32{
+						Int32: q.Experience,
+						Valid: true,
+					},
+				})
+				if err != nil {
+					writeJSONError(w, http.StatusInternalServerError, "error", err)
+					return
+				}
+
+				idx := slices.Index(subQuestsIds, q.ID)
+
+				subQuestsIds = slices.Delete(subQuestsIds, idx, idx+1)
+
+			} else if q.ID == 0 {
+				err = cfg.database.CreateSubQuest(r.Context(), database.CreateSubQuestParams{
+					Name: q.Name,
+					Experience: sql.NullInt32{
+						Int32: q.Experience,
+						Valid: true,
+					},
+					UserID: userID,
+					ParentQuestID: sql.NullInt64{
+						Int64: questID,
+						Valid: true,
+					},
+				})
+				if err != nil {
+					writeJSONError(w, http.StatusInternalServerError, "error", err)
+					return
+				}
+			}
+		}
+
+		if len(subQuestsIds) > 0 {
+			for _, q := range subQuestsIds {
+				err = cfg.database.DeleteSubQuest(r.Context(), database.DeleteSubQuestParams{
+					UserID: userID,
+					ID:     q,
+					ParentQuestID: sql.NullInt64{
+						Int64: questID,
+						Valid: true,
+					},
+				})
+				if err != nil {
+					writeJSONError(w, http.StatusInternalServerError, "error", err)
+					return
+				}
+			}
+		}
+	}
+
+	for _, s := range body.Skills {
+		skillId := s.ID
+
+		if s.IsNew {
+			skillId, err = cfg.database.CreateSkill(r.Context(), s.Name)
+			if err != nil {
+				writeJSONError(w, http.StatusInternalServerError, "error", err)
+				return
+			}
+		}
+
+		err = cfg.database.CreateUsersSkills(r.Context(), database.CreateUsersSkillsParams{
+			UserID:  userID,
+			SkillID: skillId,
+			Name:    s.Name,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		err = cfg.database.CreateQuestSkills(r.Context(), database.CreateQuestSkillsParams{
+			QuestID: questID,
+			UserID:  userID,
+			SkillID: skillId,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

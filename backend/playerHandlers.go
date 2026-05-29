@@ -92,7 +92,7 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 
 	if len(body.Quests) > 0 {
 		for _, q := range body.Quests {
-			err = cfg.database.CreateQuest(r.Context(), database.CreateQuestParams{
+			_, err = cfg.database.CreateQuest(r.Context(), database.CreateQuestParams{
 				Name: q.Name,
 				Experience: sql.NullInt32{
 					Int32: int32(q.Experience),

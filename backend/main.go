@@ -76,6 +76,7 @@ func main() {
 	r.Post("/v1/levelup_api/createProfile", cfg.profileCreationHandler)
 	r.Post("/v1/levelup_api/updateUser", cfg.updateUser)
 	r.Post("/v1/levelup_api/create-skill", cfg.skillEditHandler)
+	r.Post("/v1/levelup_api/user/quest-creation", cfg.questCreation)
 
 	r.Delete("/v1/levelup_api/skill/{id}/deactivate", cfg.deactivateUsersSkill)
 

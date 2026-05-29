@@ -92,6 +92,10 @@ func (cfg *appConfig) createRepeatingQuests(r []database.GetUsersRepeatingQuests
 				Type:   q.Type.String,
 				Quests: []RepeatingQuest{repeatingQuest},
 			}
+
+			if i == len(r)-1 {
+				res = append(res, current)
+			}
 		} else if current.Type == q.Type.String {
 			current.Quests = append(current.Quests, repeatingQuest)
 
@@ -103,6 +107,10 @@ func (cfg *appConfig) createRepeatingQuests(r []database.GetUsersRepeatingQuests
 			current = TypeRepeatingQuest{
 				Type:   q.Type.String,
 				Quests: []RepeatingQuest{repeatingQuest},
+			}
+
+			if i == len(r)-1 {
+				res = append(res, current)
 			}
 		}
 	}
