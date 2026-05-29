@@ -77,4 +77,7 @@ DELETE FROM quests_skills WHERE user_id = $1 AND quest_id = $2;
 SELECT id FROM quests WHERE parent_quest_id = $1;
 
 -- name: DeleteSubQuest :exec
-DELETE FROM quests WHERE user_id = $1 AND id = $2 AND parent_quest_id = $3;
+DELETE FROM quests WHERE user_id = $1 AND id = $2;
+
+-- name: CompleteQuest :one
+UPDATE quests SET completed = TRUE, completed_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING experience;

@@ -34,3 +34,9 @@ UPDATE users SET dateOfBirth = $1 WHERE id = $2;
 
 -- name: UpdateUserBio :exec
 UPDATE users SET bio = $1 WHERE id = $2;
+
+-- name: UpdateUsersExperience :exec
+UPDATE users SET updated_at = NOW(), experience = $2, level = $3, experience_needed = $4 WHERE id = $1;
+
+-- name: GetUsersExperience :one
+SELECT experience, experience_needed, level FROM users WHERE id = $1;
