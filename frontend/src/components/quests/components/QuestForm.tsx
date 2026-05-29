@@ -30,7 +30,9 @@ function QuestForm({ formInstance, initialValue, custom }: QuestFormProps) {
 
   return (
     <Form form={formInstance} layout="vertical" initialValues={initialValue}>
-      {custom || initialValue?.type === "custom" ? null : (
+      {custom || initialValue?.type === "custom" ? (
+        <Form.Item initialValue="custom" name="type" hidden />
+      ) : (
         <Form.Item
           name="type"
           label={t("quest.form.repeats", { defaultValue: "Repeats" })}
