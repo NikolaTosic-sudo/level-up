@@ -119,6 +119,36 @@ func (q *Queries) DeleteSubQuest(ctx context.Context, arg DeleteSubQuestParams) 
 	return err
 }
 
+const getCompletedQuestStats = `-- name: GetCompletedQuestStats :one
+SELECT
+  COUNT(*) FILTER (WHERE completed = TRUE AND parent_quest_id IS NULL) AS all_completed,
+  COUNT(*) FILTER (WHERE completed = TRUE AND type = 'custom') AS custom_completed,
+  COUNT(*) FILTER (WHERE completed = TRUE AND type != 'custom') AS repeating_completed,
+  COUNT(*) FILTER (WHERE completed = TRUE AND parent_quest_id IS NOT NULL) AS sub_quests_completed
+FROM quests
+WHERE user_id = $1
+  AND deleted_at IS NULL
+`
+
+type GetCompletedQuestStatsRow struct {
+	AllCompleted       int64 `json:"all_completed"`
+	CustomCompleted    int64 `json:"custom_completed"`
+	RepeatingCompleted int64 `json:"repeating_completed"`
+	SubQuestsCompleted int64 `json:"sub_quests_completed"`
+}
+
+func (q *Queries) GetCompletedQuestStats(ctx context.Context, userID uuid.UUID) (GetCompletedQuestStatsRow, error) {
+	row := q.db.QueryRowContext(ctx, getCompletedQuestStats, userID)
+	var i GetCompletedQuestStatsRow
+	err := row.Scan(
+		&i.AllCompleted,
+		&i.CustomCompleted,
+		&i.RepeatingCompleted,
+		&i.SubQuestsCompleted,
+	)
+	return i, err
+}
+
 const getQuestSkills = `-- name: GetQuestSkills :many
 SELECT
   us.skill_id,
@@ -156,6 +186,33 @@ func (q *Queries) GetQuestSkills(ctx context.Context, arg GetQuestSkillsParams) 
 			return nil, err
 		}
 		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getSkillsForQuest = `-- name: GetSkillsForQuest :many
+SELECT skill_id FROM quests_skills WHERE quest_id = $1
+`
+
+func (q *Queries) GetSkillsForQuest(ctx context.Context, questID int64) ([]int32, error) {
+	rows, err := q.db.QueryContext(ctx, getSkillsForQuest, questID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []int32
+	for rows.Next() {
+		var skill_id int32
+		if err := rows.Scan(&skill_id); err != nil {
+			return nil, err
+		}
+		items = append(items, skill_id)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

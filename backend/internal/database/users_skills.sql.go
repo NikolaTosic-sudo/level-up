@@ -86,6 +86,28 @@ func (q *Queries) GetMostRecentLeveledSkill(ctx context.Context, userID uuid.UUI
 	return name, err
 }
 
+const getSkillsExperience = `-- name: GetSkillsExperience :one
+SELECT experience, experience_needed, level FROM users_skills WHERE skill_id = $1 AND user_id = $2 AND deleted_at IS NULL
+`
+
+type GetSkillsExperienceParams struct {
+	SkillID int32     `json:"skill_id"`
+	UserID  uuid.UUID `json:"user_id"`
+}
+
+type GetSkillsExperienceRow struct {
+	Experience       int32 `json:"experience"`
+	ExperienceNeeded int32 `json:"experience_needed"`
+	Level            int32 `json:"level"`
+}
+
+func (q *Queries) GetSkillsExperience(ctx context.Context, arg GetSkillsExperienceParams) (GetSkillsExperienceRow, error) {
+	row := q.db.QueryRowContext(ctx, getSkillsExperience, arg.SkillID, arg.UserID)
+	var i GetSkillsExperienceRow
+	err := row.Scan(&i.Experience, &i.ExperienceNeeded, &i.Level)
+	return i, err
+}
+
 const getUserSkillID = `-- name: GetUserSkillID :one
 SELECT skill_id FROM users_skills WHERE user_id = $1 AND name = $2
 `
@@ -306,6 +328,29 @@ type SoftDeleteUserSkillParams struct {
 
 func (q *Queries) SoftDeleteUserSkill(ctx context.Context, arg SoftDeleteUserSkillParams) error {
 	_, err := q.db.ExecContext(ctx, softDeleteUserSkill, arg.UserID, arg.ParentSkillID)
+	return err
+}
+
+const updateSkillsExperience = `-- name: UpdateSkillsExperience :exec
+UPDATE users_skills SET experience = $3, experience_needed = $4, level = $5 WHERE skill_id = $1 AND user_id = $2
+`
+
+type UpdateSkillsExperienceParams struct {
+	SkillID          int32     `json:"skill_id"`
+	UserID           uuid.UUID `json:"user_id"`
+	Experience       int32     `json:"experience"`
+	ExperienceNeeded int32     `json:"experience_needed"`
+	Level            int32     `json:"level"`
+}
+
+func (q *Queries) UpdateSkillsExperience(ctx context.Context, arg UpdateSkillsExperienceParams) error {
+	_, err := q.db.ExecContext(ctx, updateSkillsExperience,
+		arg.SkillID,
+		arg.UserID,
+		arg.Experience,
+		arg.ExperienceNeeded,
+		arg.Level,
+	)
 	return err
 }
 

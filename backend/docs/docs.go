@@ -324,6 +324,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/levelup_api/user/quest/{id}/complete": {
+            "post": {
+                "tags": [
+                    "Quests"
+                ],
+                "summary": "Complete a sub-quest",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the quest",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.QuestCompletionResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/user/quest/{id}/complete-subquest": {
             "post": {
                 "tags": [
@@ -341,7 +366,10 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.QuestCompletionResponse"
+                        }
                     }
                 }
             }
@@ -634,6 +662,14 @@ const docTemplate = `{
                 }
             }
         },
+        "main.QuestCompletionResponse": {
+            "type": "object",
+            "properties": {
+                "leveledUpTimes": {
+                    "type": "integer"
+                }
+            }
+        },
         "main.QuestCreationPayload": {
             "type": "object",
             "properties": {
@@ -666,6 +702,26 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string"
+                }
+            }
+        },
+        "main.QuestStatsResponse": {
+            "type": "object",
+            "properties": {
+                "customQuestCompleted": {
+                    "type": "integer"
+                },
+                "experienceGained": {
+                    "type": "integer"
+                },
+                "questCompleted": {
+                    "type": "integer"
+                },
+                "repeatingQuestCompleted": {
+                    "type": "integer"
+                },
+                "subQuestsCompleted": {
+                    "type": "integer"
                 }
             }
         },
@@ -930,6 +986,9 @@ const docTemplate = `{
                 },
                 "profile": {
                     "$ref": "#/definitions/main.ProfileResponse"
+                },
+                "questStats": {
+                    "$ref": "#/definitions/main.QuestStatsResponse"
                 }
             }
         },
