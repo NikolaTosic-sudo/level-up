@@ -18,7 +18,7 @@ function DashboardWrapper({ user }: DashboardWrapperProps) {
       </Col>
 
       <Col span={8}>
-        <QuestsCard />
+        <QuestsCard questStats={user.questStats} />
       </Col>
 
       <Col span={8}>

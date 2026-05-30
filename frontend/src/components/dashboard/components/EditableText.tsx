@@ -5,12 +5,12 @@ import { useState, type CSSProperties } from "react";
 
 type EditableTextProps = {
   title?: string;
-  onChange?: (value: string, e?: MouseEvent) => void;
+  onChange?: (value: string | number, e?: MouseEvent) => void;
   editable?: boolean;
   style?: CSSProperties;
   spaceStyle?: CSSProperties;
   mode?: "input" | "textArea" | "date";
-  val?: string;
+  val?: string | number;
   placeholder?: string;
 };
 
