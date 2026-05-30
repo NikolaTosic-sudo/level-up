@@ -143,3 +143,9 @@ WHERE users_skills_links.user_id = $1
     parent_skill_id = $2
     OR child_skill_id = $2
   );
+
+-- name: GetSkillsExperience :one
+SELECT experience, experience_needed, level FROM users_skills WHERE skill_id = $1 AND user_id = $2 AND deleted_at IS NULL;
+
+-- name: UpdateSkillsExperience :exec
+UPDATE users_skills SET experience = $3, experience_needed = $4, level = $5 WHERE skill_id = $1 AND user_id = $2;

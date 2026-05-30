@@ -81,3 +81,16 @@ DELETE FROM quests WHERE user_id = $1 AND id = $2;
 
 -- name: CompleteQuest :one
 UPDATE quests SET completed = TRUE, completed_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING experience;
+
+-- name: GetSkillsForQuest :many
+SELECT skill_id FROM quests_skills WHERE quest_id = $1;
+
+-- name: GetCompletedQuestStats :one
+SELECT
+  COUNT(*) FILTER (WHERE completed = TRUE AND parent_quest_id IS NULL) AS all_completed,
+  COUNT(*) FILTER (WHERE completed = TRUE AND type = 'custom') AS custom_completed,
+  COUNT(*) FILTER (WHERE completed = TRUE AND type != 'custom') AS repeating_completed,
+  COUNT(*) FILTER (WHERE completed = TRUE AND parent_quest_id IS NOT NULL) AS sub_quests_completed
+FROM quests
+WHERE user_id = $1
+  AND deleted_at IS NULL;
