@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"io"
+	"math"
 	"net/http"
 	"slices"
 	"strconv"
@@ -60,6 +61,10 @@ type QuestCreationPayload struct {
 	EndDate    time.Time              `json:"endDate"`
 	Skills     []SkillCreationPayload `json:"skills"`
 	SubQuests  []RepeatingQuest       `json:"subQuests"`
+}
+
+type QuestCompletionResponse struct {
+	LeveledUpTimes int32 `json:"leveledUpTimes"`
 }
 
 // @Tags Quests
@@ -337,7 +342,7 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 
 // @Tags Quests
 // @Summary Complete a sub-quest
-// @Success 200
+// @Success 200 {object} QuestCompletionResponse
 // @Param id path int true "ID of the quest"
 // @Router /v1/levelup_api/user/quest/{id}/complete-subquest [post]
 func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
@@ -371,21 +376,12 @@ func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if quest.Valid {
-		var newExperience int32
-
-		need := user.ExperienceNeeded.Int32
-		have := user.Experience.Int32
-		lvl := user.Level.Int32
-		gain := quest.Int32
-
-		if have+gain < need {
-			newExperience = have + gain
-		} else if have+gain >= need {
-			newExperience = have + gain - need
-			lvl += 1
-			// TODO: Update the need once I have some logic behind it :)
-			need += 100
-		}
+		newExperience, lvl, need := calculateExperience(CalculateExperienceParams{
+			need: user.ExperienceNeeded.Int32,
+			have: user.Experience.Int32,
+			lvl:  user.Level.Int32,
+			gain: quest.Int32,
+		})
 
 		err = cfg.database.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
 			ID: userID,
@@ -406,9 +402,14 @@ func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
 			writeJSONError(w, http.StatusInternalServerError, "error", err)
 			return
 		}
-	}
+		w.WriteHeader(http.StatusOK)
 
-	w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(QuestCompletionResponse{
+			LeveledUpTimes: lvl - user.Level.Int32,
+		})
+	} else {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+	}
 }
 
 // @Tags Quests
@@ -441,4 +442,164 @@ func (cfg *appConfig) deleteSubQuest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+// @Tags Quests
+// @Summary Complete a sub-quest
+// @Success 200 {object} QuestCompletionResponse
+// @Param id path int true "ID of the quest"
+// @Router /v1/levelup_api/user/quest/{id}/complete [post]
+func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	questIDStr := r.PathValue("id")
+
+	questID, err := strconv.Atoi(questIDStr)
+	if err != nil {
+		writeJSONError(w, http.StatusBadRequest, "wrongIdDeactivate", err)
+		return
+	}
+
+	questExp, err := cfg.database.CompleteQuest(r.Context(), database.CompleteQuestParams{
+		ID:     int64(questID),
+		UserID: userID,
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	userInfo, err := cfg.database.GetUsersExperience(r.Context(), userID)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	newExperience, lvl, need := calculateExperience(CalculateExperienceParams{
+		need: userInfo.ExperienceNeeded.Int32,
+		have: userInfo.Experience.Int32,
+		lvl:  userInfo.Level.Int32,
+		gain: questExp.Int32,
+	})
+
+	err = cfg.database.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
+		ID: userID,
+		Experience: sql.NullInt32{
+			Int32: newExperience,
+			Valid: true,
+		},
+		Level: sql.NullInt32{
+			Int32: lvl,
+			Valid: true,
+		},
+		ExperienceNeeded: sql.NullInt32{
+			Int32: need,
+			Valid: true,
+		},
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	skillIds, err := cfg.database.GetSkillsForQuest(r.Context(), int64(questID))
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	for _, s := range skillIds {
+		skillInfo, err := cfg.database.GetSkillsExperience(r.Context(), database.GetSkillsExperienceParams{
+			UserID:  userID,
+			SkillID: s,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		newExperience, lvl, need := calculateExperience(CalculateExperienceParams{
+			need: skillInfo.ExperienceNeeded,
+			have: skillInfo.Experience,
+			lvl:  skillInfo.Level,
+			gain: questExp.Int32,
+		})
+
+		err = cfg.database.UpdateSkillsExperience(r.Context(), database.UpdateSkillsExperienceParams{
+			SkillID:          s,
+			UserID:           userID,
+			Experience:       newExperience,
+			Level:            lvl,
+			ExperienceNeeded: need,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		linkedIDs, err := cfg.database.GetUsersSkillsLinkedID(r.Context(), database.GetUsersSkillsLinkedIDParams{
+			ParentSkillID: s,
+			UserID:        userID,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+
+		for _, l := range linkedIDs {
+			linkedInfo, err := cfg.database.GetSkillsExperience(r.Context(), database.GetSkillsExperienceParams{
+				UserID:  userID,
+				SkillID: l,
+			})
+
+			newExperience, lvl, need := calculateExperience(CalculateExperienceParams{
+				need: linkedInfo.ExperienceNeeded,
+				have: linkedInfo.Experience,
+				lvl:  linkedInfo.Level,
+				gain: int32(math.Round(float64(questExp.Int32) / 12)),
+			})
+
+			err = cfg.database.UpdateSkillsExperience(r.Context(), database.UpdateSkillsExperienceParams{
+				SkillID:          l,
+				UserID:           userID,
+				Experience:       newExperience,
+				Level:            lvl,
+				ExperienceNeeded: need,
+			})
+			if err != nil {
+				writeJSONError(w, http.StatusInternalServerError, "error", err)
+				return
+			}
+		}
+	}
+
+	subQuestsIds, err := cfg.database.GetSubQuestsIDs(r.Context(), sql.NullInt64{
+		Int64: int64(questID),
+		Valid: true,
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	for _, q := range subQuestsIds {
+		_, err := cfg.database.CompleteQuest(r.Context(), database.CompleteQuestParams{
+			ID:     q,
+			UserID: userID,
+		})
+		if err != nil {
+			writeJSONError(w, http.StatusInternalServerError, "error", err)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(QuestCompletionResponse{
+		LeveledUpTimes: lvl - userInfo.Level.Int32,
+	})
 }

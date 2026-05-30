@@ -11,6 +11,8 @@ import (
 	"github.com/NikolaTosic-sudo/level-up/backend/internal/database"
 )
 
+const DEFAULT_EXPERIENCE_NEEDED_INCREASE = 100
+
 type SkillsCreation struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
@@ -32,10 +34,11 @@ type ProfileCreationBody struct {
 }
 
 type UserResponse struct {
-	Profile                ProfileResponse `json:"profile" binding:"required"`
-	Bio                    string          `json:"bio"`
-	HighestLeveledSkill    string          `json:"highestLeveledSkill"`
-	MostRecentLeveledSkill string          `json:"mostRecentLeveledSkill"`
+	Profile                ProfileResponse    `json:"profile" binding:"required"`
+	Bio                    string             `json:"bio"`
+	HighestLeveledSkill    string             `json:"highestLeveledSkill"`
+	MostRecentLeveledSkill string             `json:"mostRecentLeveledSkill"`
+	QuestStats             QuestStatsResponse `json:"questStats"`
 }
 
 type ProfileResponse struct {
@@ -62,6 +65,14 @@ type PlayerInfoResponse struct {
 	ExperienceNeeded int32  `json:"experienceNeeded"`
 	Level            int32  `json:"level"`
 	HotStreak        int32  `json:"hotStreak"`
+}
+
+type QuestStatsResponse struct {
+	CompletedCount          int `json:"questCompleted"`
+	RepeatingCompletedCount int `json:"repeatingQuestCompleted"`
+	CustomCompletedCount    int `json:"customQuestCompleted"`
+	ExperienceGained        int `json:"experienceGained"`
+	SubQuestsCompletedCount int `json:"subQuestsCompleted"`
 }
 
 // @Tags Player
@@ -203,8 +214,28 @@ func (cfg *appConfig) getFullUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	highestSkill, err := cfg.database.GetUsersSkillHighestLevel(r.Context(), userID)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
 
 	mostRecentLeveled, err := cfg.database.GetMostRecentLeveledSkill(r.Context(), userID)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	questStats, err := cfg.database.GetCompletedQuestStats(r.Context(), userID)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	experienceGained := 0
+
+	for lvl := range user.Level.Int32 {
+		experienceGained += (int(lvl) + 1) * DEFAULT_EXPERIENCE_NEEDED_INCREASE
+	}
 
 	w.WriteHeader(http.StatusOK)
 
@@ -219,6 +250,13 @@ func (cfg *appConfig) getFullUser(w http.ResponseWriter, r *http.Request) {
 		Bio:                    user.Bio.String,
 		HighestLeveledSkill:    highestSkill,
 		MostRecentLeveledSkill: mostRecentLeveled,
+		QuestStats: QuestStatsResponse{
+			CompletedCount:          int(questStats.AllCompleted),
+			RepeatingCompletedCount: int(questStats.RepeatingCompleted),
+			CustomCompletedCount:    int(questStats.CustomCompleted),
+			SubQuestsCompletedCount: int(questStats.SubQuestsCompleted),
+			ExperienceGained:        experienceGained + int(user.Experience.Int32),
+		},
 	})
 }
 

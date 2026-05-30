@@ -8,6 +8,13 @@ import (
 	"github.com/google/uuid"
 )
 
+type CalculateExperienceParams struct {
+	need int32
+	have int32
+	lvl  int32
+	gain int32
+}
+
 func (cfg *appConfig) getQuestSkills(userID uuid.UUID, questID int64) ([]QuestsSkills, error) {
 	var res []QuestsSkills
 
@@ -116,4 +123,28 @@ func (cfg *appConfig) createRepeatingQuests(r []database.GetUsersRepeatingQuests
 	}
 
 	return res, nil
+}
+
+func calculateExperience(info CalculateExperienceParams) (int32, int32, int32) {
+	var newExperience int32
+
+	need := info.need
+	have := info.have
+	lvl := info.lvl
+	gain := info.gain
+
+	if have+gain < need {
+		newExperience = have + gain
+	}
+
+	for have+gain >= need {
+		newExperience = have + gain - need
+		lvl += 1
+		// TODO: Update the need once I have some logic behind it :)
+		gain -= (need - have)
+		need += DEFAULT_EXPERIENCE_NEEDED_INCREASE
+		have = 0
+	}
+
+	return newExperience, lvl, need
 }
