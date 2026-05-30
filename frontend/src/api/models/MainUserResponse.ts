@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { MainQuestStatsResponse } from './MainQuestStatsResponse';
+import {
+    MainQuestStatsResponseFromJSON,
+    MainQuestStatsResponseFromJSONTyped,
+    MainQuestStatsResponseToJSON,
+    MainQuestStatsResponseToJSONTyped,
+} from './MainQuestStatsResponse';
 import type { MainProfileResponse } from './MainProfileResponse';
 import {
     MainProfileResponseFromJSON,
@@ -51,6 +58,12 @@ export interface MainUserResponse {
      * @memberof MainUserResponse
      */
     profile: MainProfileResponse;
+    /**
+     * 
+     * @type {MainQuestStatsResponse}
+     * @memberof MainUserResponse
+     */
+    questStats?: MainQuestStatsResponse;
 }
 
 /**
@@ -75,6 +88,7 @@ export function MainUserResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
         'highestLeveledSkill': json['highestLeveledSkill'] == null ? undefined : json['highestLeveledSkill'],
         'mostRecentLeveledSkill': json['mostRecentLeveledSkill'] == null ? undefined : json['mostRecentLeveledSkill'],
         'profile': MainProfileResponseFromJSON(json['profile']),
+        'questStats': json['questStats'] == null ? undefined : MainQuestStatsResponseFromJSON(json['questStats']),
     };
 }
 
@@ -93,6 +107,7 @@ export function MainUserResponseToJSONTyped(value?: MainUserResponse | null, ign
         'highestLeveledSkill': value['highestLeveledSkill'],
         'mostRecentLeveledSkill': value['mostRecentLeveledSkill'],
         'profile': MainProfileResponseToJSON(value['profile']),
+        'questStats': MainQuestStatsResponseToJSON(value['questStats']),
     };
 }
 

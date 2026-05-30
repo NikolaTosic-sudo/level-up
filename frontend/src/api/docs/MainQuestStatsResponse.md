@@ -1,30 +1,30 @@
 
-# MainUserResponse
+# MainQuestStatsResponse
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`bio` | string
-`highestLeveledSkill` | string
-`mostRecentLeveledSkill` | string
-`profile` | [MainProfileResponse](MainProfileResponse.md)
-`questStats` | [MainQuestStatsResponse](MainQuestStatsResponse.md)
+`customQuestCompleted` | number
+`experienceGained` | number
+`questCompleted` | number
+`repeatingQuestCompleted` | number
+`subQuestsCompleted` | number
 
 ## Example
 
 ```typescript
-import type { MainUserResponse } from ''
+import type { MainQuestStatsResponse } from ''
 
 // TODO: Update the object below with actual values
 const example = {
-  "bio": null,
-  "highestLeveledSkill": null,
-  "mostRecentLeveledSkill": null,
-  "profile": null,
-  "questStats": null,
-} satisfies MainUserResponse
+  "customQuestCompleted": null,
+  "experienceGained": null,
+  "questCompleted": null,
+  "repeatingQuestCompleted": null,
+  "subQuestsCompleted": null,
+} satisfies MainQuestStatsResponse
 
 console.log(example)
 
@@ -33,7 +33,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as MainUserResponse
+const exampleParsed = JSON.parse(exampleJSON) as MainQuestStatsResponse
 console.log(exampleParsed)
 ```
 

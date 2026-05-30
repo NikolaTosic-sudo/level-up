@@ -14,6 +14,11 @@
 
 import * as runtime from '../runtime';
 import {
+    type MainQuestCompletionResponse,
+    MainQuestCompletionResponseFromJSON,
+    MainQuestCompletionResponseToJSON,
+} from '../models/MainQuestCompletionResponse';
+import {
     type MainQuestCreationPayload,
     MainQuestCreationPayloadFromJSON,
     MainQuestCreationPayloadToJSON,
@@ -26,6 +31,10 @@ import {
 
 export interface V1LevelupApiUserQuestCreationPostRequest {
     body: MainQuestCreationPayload;
+}
+
+export interface V1LevelupApiUserQuestIdCompletePostRequest {
+    id: number;
 }
 
 export interface V1LevelupApiUserQuestIdCompleteSubquestPostRequest {
@@ -125,6 +134,51 @@ export class QuestsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for v1LevelupApiUserQuestIdCompletePost without sending the request
+     */
+    async v1LevelupApiUserQuestIdCompletePostRequestOpts(requestParameters: V1LevelupApiUserQuestIdCompletePostRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling v1LevelupApiUserQuestIdCompletePost().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/v1/levelup_api/user/quest/{id}/complete`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Complete a sub-quest
+     */
+    async v1LevelupApiUserQuestIdCompletePostRaw(requestParameters: V1LevelupApiUserQuestIdCompletePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MainQuestCompletionResponse>> {
+        const requestOptions = await this.v1LevelupApiUserQuestIdCompletePostRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MainQuestCompletionResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Complete a sub-quest
+     */
+    async v1LevelupApiUserQuestIdCompletePost(requestParameters: V1LevelupApiUserQuestIdCompletePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainQuestCompletionResponse> {
+        const response = await this.v1LevelupApiUserQuestIdCompletePostRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for v1LevelupApiUserQuestIdCompleteSubquestPost without sending the request
      */
     async v1LevelupApiUserQuestIdCompleteSubquestPostRequestOpts(requestParameters: V1LevelupApiUserQuestIdCompleteSubquestPostRequest): Promise<runtime.RequestOpts> {
@@ -154,18 +208,19 @@ export class QuestsApi extends runtime.BaseAPI {
     /**
      * Complete a sub-quest
      */
-    async v1LevelupApiUserQuestIdCompleteSubquestPostRaw(requestParameters: V1LevelupApiUserQuestIdCompleteSubquestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async v1LevelupApiUserQuestIdCompleteSubquestPostRaw(requestParameters: V1LevelupApiUserQuestIdCompleteSubquestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MainQuestCompletionResponse>> {
         const requestOptions = await this.v1LevelupApiUserQuestIdCompleteSubquestPostRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => MainQuestCompletionResponseFromJSON(jsonValue));
     }
 
     /**
      * Complete a sub-quest
      */
-    async v1LevelupApiUserQuestIdCompleteSubquestPost(requestParameters: V1LevelupApiUserQuestIdCompleteSubquestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.v1LevelupApiUserQuestIdCompleteSubquestPostRaw(requestParameters, initOverrides);
+    async v1LevelupApiUserQuestIdCompleteSubquestPost(requestParameters: V1LevelupApiUserQuestIdCompleteSubquestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainQuestCompletionResponse> {
+        const response = await this.v1LevelupApiUserQuestIdCompleteSubquestPostRaw(requestParameters, initOverrides);
+        return await response.value();
     }
 
     /**

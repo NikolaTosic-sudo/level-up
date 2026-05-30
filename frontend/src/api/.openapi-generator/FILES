@@ -14,7 +14,9 @@ docs/MainLoginResponse.md
 docs/MainPlayerInfoResponse.md
 docs/MainProfileCreationBody.md
 docs/MainProfileResponse.md
+docs/MainQuestCompletionResponse.md
 docs/MainQuestCreationPayload.md
+docs/MainQuestStatsResponse.md
 docs/MainQuestsCreation.md
 docs/MainQuestsReponse.md
 docs/MainQuestsSkills.md
@@ -43,7 +45,9 @@ models/MainLoginResponse.ts
 models/MainPlayerInfoResponse.ts
 models/MainProfileCreationBody.ts
 models/MainProfileResponse.ts
+models/MainQuestCompletionResponse.ts
 models/MainQuestCreationPayload.ts
+models/MainQuestStatsResponse.ts
 models/MainQuestsCreation.ts
 models/MainQuestsReponse.ts
 models/MainQuestsSkills.ts
