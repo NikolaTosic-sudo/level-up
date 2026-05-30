@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import ErrorMessageComponent, {
   type ApiError,
 } from "../../common/ErrorMessageComponent";
-import { message } from "antd";
+import { App } from "antd";
 import {
   type MainLoginResponse,
   type V1LevelupApiCreateProfilePostRequest,
@@ -16,6 +16,7 @@ export function useCreateProfile() {
   const api = useRef(playerApi);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { message } = App.useApp();
 
   const mutation = useMutation({
     mutationFn: (data: V1LevelupApiCreateProfilePostRequest) =>

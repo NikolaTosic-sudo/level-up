@@ -66,6 +66,9 @@ const theme: ThemeConfig = {
     Progress: {
       defaultColor: "#008c95",
     },
+    Message: {
+      borderRadiusLG: 0,
+    },
   },
 };
 

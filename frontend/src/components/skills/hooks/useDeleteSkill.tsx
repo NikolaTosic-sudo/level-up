@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import ErrorMessageComponent, {
   type ApiError,
 } from "../../common/ErrorMessageComponent";
-import { message } from "antd";
+import { App } from "antd";
 import { skillsApi } from "../../../types/newApi";
 import type { V1LevelupApiSkillIdDeactivateDeleteRequest } from "../../../api";
 
@@ -12,6 +12,7 @@ export function useDeleteSkill() {
   const api = useRef(skillsApi);
   const { t } = useTranslation();
   const query = useQueryClient();
+  const { message } = App.useApp();
 
   const mutation = useMutation({
     mutationFn: (data: V1LevelupApiSkillIdDeactivateDeleteRequest) =>

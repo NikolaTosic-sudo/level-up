@@ -9,7 +9,7 @@ import { useNavigate } from "@tanstack/react-router";
 import ErrorMessageComponent, {
   type ApiError,
 } from "../../common/ErrorMessageComponent";
-import { message } from "antd";
+import { App } from "antd";
 import { useTranslation } from "react-i18next";
 import { loginApi } from "../../../types/newApi";
 
@@ -17,6 +17,7 @@ export function useSignUp(isSignIn: boolean) {
   const api = useRef(loginApi);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { message } = App.useApp();
 
   const mutation = useMutation({
     mutationFn: (

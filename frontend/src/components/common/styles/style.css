@@ -45,6 +45,7 @@ body {
   max-height: 250px;
 }
 
+.ant-message .ant-message-notice .ant-message-notice-content,
 .ant-popover .ant-popover-container,
 .ant-popover .ant-popover-arrow:before,
 .ant-select-dropdown,
@@ -107,6 +108,7 @@ body {
 }
 
 :root,
+.ant-message .ant-message-notice .ant-message-notice-content,
 .ant-select.ant-select-open,
 .ant-picker.ant-picker-focused,
 .ant-dropdown,
@@ -121,6 +123,7 @@ body {
 }
 
 :root,
+.ant-message .ant-message-notice .ant-message-notice-content,
 .ant-select-dropdown,
 .ant-picker-dropdown .ant-picker-panel-container,
 .ant-dropdown,

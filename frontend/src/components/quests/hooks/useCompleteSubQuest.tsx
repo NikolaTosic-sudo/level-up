@@ -4,13 +4,14 @@ import { useTranslation } from "react-i18next";
 import ErrorMessageComponent, {
   type ApiError,
 } from "../../common/ErrorMessageComponent";
-import { message } from "antd";
+import { App } from "antd";
 import { questsApi } from "../../../types/newApi";
 
 export function useCompleteSubQuest() {
   const api = useRef(questsApi);
   const { t } = useTranslation();
   const query = useQueryClient();
+  const { message } = App.useApp();
 
   const mutation = useMutation({
     mutationFn: (id: number) =>
