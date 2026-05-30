@@ -7,7 +7,7 @@ import ErrorMessageComponent, {
 import { App } from "antd";
 import { questsApi } from "../../../types/newApi";
 
-export function useCompleteSubQuest() {
+export function useCompleteQuest() {
   const api = useRef(questsApi);
   const { t } = useTranslation();
   const query = useQueryClient();
@@ -15,11 +15,11 @@ export function useCompleteSubQuest() {
 
   const mutation = useMutation({
     mutationFn: (id: number) =>
-      api.current.v1LevelupApiUserQuestIdCompleteSubquestPost({ id }),
+      api.current.v1LevelupApiUserQuestIdCompletePost({ id }),
     onSuccess: ({ leveledUpTimes }) => {
       message.success(
         t("", {
-          defaultValue: "Successfully completed sub-quest.",
+          defaultValue: "Successfully completed Quest.",
         }),
       );
 

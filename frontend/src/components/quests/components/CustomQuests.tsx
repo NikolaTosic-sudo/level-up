@@ -23,7 +23,10 @@ function CustomQuests({ quests }: CustomQuestsProps) {
 
   const handleFinish = () => {
     form.validateFields().then((values) => {
-      mutate({ body: { ...values } }, { onSuccess: () => setOpen(false) });
+      mutate(
+        { body: { ...values, startDate: new Date() } },
+        { onSuccess: () => setOpen(false) },
+      );
     });
   };
 

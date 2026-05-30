@@ -158,65 +158,79 @@ function QuestForm({ formInstance, initialValue, custom }: QuestFormProps) {
       <Form.List name="subQuests">
         {(fields, { add, remove }) => (
           <>
-            {fields.map((field, index) => (
-              <Space
-                key={field.key}
-                align="start"
-                style={{ display: "flex", width: "100%", marginBottom: 12 }}
-              >
-                <Form.Item name={[field.name, "id"]} hidden />
+            {fields.map((field, index) => {
+              const currentValues = formInstance.getFieldValue([
+                "subQuests",
+                field.name,
+              ]);
 
-                <Form.Item
-                  name={[field.name, "name"]}
-                  label={t("quest.form.subquestTitle", {
-                    defaultValue: "Sub-quest {{count}}",
-                    count: index + 1,
-                  })}
-                  rules={[
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: t("quest.form.subquestTitle.required", {
-                        defaultValue: "Sub-quest title is required.",
-                      }),
-                    },
-                  ]}
-                  style={{ minWidth: 380, flex: 1 }}
+              const isDisabled = currentValues?.completed;
+
+              return (
+                <Space
+                  key={field.key}
+                  align="start"
+                  style={{ display: "flex", width: "100%", marginBottom: 12 }}
                 >
-                  <Input />
-                </Form.Item>
+                  <Form.Item name={[field.name, "id"]} hidden />
 
-                <Form.Item
-                  name={[field.name, "experience"]}
-                  label={
-                    <>
-                      {t("quest.form.experience", {
-                        defaultValue: "Experience",
-                      })}
-                      <HelperComponent text="Part of overall quest experience" />
-                    </>
-                  }
-                  rules={[
-                    {
-                      required: true,
-                      message: t("quest.form.experience.required", {
-                        defaultValue: "Experience is required.",
-                      }),
-                    },
-                  ]}
-                >
-                  <InputNumber min={0} style={{ width: 120 }} />
-                </Form.Item>
+                  <Form.Item
+                    name={[field.name, "name"]}
+                    label={t("quest.form.subquestTitle", {
+                      defaultValue: "Sub-quest {{count}}",
+                      count: index + 1,
+                    })}
+                    rules={[
+                      {
+                        required: true,
+                        whitespace: true,
+                        message: t("quest.form.subquestTitle.required", {
+                          defaultValue: "Sub-quest title is required.",
+                        }),
+                      },
+                    ]}
+                    style={{ minWidth: 380, flex: 1 }}
+                  >
+                    <Input disabled={isDisabled} />
+                  </Form.Item>
 
-                <Button
-                  danger
-                  ghost
-                  icon={<MinusCircleOutlined />}
-                  onClick={() => remove(field.name)}
-                  style={{ marginTop: 30 }}
-                />
-              </Space>
-            ))}
+                  <Form.Item
+                    name={[field.name, "experience"]}
+                    label={
+                      <>
+                        {t("quest.form.experience", {
+                          defaultValue: "Experience",
+                        })}
+                        <HelperComponent text="Part of overall quest experience" />
+                      </>
+                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: t("quest.form.experience.required", {
+                          defaultValue: "Experience is required.",
+                        }),
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      disabled={isDisabled}
+                      style={{ width: 120 }}
+                    />
+                  </Form.Item>
+
+                  <Button
+                    danger
+                    ghost
+                    icon={<MinusCircleOutlined />}
+                    onClick={() => remove(field.name)}
+                    style={{ marginTop: 30 }}
+                    disabled={isDisabled}
+                  />
+                </Space>
+              );
+            })}
 
             <Form.Item>
               <Button

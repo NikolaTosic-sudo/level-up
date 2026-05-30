@@ -7,6 +7,7 @@ import QuestForm from "./QuestForm";
 import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
 import { useState } from "react";
 import { useEditQuest } from "../hooks/useEditQuest";
+import { useCompleteQuest } from "../hooks/useCompleteQuest";
 
 function QuestExtra({
   quest,
@@ -17,13 +18,21 @@ function QuestExtra({
 
   const [open, setOpen] = useState(false);
 
-  const { mutate } = useEditQuest();
+  const { mutate: editQuest } = useEditQuest();
+
+  const { mutate: completeQuest } = useCompleteQuest();
 
   const [form] = Form.useForm();
 
   const handleFinish = () => {
+    if (quest.id) {
+      completeQuest(quest.id);
+    }
+  };
+
+  const handleEdit = () => {
     form.validateFields().then((values) => {
-      mutate(
+      editQuest(
         { body: { id: quest.id, ...values } },
         { onSuccess: () => setOpen(false) },
       );
@@ -44,6 +53,7 @@ function QuestExtra({
         title={t("quest.confirm.done", {
           defaultValue: "Are you done with this Quest?",
         })}
+        onConfirm={handleFinish}
       >
         <Button
           variant="outlined"
@@ -59,7 +69,7 @@ function QuestExtra({
         title={t("quest.repeating.editModalTitle", {
           defaultValue: "Edit quest",
         })}
-        onOk={handleFinish}
+        onOk={handleEdit}
         isOpen={open}
         setIsOpen={setOpen}
       >
