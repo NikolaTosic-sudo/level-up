@@ -41,6 +41,10 @@ export interface V1LevelupApiUserQuestIdCompleteSubquestPostRequest {
     id: number;
 }
 
+export interface V1LevelupApiUserQuestIdDeleteDeleteRequest {
+    id: number;
+}
+
 export interface V1LevelupApiUserQuestIdDeleteSubquestDeleteRequest {
     id: number;
 }
@@ -221,6 +225,50 @@ export class QuestsApi extends runtime.BaseAPI {
     async v1LevelupApiUserQuestIdCompleteSubquestPost(requestParameters: V1LevelupApiUserQuestIdCompleteSubquestPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MainQuestCompletionResponse> {
         const response = await this.v1LevelupApiUserQuestIdCompleteSubquestPostRaw(requestParameters, initOverrides);
         return await response.value();
+    }
+
+    /**
+     * Creates request options for v1LevelupApiUserQuestIdDeleteDelete without sending the request
+     */
+    async v1LevelupApiUserQuestIdDeleteDeleteRequestOpts(requestParameters: V1LevelupApiUserQuestIdDeleteDeleteRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling v1LevelupApiUserQuestIdDeleteDelete().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/v1/levelup_api/user/quest/{id}/delete`;
+        urlPath = urlPath.replace('{id}', encodeURIComponent(String(requestParameters['id'])));
+
+        return {
+            path: urlPath,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Complete a sub-quest
+     */
+    async v1LevelupApiUserQuestIdDeleteDeleteRaw(requestParameters: V1LevelupApiUserQuestIdDeleteDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const requestOptions = await this.v1LevelupApiUserQuestIdDeleteDeleteRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Complete a sub-quest
+     */
+    async v1LevelupApiUserQuestIdDeleteDelete(requestParameters: V1LevelupApiUserQuestIdDeleteDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.v1LevelupApiUserQuestIdDeleteDeleteRaw(requestParameters, initOverrides);
     }
 
     /**
