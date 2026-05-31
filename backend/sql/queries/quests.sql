@@ -13,7 +13,7 @@ WHERE q.user_id = $1
   AND q.deleted_at IS NULL 
   AND q.type != 'custom'
   AND q.parent_quest_id IS NULL
-ORDER BY q.type, q.completed, q.name;
+ORDER BY q.type, COALESCE(q.completed, false), q.name;
 
 -- name: GetUsersCustomQuests :many
 SELECT q.id, q.type, q.name, q.experience, q.completed, q.start_date, q.end_date,
@@ -35,7 +35,8 @@ ORDER BY q.completed;
 SELECT id, type, name, experience, completed FROM quests
 WHERE user_id = $1
   AND deleted_at IS NULL
-  AND parent_quest_id = $2;
+  AND parent_quest_id = $2
+ORDER BY completed;
 
 -- name: GetQuestSkills :many
 SELECT

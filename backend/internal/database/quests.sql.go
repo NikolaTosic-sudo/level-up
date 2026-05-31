@@ -236,6 +236,7 @@ SELECT id, type, name, experience, completed FROM quests
 WHERE user_id = $1
   AND deleted_at IS NULL
   AND parent_quest_id = $2
+ORDER BY completed
 `
 
 type GetSubQuestsParams struct {
@@ -373,7 +374,7 @@ WHERE q.user_id = $1
   AND q.deleted_at IS NULL 
   AND q.type != 'custom'
   AND q.parent_quest_id IS NULL
-ORDER BY q.type, q.completed, q.name
+ORDER BY q.type, COALESCE(q.completed, false), q.name
 `
 
 type GetUsersRepeatingQuestsRow struct {
