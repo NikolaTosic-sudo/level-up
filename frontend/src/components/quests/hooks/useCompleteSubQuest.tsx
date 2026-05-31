@@ -29,7 +29,7 @@ export function useCompleteSubQuest() {
             () =>
               message.success(
                 t("", {
-                  defaultValue: "Leveled up!",
+                  defaultValue: "Level up!",
                 }),
               ),
             200 * i + 600,
