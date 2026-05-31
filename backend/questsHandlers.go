@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"io"
 	"math"
@@ -11,6 +10,7 @@ import (
 	"time"
 
 	"github.com/NikolaTosic-sudo/level-up/backend/internal/database"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type QuestsSkills struct {
@@ -168,19 +168,19 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 		questID, err = cfg.database.CreateQuest(r.Context(), database.CreateQuestParams{
 			UserID: userID,
 			Name:   body.Name,
-			Experience: sql.NullInt32{
+			Experience: pgtype.Int4{
 				Int32: body.Experience,
 				Valid: true,
 			},
-			Type: sql.NullString{
+			Type: pgtype.Text{
 				String: body.Type,
 				Valid:  true,
 			},
-			StartDate: sql.NullTime{
+			StartDate: pgtype.Date{
 				Time:  body.StartDate,
 				Valid: true,
 			},
-			EndDate: sql.NullTime{
+			EndDate: pgtype.Date{
 				Time:  body.EndDate,
 				Valid: true,
 			},
@@ -192,13 +192,13 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 
 		for _, q := range body.SubQuests {
 			err = cfg.database.CreateSubQuest(r.Context(), database.CreateSubQuestParams{
-				ParentQuestID: sql.NullInt64{
+				ParentQuestID: pgtype.Int8{
 					Int64: questID,
 					Valid: true,
 				},
 				UserID: userID,
 				Name:   q.Name,
-				Experience: sql.NullInt32{
+				Experience: pgtype.Int4{
 					Int32: q.Experience,
 					Valid: true,
 				},
@@ -212,19 +212,19 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 		err = cfg.database.UpdateQuest(r.Context(), database.UpdateQuestParams{
 			ID:   questID,
 			Name: body.Name,
-			Type: sql.NullString{
+			Type: pgtype.Text{
 				String: body.Type,
 				Valid:  true,
 			},
-			Experience: sql.NullInt32{
+			Experience: pgtype.Int4{
 				Int32: body.Experience,
 				Valid: true,
 			},
-			StartDate: sql.NullTime{
+			StartDate: pgtype.Date{
 				Time:  body.StartDate,
 				Valid: true,
 			},
-			EndDate: sql.NullTime{
+			EndDate: pgtype.Date{
 				Time:  body.EndDate,
 				Valid: true,
 			},
@@ -243,7 +243,7 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		subQuestsIds, err := cfg.database.GetSubQuestsIDs(r.Context(), sql.NullInt64{
+		subQuestsIds, err := cfg.database.GetSubQuestsIDs(r.Context(), pgtype.Int8{
 			Int64: questID,
 			Valid: true,
 		})
@@ -257,7 +257,7 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 				err = cfg.database.UpdateQuest(r.Context(), database.UpdateQuestParams{
 					ID:   q.ID,
 					Name: q.Name,
-					Experience: sql.NullInt32{
+					Experience: pgtype.Int4{
 						Int32: q.Experience,
 						Valid: true,
 					},
@@ -274,12 +274,12 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 			} else if q.ID == 0 {
 				err = cfg.database.CreateSubQuest(r.Context(), database.CreateSubQuestParams{
 					Name: q.Name,
-					Experience: sql.NullInt32{
+					Experience: pgtype.Int4{
 						Int32: q.Experience,
 						Valid: true,
 					},
 					UserID: userID,
-					ParentQuestID: sql.NullInt64{
+					ParentQuestID: pgtype.Int8{
 						Int64: questID,
 						Valid: true,
 					},
@@ -385,15 +385,15 @@ func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
 
 		err = cfg.database.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
 			ID: userID,
-			Experience: sql.NullInt32{
+			Experience: pgtype.Int4{
 				Int32: newExperience,
 				Valid: true,
 			},
-			Level: sql.NullInt32{
+			Level: pgtype.Int4{
 				Int32: lvl,
 				Valid: true,
 			},
-			ExperienceNeeded: sql.NullInt32{
+			ExperienceNeeded: pgtype.Int4{
 				Int32: need,
 				Valid: true,
 			},
@@ -488,15 +488,15 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 
 	err = cfg.database.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
 		ID: userID,
-		Experience: sql.NullInt32{
+		Experience: pgtype.Int4{
 			Int32: newExperience,
 			Valid: true,
 		},
-		Level: sql.NullInt32{
+		Level: pgtype.Int4{
 			Int32: lvl,
 			Valid: true,
 		},
-		ExperienceNeeded: sql.NullInt32{
+		ExperienceNeeded: pgtype.Int4{
 			Int32: need,
 			Valid: true,
 		},
@@ -577,7 +577,7 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	subQuestsIds, err := cfg.database.GetSubQuestsIDs(r.Context(), sql.NullInt64{
+	subQuestsIds, err := cfg.database.GetSubQuestsIDs(r.Context(), pgtype.Int8{
 		Int64: int64(questID),
 		Valid: true,
 	})

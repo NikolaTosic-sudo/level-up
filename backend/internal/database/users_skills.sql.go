@@ -9,7 +9,6 @@ import (
 	"context"
 
 	"github.com/google/uuid"
-	"github.com/lib/pq"
 )
 
 const createUsersSkills = `-- name: CreateUsersSkills :exec
@@ -46,7 +45,7 @@ type CreateUsersSkillsParams struct {
 }
 
 func (q *Queries) CreateUsersSkills(ctx context.Context, arg CreateUsersSkillsParams) error {
-	_, err := q.db.ExecContext(ctx, createUsersSkills, arg.UserID, arg.SkillID, arg.Name)
+	_, err := q.db.Exec(ctx, createUsersSkills, arg.UserID, arg.SkillID, arg.Name)
 	return err
 }
 
@@ -68,7 +67,7 @@ type DeactivateRemovedLinkedSkillsParams struct {
 }
 
 func (q *Queries) DeactivateRemovedLinkedSkills(ctx context.Context, arg DeactivateRemovedLinkedSkillsParams) error {
-	_, err := q.db.ExecContext(ctx, deactivateRemovedLinkedSkills, arg.UserID, arg.ParentSkillID, pq.Array(arg.Column3))
+	_, err := q.db.Exec(ctx, deactivateRemovedLinkedSkills, arg.UserID, arg.ParentSkillID, arg.Column3)
 	return err
 }
 
@@ -80,7 +79,7 @@ LIMIT 1
 `
 
 func (q *Queries) GetMostRecentLeveledSkill(ctx context.Context, userID uuid.UUID) (string, error) {
-	row := q.db.QueryRowContext(ctx, getMostRecentLeveledSkill, userID)
+	row := q.db.QueryRow(ctx, getMostRecentLeveledSkill, userID)
 	var name string
 	err := row.Scan(&name)
 	return name, err
@@ -102,7 +101,7 @@ type GetSkillsExperienceRow struct {
 }
 
 func (q *Queries) GetSkillsExperience(ctx context.Context, arg GetSkillsExperienceParams) (GetSkillsExperienceRow, error) {
-	row := q.db.QueryRowContext(ctx, getSkillsExperience, arg.SkillID, arg.UserID)
+	row := q.db.QueryRow(ctx, getSkillsExperience, arg.SkillID, arg.UserID)
 	var i GetSkillsExperienceRow
 	err := row.Scan(&i.Experience, &i.ExperienceNeeded, &i.Level)
 	return i, err
@@ -118,7 +117,7 @@ type GetUserSkillIDParams struct {
 }
 
 func (q *Queries) GetUserSkillID(ctx context.Context, arg GetUserSkillIDParams) (int32, error) {
-	row := q.db.QueryRowContext(ctx, getUserSkillID, arg.UserID, arg.Name)
+	row := q.db.QueryRow(ctx, getUserSkillID, arg.UserID, arg.Name)
 	var skill_id int32
 	err := row.Scan(&skill_id)
 	return skill_id, err
@@ -132,7 +131,7 @@ LIMIT 1
 `
 
 func (q *Queries) GetUsersSkillHighestLevel(ctx context.Context, userID uuid.UUID) (string, error) {
-	row := q.db.QueryRowContext(ctx, getUsersSkillHighestLevel, userID)
+	row := q.db.QueryRow(ctx, getUsersSkillHighestLevel, userID)
 	var name string
 	err := row.Scan(&name)
 	return name, err
@@ -183,7 +182,7 @@ type GetUsersSkillsRow struct {
 }
 
 func (q *Queries) GetUsersSkills(ctx context.Context, userID uuid.UUID) ([]GetUsersSkillsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getUsersSkills, userID)
+	rows, err := q.db.Query(ctx, getUsersSkills, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -202,9 +201,6 @@ func (q *Queries) GetUsersSkills(ctx context.Context, userID uuid.UUID) ([]GetUs
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -234,10 +230,10 @@ type GetUsersSkillsExcludeRow struct {
 }
 
 func (q *Queries) GetUsersSkillsExclude(ctx context.Context, arg GetUsersSkillsExcludeParams) ([]GetUsersSkillsExcludeRow, error) {
-	rows, err := q.db.QueryContext(ctx, getUsersSkillsExclude,
+	rows, err := q.db.Query(ctx, getUsersSkillsExclude,
 		arg.UserID,
 		arg.Name,
-		pq.Array(arg.Column3),
+		arg.Column3,
 		arg.Name_2,
 	)
 	if err != nil {
@@ -251,9 +247,6 @@ func (q *Queries) GetUsersSkillsExclude(ctx context.Context, arg GetUsersSkillsE
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -272,7 +265,7 @@ type GetUsersSkillsLinkedIDParams struct {
 }
 
 func (q *Queries) GetUsersSkillsLinkedID(ctx context.Context, arg GetUsersSkillsLinkedIDParams) ([]int32, error) {
-	rows, err := q.db.QueryContext(ctx, getUsersSkillsLinkedID, arg.ParentSkillID, arg.UserID)
+	rows, err := q.db.Query(ctx, getUsersSkillsLinkedID, arg.ParentSkillID, arg.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -284,9 +277,6 @@ func (q *Queries) GetUsersSkillsLinkedID(ctx context.Context, arg GetUsersSkills
 			return nil, err
 		}
 		items = append(items, child_skill_id)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -327,12 +317,12 @@ type SoftDeleteUserSkillParams struct {
 }
 
 func (q *Queries) SoftDeleteUserSkill(ctx context.Context, arg SoftDeleteUserSkillParams) error {
-	_, err := q.db.ExecContext(ctx, softDeleteUserSkill, arg.UserID, arg.ParentSkillID)
+	_, err := q.db.Exec(ctx, softDeleteUserSkill, arg.UserID, arg.ParentSkillID)
 	return err
 }
 
 const updateSkillsExperience = `-- name: UpdateSkillsExperience :exec
-UPDATE users_skills SET experience = $3, experience_needed = $4, level = $5 WHERE skill_id = $1 AND user_id = $2
+UPDATE users_skills SET updated_at = NOW(), experience = $3, experience_needed = $4, level = $5 WHERE skill_id = $1 AND user_id = $2
 `
 
 type UpdateSkillsExperienceParams struct {
@@ -344,7 +334,7 @@ type UpdateSkillsExperienceParams struct {
 }
 
 func (q *Queries) UpdateSkillsExperience(ctx context.Context, arg UpdateSkillsExperienceParams) error {
-	_, err := q.db.ExecContext(ctx, updateSkillsExperience,
+	_, err := q.db.Exec(ctx, updateSkillsExperience,
 		arg.SkillID,
 		arg.UserID,
 		arg.Experience,
@@ -385,6 +375,6 @@ type UpsertLinkedSkillsParams struct {
 }
 
 func (q *Queries) UpsertLinkedSkills(ctx context.Context, arg UpsertLinkedSkillsParams) error {
-	_, err := q.db.ExecContext(ctx, upsertLinkedSkills, arg.UserID, arg.ParentSkillID, pq.Array(arg.Column3))
+	_, err := q.db.Exec(ctx, upsertLinkedSkills, arg.UserID, arg.ParentSkillID, arg.Column3)
 	return err
 }

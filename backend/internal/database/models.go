@@ -5,30 +5,30 @@
 package database
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Quest struct {
-	ID               int64          `json:"id"`
-	CreatedAt        time.Time      `json:"created_at"`
-	UpdatedAt        time.Time      `json:"updated_at"`
-	Name             string         `json:"name"`
-	Experience       sql.NullInt32  `json:"experience"`
-	ExperienceNeeded sql.NullInt32  `json:"experience_needed"`
-	Level            sql.NullInt32  `json:"level"`
-	StartDate        sql.NullTime   `json:"start_date"`
-	EndDate          sql.NullTime   `json:"end_date"`
-	Completed        sql.NullBool   `json:"completed"`
-	UserID           uuid.UUID      `json:"user_id"`
-	ParentQuestID    sql.NullInt64  `json:"parent_quest_id"`
-	CompletedAt      sql.NullTime   `json:"completed_at"`
-	DeletedAt        sql.NullTime   `json:"deleted_at"`
-	Type             sql.NullString `json:"type"`
-	Failed           sql.NullBool   `json:"failed"`
-	FailedAt         sql.NullTime   `json:"failed_at"`
+	ID               int64            `json:"id"`
+	CreatedAt        time.Time        `json:"created_at"`
+	UpdatedAt        time.Time        `json:"updated_at"`
+	Name             string           `json:"name"`
+	Experience       pgtype.Int4      `json:"experience"`
+	ExperienceNeeded pgtype.Int4      `json:"experience_needed"`
+	Level            pgtype.Int4      `json:"level"`
+	StartDate        pgtype.Date      `json:"start_date"`
+	EndDate          pgtype.Date      `json:"end_date"`
+	Completed        pgtype.Bool      `json:"completed"`
+	UserID           uuid.UUID        `json:"user_id"`
+	ParentQuestID    pgtype.Int8      `json:"parent_quest_id"`
+	CompletedAt      pgtype.Timestamp `json:"completed_at"`
+	DeletedAt        pgtype.Timestamp `json:"deleted_at"`
+	Type             pgtype.Text      `json:"type"`
+	Failed           pgtype.Bool      `json:"failed"`
+	FailedAt         pgtype.Timestamp `json:"failed_at"`
 }
 
 type QuestsSkill struct {
@@ -40,12 +40,12 @@ type QuestsSkill struct {
 }
 
 type RefreshToken struct {
-	Token     string       `json:"token"`
-	CreatedAt time.Time    `json:"created_at"`
-	UpdatedAt time.Time    `json:"updated_at"`
-	UserID    uuid.UUID    `json:"user_id"`
-	ExpiresAt time.Time    `json:"expires_at"`
-	RevokedAt sql.NullTime `json:"revoked_at"`
+	Token     string           `json:"token"`
+	CreatedAt time.Time        `json:"created_at"`
+	UpdatedAt time.Time        `json:"updated_at"`
+	UserID    uuid.UUID        `json:"user_id"`
+	ExpiresAt time.Time        `json:"expires_at"`
+	RevokedAt pgtype.Timestamp `json:"revoked_at"`
 }
 
 type Skill struct {
@@ -56,48 +56,48 @@ type Skill struct {
 }
 
 type User struct {
-	ID                 uuid.UUID      `json:"id"`
-	CreatedAt          time.Time      `json:"created_at"`
-	UpdatedAt          time.Time      `json:"updated_at"`
-	Firstname          sql.NullString `json:"firstname"`
-	Lastname           sql.NullString `json:"lastname"`
-	Nickname           sql.NullString `json:"nickname"`
-	Bio                sql.NullString `json:"bio"`
-	Dateofbirth        sql.NullTime   `json:"dateofbirth"`
-	Email              string         `json:"email"`
-	Password           string         `json:"password"`
-	HotStreak          sql.NullInt32  `json:"hot_streak"`
-	QuestsCompleted    sql.NullInt32  `json:"quests_completed"`
-	RepeatingCompleted sql.NullInt32  `json:"repeating_completed"`
-	CustomsCompleted   sql.NullInt32  `json:"customs_completed"`
-	Experience         sql.NullInt32  `json:"experience"`
-	ExperienceNeeded   sql.NullInt32  `json:"experience_needed"`
-	Level              sql.NullInt32  `json:"level"`
-	Money              sql.NullInt64  `json:"money"`
+	ID                 uuid.UUID   `json:"id"`
+	CreatedAt          time.Time   `json:"created_at"`
+	UpdatedAt          time.Time   `json:"updated_at"`
+	Firstname          pgtype.Text `json:"firstname"`
+	Lastname           pgtype.Text `json:"lastname"`
+	Nickname           pgtype.Text `json:"nickname"`
+	Bio                pgtype.Text `json:"bio"`
+	Dateofbirth        pgtype.Date `json:"dateofbirth"`
+	Email              string      `json:"email"`
+	Password           string      `json:"password"`
+	HotStreak          pgtype.Int4 `json:"hot_streak"`
+	QuestsCompleted    pgtype.Int4 `json:"quests_completed"`
+	RepeatingCompleted pgtype.Int4 `json:"repeating_completed"`
+	CustomsCompleted   pgtype.Int4 `json:"customs_completed"`
+	Experience         pgtype.Int4 `json:"experience"`
+	ExperienceNeeded   pgtype.Int4 `json:"experience_needed"`
+	Level              pgtype.Int4 `json:"level"`
+	Money              pgtype.Int8 `json:"money"`
 }
 
 type UsersSkill struct {
-	UserID           uuid.UUID      `json:"user_id"`
-	SkillID          int32          `json:"skill_id"`
-	Name             string         `json:"name"`
-	CreatedAt        time.Time      `json:"created_at"`
-	UpdatedAt        time.Time      `json:"updated_at"`
-	Experience       int32          `json:"experience"`
-	ExperienceNeeded int32          `json:"experience_needed"`
-	Level            int32          `json:"level"`
-	DeletedAt        sql.NullTime   `json:"deleted_at"`
-	DeletedReason    sql.NullString `json:"deleted_reason"`
-	LeveledAt        sql.NullTime   `json:"leveled_at"`
+	UserID           uuid.UUID        `json:"user_id"`
+	SkillID          int32            `json:"skill_id"`
+	Name             string           `json:"name"`
+	CreatedAt        time.Time        `json:"created_at"`
+	UpdatedAt        time.Time        `json:"updated_at"`
+	Experience       int32            `json:"experience"`
+	ExperienceNeeded int32            `json:"experience_needed"`
+	Level            int32            `json:"level"`
+	DeletedAt        pgtype.Timestamp `json:"deleted_at"`
+	DeletedReason    pgtype.Text      `json:"deleted_reason"`
+	LeveledAt        pgtype.Timestamp `json:"leveled_at"`
 }
 
 type UsersSkillsLink struct {
-	UserID        uuid.UUID      `json:"user_id"`
-	ParentSkillID int32          `json:"parent_skill_id"`
-	ChildSkillID  int32          `json:"child_skill_id"`
-	CreatedAt     time.Time      `json:"created_at"`
-	UpdatedAt     time.Time      `json:"updated_at"`
-	DeletedAt     sql.NullTime   `json:"deleted_at"`
-	DeletedReason sql.NullString `json:"deleted_reason"`
+	UserID        uuid.UUID        `json:"user_id"`
+	ParentSkillID int32            `json:"parent_skill_id"`
+	ChildSkillID  int32            `json:"child_skill_id"`
+	CreatedAt     time.Time        `json:"created_at"`
+	UpdatedAt     time.Time        `json:"updated_at"`
+	DeletedAt     pgtype.Timestamp `json:"deleted_at"`
+	DeletedReason pgtype.Text      `json:"deleted_reason"`
 }
 
 type UsersStat struct {

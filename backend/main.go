@@ -1,7 +1,7 @@
 package main
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,6 +13,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -42,7 +43,7 @@ func main() {
 	port := os.Getenv("PORT")
 	secret := os.Getenv("SECRET")
 
-	db, err := sql.Open("postgres", dbURL)
+	db, err := pgxpool.New(context.Background(), dbURL)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -50,6 +51,7 @@ func main() {
 	dbQueries := database.New(db)
 
 	cfg := appConfig{
+		db:       db,
 		database: dbQueries,
 		users:    make(map[uuid.UUID]User, 0),
 		secret:   secret,

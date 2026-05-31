@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/NikolaTosic-sudo/level-up/backend/internal/database"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type CalculateExperienceParams struct {
@@ -43,7 +43,7 @@ func (cfg *appConfig) getSubQuests(userID uuid.UUID, questID int64) ([]Repeating
 
 	subQuests, err := cfg.database.GetSubQuests(context.Background(), database.GetSubQuestsParams{
 		UserID: userID,
-		ParentQuestID: sql.NullInt64{
+		ParentQuestID: pgtype.Int8{
 			Int64: questID,
 			Valid: true,
 		},

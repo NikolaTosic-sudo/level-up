@@ -7,10 +7,10 @@ package database
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createRefreshToken = `-- name: CreateRefreshToken :one
@@ -38,7 +38,7 @@ type CreateRefreshTokenParams struct {
 }
 
 func (q *Queries) CreateRefreshToken(ctx context.Context, arg CreateRefreshTokenParams) (RefreshToken, error) {
-	row := q.db.QueryRowContext(ctx, createRefreshToken,
+	row := q.db.QueryRow(ctx, createRefreshToken,
 		arg.Token,
 		arg.CreatedAt,
 		arg.UpdatedAt,
@@ -62,7 +62,7 @@ DELETE FROM refresh_tokens
 `
 
 func (q *Queries) DeleteTokens(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, deleteTokens)
+	_, err := q.db.Exec(ctx, deleteTokens)
 	return err
 }
 
@@ -81,7 +81,7 @@ type RefreshTokenParams struct {
 }
 
 func (q *Queries) RefreshToken(ctx context.Context, arg RefreshTokenParams) (RefreshToken, error) {
-	row := q.db.QueryRowContext(ctx, refreshToken,
+	row := q.db.QueryRow(ctx, refreshToken,
 		arg.Token,
 		arg.ExpiresAt,
 		arg.UpdatedAt,
@@ -106,12 +106,12 @@ WHERE token = $2
 `
 
 type RevokeTokenParams struct {
-	RevokedAt sql.NullTime `json:"revoked_at"`
-	Token     string       `json:"token"`
+	RevokedAt pgtype.Timestamp `json:"revoked_at"`
+	Token     string           `json:"token"`
 }
 
 func (q *Queries) RevokeToken(ctx context.Context, arg RevokeTokenParams) error {
-	_, err := q.db.ExecContext(ctx, revokeToken, arg.RevokedAt, arg.Token)
+	_, err := q.db.Exec(ctx, revokeToken, arg.RevokedAt, arg.Token)
 	return err
 }
 
@@ -120,7 +120,7 @@ SELECT token, created_at, updated_at, user_id, expires_at, revoked_at FROM refre
 `
 
 func (q *Queries) SearchForToken(ctx context.Context, token string) (RefreshToken, error) {
-	row := q.db.QueryRowContext(ctx, searchForToken, token)
+	row := q.db.QueryRow(ctx, searchForToken, token)
 	var i RefreshToken
 	err := row.Scan(
 		&i.Token,

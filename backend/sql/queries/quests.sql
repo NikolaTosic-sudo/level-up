@@ -80,10 +80,10 @@ SELECT id FROM quests WHERE parent_quest_id = $1;
 DELETE FROM quests WHERE user_id = $1 AND id = $2;
 
 -- name: DeleteQuest :exec
-UPDATE quests SET deleted_at = NOW(), failed = TRUE, failed_at = NOW() WHERE id = $1 AND user_id = $2;
+UPDATE quests SET updated_at = NOW(), deleted_at = NOW(), failed = TRUE, failed_at = NOW() WHERE id = $1 AND user_id = $2;
 
 -- name: CompleteQuest :one
-UPDATE quests SET completed = TRUE, completed_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING experience;
+UPDATE quests SET updated_at = NOW(), completed = TRUE, completed_at = NOW() WHERE id = $1 AND user_id = $2 RETURNING experience;
 
 -- name: GetSkillsForQuest :many
 SELECT skill_id FROM quests_skills WHERE quest_id = $1;

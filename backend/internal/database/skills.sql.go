@@ -16,7 +16,7 @@ INSERT INTO skills(created_at, updated_at, name) VALUES (NOW(), NOW(), $1) RETUR
 `
 
 func (q *Queries) CreateSkill(ctx context.Context, name string) (int32, error) {
-	row := q.db.QueryRowContext(ctx, createSkill, name)
+	row := q.db.QueryRow(ctx, createSkill, name)
 	var id int32
 	err := row.Scan(&id)
 	return id, err
@@ -27,7 +27,7 @@ SELECT name FROM skills ORDER BY name LIMIT 200
 `
 
 func (q *Queries) GetAllSkills(ctx context.Context) ([]string, error) {
-	rows, err := q.db.QueryContext(ctx, getAllSkills)
+	rows, err := q.db.Query(ctx, getAllSkills)
 	if err != nil {
 		return nil, err
 	}
@@ -39,9 +39,6 @@ func (q *Queries) GetAllSkills(ctx context.Context) ([]string, error) {
 			return nil, err
 		}
 		items = append(items, name)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -59,7 +56,7 @@ type GetSkillsByNameRow struct {
 }
 
 func (q *Queries) GetSkillsByName(ctx context.Context, name string) ([]GetSkillsByNameRow, error) {
-	rows, err := q.db.QueryContext(ctx, getSkillsByName, name)
+	rows, err := q.db.Query(ctx, getSkillsByName, name)
 	if err != nil {
 		return nil, err
 	}
@@ -71,9 +68,6 @@ func (q *Queries) GetSkillsByName(ctx context.Context, name string) ([]GetSkills
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -104,7 +98,7 @@ type GetSkillsNotOwnedByUserRow struct {
 }
 
 func (q *Queries) GetSkillsNotOwnedByUser(ctx context.Context, arg GetSkillsNotOwnedByUserParams) ([]GetSkillsNotOwnedByUserRow, error) {
-	rows, err := q.db.QueryContext(ctx, getSkillsNotOwnedByUser, arg.Name, arg.UserID)
+	rows, err := q.db.Query(ctx, getSkillsNotOwnedByUser, arg.Name, arg.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -117,9 +111,6 @@ func (q *Queries) GetSkillsNotOwnedByUser(ctx context.Context, arg GetSkillsNotO
 		}
 		items = append(items, i)
 	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
@@ -131,7 +122,7 @@ SELECT name FROM skills WHERE id = $1
 `
 
 func (q *Queries) GetUsersSkillsLinkedName(ctx context.Context, id int32) (string, error) {
-	row := q.db.QueryRowContext(ctx, getUsersSkillsLinkedName, id)
+	row := q.db.QueryRow(ctx, getUsersSkillsLinkedName, id)
 	var name string
 	err := row.Scan(&name)
 	return name, err

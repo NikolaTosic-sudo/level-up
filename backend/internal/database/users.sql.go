@@ -7,9 +7,9 @@ package database
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -34,7 +34,7 @@ type CreateUserRow struct {
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.Email, arg.Password)
+	row := q.db.QueryRow(ctx, createUser, arg.Email, arg.Password)
 	var i CreateUserRow
 	err := row.Scan(&i.ID, &i.Email)
 	return i, err
@@ -45,7 +45,7 @@ SELECT id, created_at, updated_at, firstname, lastname, nickname, bio, dateofbir
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
+	row := q.db.QueryRow(ctx, getUserByEmail, email)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -75,7 +75,7 @@ SELECT id, created_at, updated_at, firstname, lastname, nickname, bio, dateofbir
 `
 
 func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUserByID, id)
+	row := q.db.QueryRow(ctx, getUserByID, id)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -105,48 +105,48 @@ SELECT experience, experience_needed, level FROM users WHERE id = $1
 `
 
 type GetUsersExperienceRow struct {
-	Experience       sql.NullInt32 `json:"experience"`
-	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
-	Level            sql.NullInt32 `json:"level"`
+	Experience       pgtype.Int4 `json:"experience"`
+	ExperienceNeeded pgtype.Int4 `json:"experience_needed"`
+	Level            pgtype.Int4 `json:"level"`
 }
 
 func (q *Queries) GetUsersExperience(ctx context.Context, id uuid.UUID) (GetUsersExperienceRow, error) {
-	row := q.db.QueryRowContext(ctx, getUsersExperience, id)
+	row := q.db.QueryRow(ctx, getUsersExperience, id)
 	var i GetUsersExperienceRow
 	err := row.Scan(&i.Experience, &i.ExperienceNeeded, &i.Level)
 	return i, err
 }
 
 const updateUserBio = `-- name: UpdateUserBio :exec
-UPDATE users SET bio = $1 WHERE id = $2
+UPDATE users SET updated_at = NOW(), bio = $1 WHERE id = $2
 `
 
 type UpdateUserBioParams struct {
-	Bio sql.NullString `json:"bio"`
-	ID  uuid.UUID      `json:"id"`
+	Bio pgtype.Text `json:"bio"`
+	ID  uuid.UUID   `json:"id"`
 }
 
 func (q *Queries) UpdateUserBio(ctx context.Context, arg UpdateUserBioParams) error {
-	_, err := q.db.ExecContext(ctx, updateUserBio, arg.Bio, arg.ID)
+	_, err := q.db.Exec(ctx, updateUserBio, arg.Bio, arg.ID)
 	return err
 }
 
 const updateUserDateOfBirth = `-- name: UpdateUserDateOfBirth :exec
-UPDATE users SET dateOfBirth = $1 WHERE id = $2
+UPDATE users SET updated_at = NOW(), dateOfBirth = $1 WHERE id = $2
 `
 
 type UpdateUserDateOfBirthParams struct {
-	Dateofbirth sql.NullTime `json:"dateofbirth"`
-	ID          uuid.UUID    `json:"id"`
+	Dateofbirth pgtype.Date `json:"dateofbirth"`
+	ID          uuid.UUID   `json:"id"`
 }
 
 func (q *Queries) UpdateUserDateOfBirth(ctx context.Context, arg UpdateUserDateOfBirthParams) error {
-	_, err := q.db.ExecContext(ctx, updateUserDateOfBirth, arg.Dateofbirth, arg.ID)
+	_, err := q.db.Exec(ctx, updateUserDateOfBirth, arg.Dateofbirth, arg.ID)
 	return err
 }
 
 const updateUserEmail = `-- name: UpdateUserEmail :exec
-UPDATE users SET email = $1 WHERE id = $2
+UPDATE users SET updated_at = NOW(), email = $1 WHERE id = $2
 `
 
 type UpdateUserEmailParams struct {
@@ -155,67 +155,67 @@ type UpdateUserEmailParams struct {
 }
 
 func (q *Queries) UpdateUserEmail(ctx context.Context, arg UpdateUserEmailParams) error {
-	_, err := q.db.ExecContext(ctx, updateUserEmail, arg.Email, arg.ID)
+	_, err := q.db.Exec(ctx, updateUserEmail, arg.Email, arg.ID)
 	return err
 }
 
 const updateUserFirstName = `-- name: UpdateUserFirstName :exec
-UPDATE users SET firstName = $1 WHERE id = $2
+UPDATE users SET updated_at = NOW(), firstName = $1 WHERE id = $2
 `
 
 type UpdateUserFirstNameParams struct {
-	Firstname sql.NullString `json:"firstname"`
-	ID        uuid.UUID      `json:"id"`
+	Firstname pgtype.Text `json:"firstname"`
+	ID        uuid.UUID   `json:"id"`
 }
 
 func (q *Queries) UpdateUserFirstName(ctx context.Context, arg UpdateUserFirstNameParams) error {
-	_, err := q.db.ExecContext(ctx, updateUserFirstName, arg.Firstname, arg.ID)
+	_, err := q.db.Exec(ctx, updateUserFirstName, arg.Firstname, arg.ID)
 	return err
 }
 
 const updateUserLastName = `-- name: UpdateUserLastName :exec
-UPDATE users SET lastName = $1 WHERE id = $2
+UPDATE users SET updated_at = NOW(), lastName = $1 WHERE id = $2
 `
 
 type UpdateUserLastNameParams struct {
-	Lastname sql.NullString `json:"lastname"`
-	ID       uuid.UUID      `json:"id"`
+	Lastname pgtype.Text `json:"lastname"`
+	ID       uuid.UUID   `json:"id"`
 }
 
 func (q *Queries) UpdateUserLastName(ctx context.Context, arg UpdateUserLastNameParams) error {
-	_, err := q.db.ExecContext(ctx, updateUserLastName, arg.Lastname, arg.ID)
+	_, err := q.db.Exec(ctx, updateUserLastName, arg.Lastname, arg.ID)
 	return err
 }
 
 const updateUserNickname = `-- name: UpdateUserNickname :exec
-UPDATE users SET nickname = $1 WHERE id = $2
+UPDATE users SET updated_at = NOW(), nickname = $1 WHERE id = $2
 `
 
 type UpdateUserNicknameParams struct {
-	Nickname sql.NullString `json:"nickname"`
-	ID       uuid.UUID      `json:"id"`
+	Nickname pgtype.Text `json:"nickname"`
+	ID       uuid.UUID   `json:"id"`
 }
 
 func (q *Queries) UpdateUserNickname(ctx context.Context, arg UpdateUserNicknameParams) error {
-	_, err := q.db.ExecContext(ctx, updateUserNickname, arg.Nickname, arg.ID)
+	_, err := q.db.Exec(ctx, updateUserNickname, arg.Nickname, arg.ID)
 	return err
 }
 
 const updateUserProfile = `-- name: UpdateUserProfile :exec
-UPDATE users SET firstName = $1, lastName = $2, nickname = $3, dateOfBirth = $4, bio = $5 WHERE email = $6
+UPDATE users SET updated_at = NOW(), firstName = $1, lastName = $2, nickname = $3, dateOfBirth = $4, bio = $5 WHERE email = $6
 `
 
 type UpdateUserProfileParams struct {
-	Firstname   sql.NullString `json:"firstname"`
-	Lastname    sql.NullString `json:"lastname"`
-	Nickname    sql.NullString `json:"nickname"`
-	Dateofbirth sql.NullTime   `json:"dateofbirth"`
-	Bio         sql.NullString `json:"bio"`
-	Email       string         `json:"email"`
+	Firstname   pgtype.Text `json:"firstname"`
+	Lastname    pgtype.Text `json:"lastname"`
+	Nickname    pgtype.Text `json:"nickname"`
+	Dateofbirth pgtype.Date `json:"dateofbirth"`
+	Bio         pgtype.Text `json:"bio"`
+	Email       string      `json:"email"`
 }
 
 func (q *Queries) UpdateUserProfile(ctx context.Context, arg UpdateUserProfileParams) error {
-	_, err := q.db.ExecContext(ctx, updateUserProfile,
+	_, err := q.db.Exec(ctx, updateUserProfile,
 		arg.Firstname,
 		arg.Lastname,
 		arg.Nickname,
@@ -231,14 +231,14 @@ UPDATE users SET updated_at = NOW(), experience = $2, level = $3, experience_nee
 `
 
 type UpdateUsersExperienceParams struct {
-	ID               uuid.UUID     `json:"id"`
-	Experience       sql.NullInt32 `json:"experience"`
-	Level            sql.NullInt32 `json:"level"`
-	ExperienceNeeded sql.NullInt32 `json:"experience_needed"`
+	ID               uuid.UUID   `json:"id"`
+	Experience       pgtype.Int4 `json:"experience"`
+	Level            pgtype.Int4 `json:"level"`
+	ExperienceNeeded pgtype.Int4 `json:"experience_needed"`
 }
 
 func (q *Queries) UpdateUsersExperience(ctx context.Context, arg UpdateUsersExperienceParams) error {
-	_, err := q.db.ExecContext(ctx, updateUsersExperience,
+	_, err := q.db.Exec(ctx, updateUsersExperience,
 		arg.ID,
 		arg.Experience,
 		arg.Level,

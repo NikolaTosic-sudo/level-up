@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -9,6 +8,7 @@ import (
 	"time"
 
 	"github.com/NikolaTosic-sudo/level-up/backend/internal/database"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const DEFAULT_EXPERIENCE_NEEDED_INCREASE = 100
@@ -114,12 +114,12 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 		for _, q := range body.Quests {
 			_, err = cfg.database.CreateQuest(r.Context(), database.CreateQuestParams{
 				Name: q.Name,
-				Experience: sql.NullInt32{
+				Experience: pgtype.Int4{
 					Int32: int32(q.Experience),
 					Valid: true,
 				},
 				UserID: userID,
-				Type: sql.NullString{
+				Type: pgtype.Text{
 					String: "d",
 					Valid:  true,
 				},
@@ -159,23 +159,23 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 	}
 
 	err = cfg.database.UpdateUserProfile(r.Context(), database.UpdateUserProfileParams{
-		Firstname: sql.NullString{
+		Firstname: pgtype.Text{
 			String: body.FirstName,
 			Valid:  true,
 		},
-		Lastname: sql.NullString{
+		Lastname: pgtype.Text{
 			String: body.LastName,
 			Valid:  true,
 		},
-		Nickname: sql.NullString{
+		Nickname: pgtype.Text{
 			String: body.Nickname,
 			Valid:  true,
 		},
-		Dateofbirth: sql.NullTime{
+		Dateofbirth: pgtype.Date{
 			Time:  body.Date,
 			Valid: true,
 		},
-		Bio: sql.NullString{
+		Bio: pgtype.Text{
 			String: body.Bio,
 			Valid:  true,
 		},
@@ -283,7 +283,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 
 	if res.Target == "firstName" && res.FirstName != "" {
 		err = cfg.database.UpdateUserFirstName(r.Context(), database.UpdateUserFirstNameParams{
-			Firstname: sql.NullString{
+			Firstname: pgtype.Text{
 				String: res.FirstName,
 				Valid:  true,
 			},
@@ -291,7 +291,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 		})
 	} else if res.Target == "lastName" && res.LastName != "" {
 		err = cfg.database.UpdateUserLastName(r.Context(), database.UpdateUserLastNameParams{
-			Lastname: sql.NullString{
+			Lastname: pgtype.Text{
 				String: res.LastName,
 				Valid:  true,
 			},
@@ -299,7 +299,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 		})
 	} else if res.Target == "nickname" && res.Nickname != "" {
 		err = cfg.database.UpdateUserNickname(r.Context(), database.UpdateUserNicknameParams{
-			Nickname: sql.NullString{
+			Nickname: pgtype.Text{
 				String: res.Nickname,
 				Valid:  true,
 			},
@@ -307,7 +307,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 		})
 	} else if res.Target == "bio" {
 		err = cfg.database.UpdateUserBio(r.Context(), database.UpdateUserBioParams{
-			Bio: sql.NullString{
+			Bio: pgtype.Text{
 				String: res.Bio,
 				Valid:  true,
 			},
@@ -315,7 +315,7 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 		})
 	} else if res.Target == "date" {
 		err = cfg.database.UpdateUserDateOfBirth(r.Context(), database.UpdateUserDateOfBirthParams{
-			Dateofbirth: sql.NullTime{
+			Dateofbirth: pgtype.Date{
 				Time:  res.Date,
 				Valid: true,
 			},

@@ -16,7 +16,7 @@ SELECT user_id, quests_completed, repeating_quests_completed, custom_quests_comp
 `
 
 func (q *Queries) GetUsersStatsById(ctx context.Context, userID uuid.UUID) (UsersStat, error) {
-	row := q.db.QueryRowContext(ctx, getUsersStatsById, userID)
+	row := q.db.QueryRow(ctx, getUsersStatsById, userID)
 	var i UsersStat
 	err := row.Scan(
 		&i.UserID,
@@ -48,6 +48,6 @@ type UpdateUsersStatsParams struct {
 }
 
 func (q *Queries) UpdateUsersStats(ctx context.Context, arg UpdateUsersStatsParams) error {
-	_, err := q.db.ExecContext(ctx, updateUsersStats, arg.Column1, arg.QuestExperienceGained, arg.UserID)
+	_, err := q.db.Exec(ctx, updateUsersStats, arg.Column1, arg.QuestExperienceGained, arg.UserID)
 	return err
 }
