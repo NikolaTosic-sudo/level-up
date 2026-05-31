@@ -8,6 +8,7 @@ import type { MainCustomQuest, MainRepeatingQuest } from "../../../api";
 import { useState } from "react";
 import { useEditQuest } from "../hooks/useEditQuest";
 import { useCompleteQuest } from "../hooks/useCompleteQuest";
+import { useDeleteQuest } from "../hooks/useDeleteQuest";
 
 function QuestExtra({
   quest,
@@ -21,6 +22,8 @@ function QuestExtra({
   const { mutate: editQuest } = useEditQuest();
 
   const { mutate: completeQuest } = useCompleteQuest();
+
+  const { mutate: deleteQuest } = useDeleteQuest();
 
   const [form] = Form.useForm();
 
@@ -37,6 +40,12 @@ function QuestExtra({
         { onSuccess: () => setOpen(false) },
       );
     });
+  };
+
+  const handleDelete = () => {
+    if (quest.id) {
+      deleteQuest(quest.id);
+    }
   };
 
   if (quest.completed)
@@ -79,6 +88,7 @@ function QuestExtra({
         title={t("quest.confirm.delete", {
           defaultValue: "Are you sure you want to delete this Quest?",
         })}
+        onConfirm={handleDelete}
       >
         <Button
           ghost
