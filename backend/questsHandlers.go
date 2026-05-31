@@ -141,31 +141,28 @@ func (cfg *appConfig) getUsersQuests(w http.ResponseWriter, r *http.Request) {
 // @Success 200
 // @Param body body QuestCreationPayload true "Skill creation"
 // @Router /v1/levelup_api/user/quest-creation [post]
-func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
+func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request, qtx *database.Queries) ErrorResponseInternal {
 	var body QuestCreationPayload
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	err = json.Unmarshal(b, &body)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	userID, err := cfg.getUserId(r)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	questID := body.ID
 
 	if questID == 0 {
-		questID, err = cfg.database.CreateQuest(r.Context(), database.CreateQuestParams{
+		questID, err = qtx.CreateQuest(r.Context(), database.CreateQuestParams{
 			UserID: userID,
 			Name:   body.Name,
 			Experience: pgtype.Int4{
@@ -186,12 +183,11 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 			},
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 
 		for _, q := range body.SubQuests {
-			err = cfg.database.CreateSubQuest(r.Context(), database.CreateSubQuestParams{
+			err = qtx.CreateSubQuest(r.Context(), database.CreateSubQuestParams{
 				ParentQuestID: pgtype.Int8{
 					Int64: questID,
 					Valid: true,
@@ -204,8 +200,7 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 				},
 			})
 			if err != nil {
-				writeJSONError(w, http.StatusInternalServerError, "error", err)
-				return
+				return getErrorResponse(http.StatusInternalServerError, "error", err)
 			}
 		}
 	} else {
@@ -230,31 +225,28 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 			},
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 
-		err = cfg.database.DeleteQuestSkills(r.Context(), database.DeleteQuestSkillsParams{
+		err = qtx.DeleteQuestSkills(r.Context(), database.DeleteQuestSkillsParams{
 			UserID:  userID,
 			QuestID: questID,
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 
-		subQuestsIds, err := cfg.database.GetSubQuestsIDs(r.Context(), pgtype.Int8{
+		subQuestsIds, err := qtx.GetSubQuestsIDs(r.Context(), pgtype.Int8{
 			Int64: questID,
 			Valid: true,
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 
 		for _, q := range body.SubQuests {
 			if slices.Contains(subQuestsIds, q.ID) {
-				err = cfg.database.UpdateQuest(r.Context(), database.UpdateQuestParams{
+				err = qtx.UpdateQuest(r.Context(), database.UpdateQuestParams{
 					ID:   q.ID,
 					Name: q.Name,
 					Experience: pgtype.Int4{
@@ -263,8 +255,7 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 					},
 				})
 				if err != nil {
-					writeJSONError(w, http.StatusInternalServerError, "error", err)
-					return
+					return getErrorResponse(http.StatusInternalServerError, "error", err)
 				}
 
 				idx := slices.Index(subQuestsIds, q.ID)
@@ -272,7 +263,7 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 				subQuestsIds = slices.Delete(subQuestsIds, idx, idx+1)
 
 			} else if q.ID == 0 {
-				err = cfg.database.CreateSubQuest(r.Context(), database.CreateSubQuestParams{
+				err = qtx.CreateSubQuest(r.Context(), database.CreateSubQuestParams{
 					Name: q.Name,
 					Experience: pgtype.Int4{
 						Int32: q.Experience,
@@ -285,21 +276,19 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 					},
 				})
 				if err != nil {
-					writeJSONError(w, http.StatusInternalServerError, "error", err)
-					return
+					return getErrorResponse(http.StatusInternalServerError, "error", err)
 				}
 			}
 		}
 
 		if len(subQuestsIds) > 0 {
 			for _, q := range subQuestsIds {
-				err = cfg.database.DeleteSubQuest(r.Context(), database.DeleteSubQuestParams{
+				err = qtx.DeleteSubQuest(r.Context(), database.DeleteSubQuestParams{
 					UserID: userID,
 					ID:     q,
 				})
 				if err != nil {
-					writeJSONError(w, http.StatusInternalServerError, "error", err)
-					return
+					return getErrorResponse(http.StatusInternalServerError, "error", err)
 				}
 			}
 		}
@@ -309,35 +298,34 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 		skillId := s.ID
 
 		if s.IsNew {
-			skillId, err = cfg.database.CreateSkill(r.Context(), s.Name)
+			skillId, err = qtx.CreateSkill(r.Context(), s.Name)
 			if err != nil {
-				writeJSONError(w, http.StatusInternalServerError, "error", err)
-				return
+				return getErrorResponse(http.StatusInternalServerError, "error", err)
 			}
 		}
 
-		err = cfg.database.CreateUsersSkills(r.Context(), database.CreateUsersSkillsParams{
+		err = qtx.CreateUsersSkills(r.Context(), database.CreateUsersSkillsParams{
 			UserID:  userID,
 			SkillID: skillId,
 			Name:    s.Name,
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 
-		err = cfg.database.CreateQuestSkills(r.Context(), database.CreateQuestSkillsParams{
+		err = qtx.CreateQuestSkills(r.Context(), database.CreateQuestSkillsParams{
 			QuestID: questID,
 			UserID:  userID,
 			SkillID: skillId,
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 	}
 
 	w.WriteHeader(http.StatusOK)
+
+	return ErrorResponseInternal{}
 }
 
 // @Tags Quests
@@ -345,34 +333,30 @@ func (cfg *appConfig) questCreation(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} QuestCompletionResponse
 // @Param id path int true "ID of the quest"
 // @Router /v1/levelup_api/user/quest/{id}/complete-subquest [post]
-func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
+func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request, qtx *database.Queries) ErrorResponseInternal {
 	userID, err := cfg.getUserId(r)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	questIDStr := r.PathValue("id")
 
 	questID, err := strconv.Atoi(questIDStr)
 	if err != nil {
-		writeJSONError(w, http.StatusBadRequest, "wrongIdDeactivate", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
-	quest, err := cfg.database.CompleteQuest(r.Context(), database.CompleteQuestParams{
+	quest, err := qtx.CompleteQuest(r.Context(), database.CompleteQuestParams{
 		ID:     int64(questID),
 		UserID: userID,
 	})
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
-	user, err := cfg.database.GetUsersExperience(r.Context(), userID)
+	user, err := qtx.GetUsersExperience(r.Context(), userID)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	if quest.Valid {
@@ -383,7 +367,7 @@ func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
 			gain: quest.Int32,
 		})
 
-		err = cfg.database.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
+		err = qtx.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
 			ID: userID,
 			Experience: pgtype.Int4{
 				Int32: newExperience,
@@ -399,8 +383,7 @@ func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
 			},
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 		w.WriteHeader(http.StatusOK)
 
@@ -408,8 +391,9 @@ func (cfg *appConfig) completeSubQuest(w http.ResponseWriter, r *http.Request) {
 			LeveledUpTimes: lvl - user.Level.Int32,
 		})
 	} else {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
+	return ErrorResponseInternal{}
 }
 
 // @Tags Quests
@@ -449,34 +433,30 @@ func (cfg *appConfig) deleteSubQuest(w http.ResponseWriter, r *http.Request) {
 // @Success 200 {object} QuestCompletionResponse
 // @Param id path int true "ID of the quest"
 // @Router /v1/levelup_api/user/quest/{id}/complete [post]
-func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
+func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request, qtx *database.Queries) ErrorResponseInternal {
 	userID, err := cfg.getUserId(r)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	questIDStr := r.PathValue("id")
 
 	questID, err := strconv.Atoi(questIDStr)
 	if err != nil {
-		writeJSONError(w, http.StatusBadRequest, "wrongIdDeactivate", err)
-		return
+		return getErrorResponse(http.StatusBadRequest, "wrongIdDeactivate", err)
 	}
 
-	questExp, err := cfg.database.CompleteQuest(r.Context(), database.CompleteQuestParams{
+	questExp, err := qtx.CompleteQuest(r.Context(), database.CompleteQuestParams{
 		ID:     int64(questID),
 		UserID: userID,
 	})
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
-	userInfo, err := cfg.database.GetUsersExperience(r.Context(), userID)
+	userInfo, err := qtx.GetUsersExperience(r.Context(), userID)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	newExperience, lvl, need := calculateExperience(CalculateExperienceParams{
@@ -486,7 +466,7 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 		gain: questExp.Int32,
 	})
 
-	err = cfg.database.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
+	err = qtx.UpdateUsersExperience(r.Context(), database.UpdateUsersExperienceParams{
 		ID: userID,
 		Experience: pgtype.Int4{
 			Int32: newExperience,
@@ -502,24 +482,21 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
-	skillIds, err := cfg.database.GetSkillsForQuest(r.Context(), int64(questID))
+	skillIds, err := qtx.GetSkillsForQuest(r.Context(), int64(questID))
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	for _, s := range skillIds {
-		skillInfo, err := cfg.database.GetSkillsExperience(r.Context(), database.GetSkillsExperienceParams{
+		skillInfo, err := qtx.GetSkillsExperience(r.Context(), database.GetSkillsExperienceParams{
 			UserID:  userID,
 			SkillID: s,
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 
 		newExperience, lvl, need := calculateExperience(CalculateExperienceParams{
@@ -537,21 +514,19 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 			ExperienceNeeded: need,
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 
-		linkedIDs, err := cfg.database.GetUsersSkillsLinkedID(r.Context(), database.GetUsersSkillsLinkedIDParams{
+		linkedIDs, err := qtx.GetUsersSkillsLinkedID(r.Context(), database.GetUsersSkillsLinkedIDParams{
 			ParentSkillID: s,
 			UserID:        userID,
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 
 		for _, l := range linkedIDs {
-			linkedInfo, err := cfg.database.GetSkillsExperience(r.Context(), database.GetSkillsExperienceParams{
+			linkedInfo, err := qtx.GetSkillsExperience(r.Context(), database.GetSkillsExperienceParams{
 				UserID:  userID,
 				SkillID: l,
 			})
@@ -563,7 +538,7 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 				gain: int32(math.Round(float64(questExp.Int32) / 12)),
 			})
 
-			err = cfg.database.UpdateSkillsExperience(r.Context(), database.UpdateSkillsExperienceParams{
+			err = qtx.UpdateSkillsExperience(r.Context(), database.UpdateSkillsExperienceParams{
 				SkillID:          l,
 				UserID:           userID,
 				Experience:       newExperience,
@@ -571,29 +546,26 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 				ExperienceNeeded: need,
 			})
 			if err != nil {
-				writeJSONError(w, http.StatusInternalServerError, "error", err)
-				return
+				return getErrorResponse(http.StatusInternalServerError, "error", err)
 			}
 		}
 	}
 
-	subQuestsIds, err := cfg.database.GetSubQuestsIDs(r.Context(), pgtype.Int8{
+	subQuestsIds, err := qtx.GetSubQuestsIDs(r.Context(), pgtype.Int8{
 		Int64: int64(questID),
 		Valid: true,
 	})
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	for _, q := range subQuestsIds {
-		_, err := cfg.database.CompleteQuest(r.Context(), database.CompleteQuestParams{
+		_, err := qtx.CompleteQuest(r.Context(), database.CompleteQuestParams{
 			ID:     q,
 			UserID: userID,
 		})
 		if err != nil {
-			writeJSONError(w, http.StatusInternalServerError, "error", err)
-			return
+			return getErrorResponse(http.StatusInternalServerError, "error", err)
 		}
 	}
 
@@ -602,6 +574,8 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(QuestCompletionResponse{
 		LeveledUpTimes: lvl - userInfo.Level.Int32,
 	})
+
+	return ErrorResponseInternal{}
 }
 
 // @Tags Quests

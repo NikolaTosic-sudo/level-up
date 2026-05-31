@@ -269,8 +269,16 @@ func (cfg *appConfig) updateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
 
-	json.Unmarshal(b, &res)
+	err = json.Unmarshal(b, &res)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
 
 	if res.Target == "firstName" && res.FirstName != "" {
 		err = cfg.database.UpdateUserFirstName(r.Context(), database.UpdateUserFirstNameParams{

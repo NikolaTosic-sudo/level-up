@@ -79,9 +79,9 @@ func main() {
 	r.Post("/v1/levelup_api/createProfile", cfg.withTxMiddleware(cfg.profileCreationHandler))
 	r.Post("/v1/levelup_api/updateUser", cfg.updateUser)
 	r.Post("/v1/levelup_api/create-skill", cfg.skillEditHandler)
-	r.Post("/v1/levelup_api/user/quest-creation", cfg.questCreation)
-	r.Post("/v1/levelup_api/user/quest/{id}/complete-subquest", cfg.completeSubQuest)
-	r.Post("/v1/levelup_api/user/quest/{id}/complete", cfg.completeQuest)
+	r.Post("/v1/levelup_api/user/quest-creation", cfg.withTxMiddleware(cfg.questCreation))
+	r.Post("/v1/levelup_api/user/quest/{id}/complete-subquest", cfg.withTxMiddleware(cfg.completeSubQuest))
+	r.Post("/v1/levelup_api/user/quest/{id}/complete", cfg.withTxMiddleware(cfg.completeQuest))
 
 	r.Delete("/v1/levelup_api/skill/{id}/deactivate", cfg.deactivateUsersSkill)
 	r.Delete("/v1/levelup_api/user/quest/{id}/delete-subquest", cfg.deleteSubQuest)
