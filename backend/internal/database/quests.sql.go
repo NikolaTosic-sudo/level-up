@@ -316,7 +316,7 @@ FROM quests q
 WHERE q.user_id = $1 
   AND q.deleted_at IS NULL
   AND q.type = 'custom'
-ORDER BY q.completed
+ORDER BY COALESCE(q.completed, false)
 `
 
 type GetUsersCustomQuestsRow struct {
