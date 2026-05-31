@@ -374,6 +374,28 @@ const docTemplate = `{
                 }
             }
         },
+        "/v1/levelup_api/user/quest/{id}/delete": {
+            "delete": {
+                "tags": [
+                    "Quests"
+                ],
+                "summary": "Complete a sub-quest",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the quest",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/v1/levelup_api/user/quest/{id}/delete-subquest": {
             "delete": {
                 "tags": [

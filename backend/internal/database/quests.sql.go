@@ -91,6 +91,20 @@ func (q *Queries) CreateSubQuest(ctx context.Context, arg CreateSubQuestParams) 
 	return err
 }
 
+const deleteQuest = `-- name: DeleteQuest :exec
+UPDATE quests SET deleted_at = NOW(), failed = TRUE, failed_at = NOW() WHERE id = $1 AND user_id = $2
+`
+
+type DeleteQuestParams struct {
+	ID     int64     `json:"id"`
+	UserID uuid.UUID `json:"user_id"`
+}
+
+func (q *Queries) DeleteQuest(ctx context.Context, arg DeleteQuestParams) error {
+	_, err := q.db.ExecContext(ctx, deleteQuest, arg.ID, arg.UserID)
+	return err
+}
+
 const deleteQuestSkills = `-- name: DeleteQuestSkills :exec
 DELETE FROM quests_skills WHERE user_id = $1 AND quest_id = $2
 `

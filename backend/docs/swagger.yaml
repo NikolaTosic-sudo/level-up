@@ -580,6 +580,20 @@ paths:
       summary: Complete a sub-quest
       tags:
       - Quests
+  /v1/levelup_api/user/quest/{id}/delete:
+    delete:
+      parameters:
+      - description: ID of the quest
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+      summary: Complete a sub-quest
+      tags:
+      - Quests
   /v1/levelup_api/user/quest/{id}/delete-subquest:
     delete:
       parameters:
