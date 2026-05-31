@@ -83,6 +83,7 @@ func main() {
 
 	r.Delete("/v1/levelup_api/skill/{id}/deactivate", cfg.deactivateUsersSkill)
 	r.Delete("/v1/levelup_api/user/quest/{id}/delete-subquest", cfg.deleteSubQuest)
+	r.Delete("/v1/levelup_api/user/quest/{id}/delete", cfg.deleteQuest)
 
 	r.Get("/swagger/*", httpSwagger.Handler(
 		httpSwagger.URL("http://localhost:8080/swagger/doc.json"),

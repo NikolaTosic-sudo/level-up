@@ -603,3 +603,45 @@ func (cfg *appConfig) completeQuest(w http.ResponseWriter, r *http.Request) {
 		LeveledUpTimes: lvl - userInfo.Level.Int32,
 	})
 }
+
+// @Tags Quests
+// @Summary Complete a sub-quest
+// @Success 200
+// @Param id path int true "ID of the quest"
+// @Router /v1/levelup_api/user/quest/{id}/delete [delete]
+func (cfg *appConfig) deleteQuest(w http.ResponseWriter, r *http.Request) {
+	userID, err := cfg.getUserId(r)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	questIDStr := r.PathValue("id")
+	qID, err := strconv.Atoi(questIDStr)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	questID := int64(qID)
+
+	err = cfg.database.DeleteQuestSkills(r.Context(), database.DeleteQuestSkillsParams{
+		UserID:  userID,
+		QuestID: questID,
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	err = cfg.database.DeleteQuest(r.Context(), database.DeleteQuestParams{
+		ID:     questID,
+		UserID: userID,
+	})
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
