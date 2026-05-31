@@ -148,3 +148,11 @@ func calculateExperience(info CalculateExperienceParams) (int32, int32, int32) {
 
 	return newExperience, lvl, need
 }
+
+func getErrorResponse(code int, message string, err error) ErrorResponseInternal {
+	return ErrorResponseInternal{
+		code,
+		message,
+		err,
+	}
+}

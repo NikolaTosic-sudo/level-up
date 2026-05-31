@@ -83,36 +83,32 @@ type QuestStatsResponse struct {
 // @Success 200 {object} LoginResponse
 // @Param body body ProfileCreationBody true "Profile creation payload"
 // @Router /v1/levelup_api/createProfile [post]
-func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Request) {
+func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Request, qtx *database.Queries) ErrorResponseInternal {
 	var body ProfileCreationBody
 
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	err = json.Unmarshal(b, &body)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	userID, err := cfg.getUserId(r)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
-	user, err := cfg.database.GetUserByID(r.Context(), userID)
+	user, err := qtx.GetUserByID(r.Context(), userID)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	if len(body.Quests) > 0 {
 		for _, q := range body.Quests {
-			_, err = cfg.database.CreateQuest(r.Context(), database.CreateQuestParams{
+			_, err = qtx.CreateQuest(r.Context(), database.CreateQuestParams{
 				Name: q.Name,
 				Experience: pgtype.Int4{
 					Int32: int32(q.Experience),
@@ -125,40 +121,34 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 				},
 			})
 			if err != nil {
-				writeJSONError(w, http.StatusInternalServerError, "error", err)
-				return
+				return getErrorResponse(http.StatusInternalServerError, "error", err)
 			}
 		}
 	}
 
 	if len(body.Skills) > 0 {
 		for _, s := range body.Skills {
-			skillId, err := cfg.database.GetUserSkillID(r.Context(), database.GetUserSkillIDParams{
-				UserID: userID,
-				Name:   s.Name,
-			})
+			skillId := int32(s.Id)
 
-			if s.Id == 0 && skillId == 0 {
-				skillId, err = cfg.database.CreateSkill(r.Context(), s.Name)
+			if skillId == 0 {
+				skillId, err = qtx.CreateSkill(r.Context(), s.Name)
 				if err != nil {
-					writeJSONError(w, http.StatusInternalServerError, "error", err)
-					return
+					return getErrorResponse(http.StatusInternalServerError, "error", err)
 				}
 			}
 
-			err = cfg.database.CreateUsersSkills(r.Context(), database.CreateUsersSkillsParams{
+			err = qtx.CreateUsersSkills(r.Context(), database.CreateUsersSkillsParams{
 				UserID:  userID,
 				SkillID: skillId,
 				Name:    s.Name,
 			})
 			if err != nil {
-				writeJSONError(w, http.StatusInternalServerError, "error", err)
-				return
+				return getErrorResponse(http.StatusInternalServerError, "error", err)
 			}
 		}
 	}
 
-	err = cfg.database.UpdateUserProfile(r.Context(), database.UpdateUserProfileParams{
+	err = qtx.UpdateUserProfile(r.Context(), database.UpdateUserProfileParams{
 		Firstname: pgtype.Text{
 			String: body.FirstName,
 			Valid:  true,
@@ -182,8 +172,7 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 		Email: user.Email,
 	})
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "error", err)
-		return
+		return getErrorResponse(http.StatusInternalServerError, "error", err)
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -192,6 +181,8 @@ func (cfg *appConfig) profileCreationHandler(w http.ResponseWriter, r *http.Requ
 		Code:     "200",
 		Redirect: "/profile",
 	})
+
+	return ErrorResponseInternal{}
 }
 
 // @Tags Player
@@ -353,6 +344,10 @@ func (cfg *appConfig) getUserInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userInfo, err := cfg.database.GetUserByID(r.Context(), userID)
+	if err != nil {
+		writeJSONError(w, http.StatusInternalServerError, "error", err)
+		return
+	}
 
 	w.WriteHeader(http.StatusOK)
 
