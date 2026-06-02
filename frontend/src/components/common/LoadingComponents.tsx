@@ -1,6 +1,11 @@
 import { Spin } from "antd";
+import type { CSSProperties } from "react";
 
-function LoadingComponent() {
+type LoadingComponentProps = {
+  style?: CSSProperties;
+};
+
+function LoadingComponent({ style }: LoadingComponentProps) {
   return (
     <div
       style={{
@@ -9,6 +14,7 @@ function LoadingComponent() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        ...style,
       }}
     >
       <Spin size="large" />

@@ -27,21 +27,21 @@ function ProfileHeader() {
       <ProfileNotifications />
       <ProfileShop />
       {isLoading ? (
-        <LoadingComponent />
-      ) : user ? (
+        <LoadingComponent style={{ width: "auto" }} />
+      ) : (
         <>
-          <ProfileProgress user={user} />
-          <div>{user.name}</div>
+          {user ? <ProfileProgress user={user} /> : null}
+          <div>{user ? user.name : "Not Sure"}</div>
           <div>
-            {!user.hotStreak || user.hotStreak === 0 ? (
+            {!user?.hotStreak || user.hotStreak === 0 ? (
               <FireOutlined />
             ) : (
               <FireFilled className="fire-icon" />
             )}
-            <span style={{ marginLeft: 4 }}>{user.hotStreak}</span>
+            <span style={{ marginLeft: 4 }}>{user ? user.hotStreak : 0}</span>
           </div>
         </>
-      ) : null}
+      )}
     </Header>
   );
 }
