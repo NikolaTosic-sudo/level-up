@@ -6,6 +6,7 @@ import MuteButton from "../../common/MuteButton";
 import { FireFilled, FireOutlined } from "@ant-design/icons";
 import { useGetUserInfo } from "../hooks/useGetUserInfo";
 import LoadingComponent from "../../common/LoadingComponents";
+import { useTranslation } from "react-i18next";
 
 const { Header } = Layout;
 
@@ -21,6 +22,8 @@ export type User = {
 function ProfileHeader() {
   const { data: user, isLoading } = useGetUserInfo();
 
+  const { t } = useTranslation();
+
   return (
     <Header className="profile-header">
       <MuteButton />
@@ -31,7 +34,7 @@ function ProfileHeader() {
       ) : (
         <>
           {user ? <ProfileProgress user={user} /> : null}
-          <div>{user ? user.name : "Not Sure"}</div>
+          <div>{user ? user.name : t("", { defaultValue: "Unknown" })}</div>
           <div>
             {!user?.hotStreak || user.hotStreak === 0 ? (
               <FireOutlined />
